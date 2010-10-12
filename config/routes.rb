@@ -1,4 +1,8 @@
 Mojo::Application.routes.draw do
+  resources :waitlist_entries
+
+  resources :users
+
   resources :activities
 
   # The priority is based upon order of creation:

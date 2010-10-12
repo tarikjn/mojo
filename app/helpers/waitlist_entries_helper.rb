@@ -1,0 +1,2 @@
+module WaitlistEntriesHelper
+end

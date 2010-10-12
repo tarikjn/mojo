@@ -10,13 +10,38 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101010020523) do
+ActiveRecord::Schema.define(:version => 20101012015848) do
 
   create_table "activities", :force => true do |t|
     t.string   "activity_type"
     t.string   "title"
     t.text     "description"
     t.datetime "time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.string   "cellphone"
+    t.string   "picture_url"
+    t.string   "sex"
+    t.string   "sex_preference"
+    t.date     "dob"
+    t.integer  "min_age"
+    t.integer  "max_age"
+    t.integer  "height"
+    t.integer  "min_height"
+    t.integer  "max_height"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users_buddies", :id => false, :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "buddy_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -1,0 +1,27 @@
+<h1>Listing waitlist_entries</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Activity</th>
+    <th>State</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @waitlist_entries.each do |waitlist_entry| %>
+  <tr>
+    <td><%= waitlist_entry.user %></td>
+    <td><%= waitlist_entry.activity %></td>
+    <td><%= waitlist_entry.state %></td>
+    <td><%= link_to 'Show', waitlist_entry %></td>
+    <td><%= link_to 'Edit', edit_waitlist_entry_path(waitlist_entry) %></td>
+    <td><%= link_to 'Destroy', waitlist_entry, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Waitlist entry', new_waitlist_entry_path %>

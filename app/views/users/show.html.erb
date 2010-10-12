@@ -1,0 +1,70 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>First name:</b>
+  <%= @user.first_name %>
+</p>
+
+<p>
+  <b>Last name:</b>
+  <%= @user.last_name %>
+</p>
+
+<p>
+  <b>Email:</b>
+  <%= @user.email %>
+</p>
+
+<p>
+  <b>Cellphone:</b>
+  <%= @user.cellphone %>
+</p>
+
+<p>
+  <b>Picture url:</b>
+  <%= @user.picture_url %>
+</p>
+
+<p>
+  <b>Sex:</b>
+  <%= @user.sex %>
+</p>
+
+<p>
+  <b>Sex preference:</b>
+  <%= @user.sex_preference %>
+</p>
+
+<p>
+  <b>Dob:</b>
+  <%= @user.dob %>
+</p>
+
+<p>
+  <b>Min age:</b>
+  <%= @user.min_age %>
+</p>
+
+<p>
+  <b>Max age:</b>
+  <%= @user.max_age %>
+</p>
+
+<p>
+  <b>Height:</b>
+  <%= @user.height %>
+</p>
+
+<p>
+  <b>Min height:</b>
+  <%= @user.min_height %>
+</p>
+
+<p>
+  <b>Max height:</b>
+  <%= @user.max_height %>
+</p>
+
+
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', users_path %>
