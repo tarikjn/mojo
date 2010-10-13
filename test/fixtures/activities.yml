@@ -5,9 +5,15 @@ one:
   title: MyString
   description: MyText
   time: 2010-10-09 19:05:23
+  state: MyString
+  creator_duo: 
+  invitee_duo: 
 
 two:
   activity_type: MyString
   title: MyString
   description: MyText
   time: 2010-10-09 19:05:23
+  state: MyString
+  creator_duo: 
+  invitee_duo:

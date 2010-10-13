@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  host: 1
+  participant: 1
+
+two:
+  host: 1
+  participant: 1
