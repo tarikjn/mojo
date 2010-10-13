@@ -1,0 +1,10 @@
+/*
+ * Fixes for IE <= 8
+ */
+
+#head-content {
+	
+	#logo-wrapper {
+		text-indent: -100em; // unsupported "color: transparent;"
+	}
+}

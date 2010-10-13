@@ -1,0 +1,108 @@
+<div id="usage-flow-comic">
+	<div class="step-panel">
+		<div class="caption"><div class="opaque-layer"></div><div class="text-layer">Your area</div></div>
+	</div>
+	<div class="step-panel">
+		<div class="caption"><div class="opaque-layer"></div><div class="text-layer">Your time</div></div>
+	</div>
+	<div class="step-panel">
+		<div class="caption"><div class="opaque-layer"></div><div class="text-layer">You just met someone.</div></div>
+	</div>
+</div>
+
+<div id="process-box" style="display: none">
+	<div class="twin-choice-button">
+		<a href="#">I want to <em>create</em> an activity</a>
+	</div>
+	<div class="twin-choice-button">
+		<a href="#">I want to <em>join</em> an activity</a>
+	</div>
+</div>
+
+<form action="stepflow.html" method="get" class="start-process">
+	<div class="title">When do you have free time?</div>
+	<div class="hybrid-input">
+		<div class="mj-timeline-input">
+			<button class="slide-before" type="button" disabled="disabled">◀</button>
+			<div class="view-container">
+				<div class="day-title">Today</div>
+				<div class="timeline-container">
+					<div class="timeline-bar"></div>
+					<div class="timeline-marks">
+						<div class="mark">
+							<div class="line"></div>
+							<div class="title">12pm</div>
+							<div class="line-quarter"></div>
+							<div class="line-half"></div>
+							<div class="line-3rd-quarter"></div>
+						</div>
+						<div class="mark">
+							<div class="line"></div>
+							<div class="title">1pm</div>
+						</div>
+						<div class="mark">
+							<div class="line"></div>
+							<div class="title">2pm</div>
+						</div>									
+						<div class="mark">
+							<div class="line"></div>
+							<div class="title">3pm</div>
+							<div class="line-quarter"></div>
+							<div class="line-half"></div>
+							<div class="line-3rd-quarter"></div>
+						</div>
+					</div>
+					<div class="elapsed-and-current-time"></div>
+					<div class="selected-time" tabindex="0">
+						<div class="start-hand" tabindex="0"></div>
+						<div class="stop-hand" tabindex="0"></div>
+					</div>
+				</div>
+			</div>
+			<button class="slide-after" type="button">▶</button>
+		</div>
+	</div>
+	<div class="next">
+		<button type="submit">Continue...</button>
+	</div>
+</form>
+
+<div id="promo-twin-set">
+	<div class="promo-panel">
+		<div class="startline">Mojo is...</div>
+		<dl>
+			<dt><img src="/images/icons/timer.png" />Timely &amp; Actual<dt>
+			<dd>We want you to spend as little time online as possible, and enjoy your time meeting people in the real world now. This is how we designed Mojo.</dd>
+			<dt><img src="/images/icons/gears.png" />Genuine &amp; Personal<dt>
+			<dd>Mojo establishes your profile using progressive personnality testing and feedback agregation. The more you use it, the more you meet people like you.</dd>
+			<dt><img src="/images/icons/privacy.png" />Less exposing<dt>
+			<dd>Only those wanting to join your activities or hosting an activity you are trying to join can find you on Mojo.</dd>
+			<dt><img src="/images/icons/key.png" />Safe<dt>
+			<dd>Not only are team activities meant so you can bring your friends along, but you actually meet people without ever revealing your contact info or full name.</dd>
+		</dl>
+		<div class="endline"></div>
+	</div>
+	<div class="promo-panel">
+		<div class="panel-title">How does it work?</div>
+		<div class="tab-widget">
+			<div class="tab-button">
+				<div class="selected">Joining an activity</div>
+				<div>Creating an activity</div>
+			</div>
+			<div class="tab-content">
+				<ol>
+					<li><span class="bullet">➊</span><span class="text">Confirm your location</span></li>
+					<li><span class="bullet">➋</span><span class="text">Choose a time range</span></li>
+					<li><span class="bullet">➌</span><span class="text">Select your host and activity</span></li>
+					<li><span class="bullet">➍</span><span class="text">Once you are accepted, follow directions to attend</span></li>
+				</ol>
+				<ol style="display: none;">
+					<li><span class="bullet">➊</span><span class="text">Enter type of activity, place and time</span></li>
+					<li><span class="bullet">➋</span><span class="text">Enter activity description</span></li>
+					<li><span class="bullet">➌</span><span class="text">Select who you want to join your activity</span></li>
+					<li><span class="bullet">➍</span><span class="text">They instantly receive directions to your activity</span></li>
+				</ol>
+			</div>
+		</div>
+	</div>
+</div>
