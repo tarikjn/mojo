@@ -19,53 +19,13 @@
 	</div>
 </div>
 
-<form action="stepflow.html" method="get" class="start-process">
+<%= form_tag stepflow_path, :class => 'start-process' do %>
 	<div class="title">When do you have free time?</div>
-	<div class="hybrid-input">
-		<div class="mj-timeline-input">
-			<button class="slide-before" type="button" disabled="disabled">◀</button>
-			<div class="view-container">
-				<div class="day-title">Today</div>
-				<div class="timeline-container">
-					<div class="timeline-bar"></div>
-					<div class="timeline-marks">
-						<div class="mark">
-							<div class="line"></div>
-							<div class="title">12pm</div>
-							<div class="line-quarter"></div>
-							<div class="line-half"></div>
-							<div class="line-3rd-quarter"></div>
-						</div>
-						<div class="mark">
-							<div class="line"></div>
-							<div class="title">1pm</div>
-						</div>
-						<div class="mark">
-							<div class="line"></div>
-							<div class="title">2pm</div>
-						</div>									
-						<div class="mark">
-							<div class="line"></div>
-							<div class="title">3pm</div>
-							<div class="line-quarter"></div>
-							<div class="line-half"></div>
-							<div class="line-3rd-quarter"></div>
-						</div>
-					</div>
-					<div class="elapsed-and-current-time"></div>
-					<div class="selected-time" tabindex="0">
-						<div class="start-hand" tabindex="0"></div>
-						<div class="stop-hand" tabindex="0"></div>
-					</div>
-				</div>
-			</div>
-			<button class="slide-after" type="button">▶</button>
-		</div>
-	</div>
+	<%= mj_timerange %>
 	<div class="next">
 		<button type="submit">Continue...</button>
 	</div>
-</form>
+<% end %>
 
 <div id="promo-twin-set">
 	<div class="promo-panel">

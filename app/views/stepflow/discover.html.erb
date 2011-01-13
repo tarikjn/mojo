@@ -1,0 +1,309 @@
+<div class="stepflow-frame">
+	
+	<%= form_tag '/stepflow/discover' do %>
+
+		<div class="form-inputs">
+			<div class="form-item">
+				<div class="title">Where?</div><!-- replace with 'City', remove from other part -->
+				<div class="hybrid-input mj-location-input">
+					<!-- TODO: sizedown map for city only? -->
+					<!-- approve location request to autoselect your city -->
+					<div id="map_canvas" class="city-only"></div>
+					<div class="map-side">
+						<div class="selected-subset">
+							<div class="title">City:</div>
+							<div class="item">
+								<div class="name">San Francisco, CA</div>
+								<div class="state">Currently Selected</div>
+							</div>
+						</div>
+						<div class="msg-info">
+							Right now, Mojo is only in <br />San Francisco.
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-item">
+				<div class="title">Timeframe</div>
+				<%= mj_timerange %>
+			</div>
+			<div class="form-item" id="form_item_who">
+				<div class="title">Who?</div>
+				<div class="hybrid-input">
+					<label class="mj-choice selected new">
+						<input type="radio" name="party_of" value="single" checked />
+						<div class="person neutral host">
+							<div class="img"></div>
+							<div class="title">You</div>
+						</div>
+						<div class="person neutral guest">
+							<div class="img"></div>
+							<div class="title">Guest</div>
+						</div>
+					</label>
+					<label class="mj-choice new">
+						<input type="radio" name="party_of" value="double" />
+						<div class="person neutral host">
+							<div class="img"></div>
+							<div class="title">You</div>
+						</div>
+						<div class="person neutral host">
+							<div class="img"></div>
+							<div class="title">Friend</div>
+						</div>
+						<div class="person neutral guest">
+							<div class="img"></div>
+							<div class="title">Guest</div>
+						</div>
+						<div class="person neutral guest">
+							<div class="img"></div>
+							<div class="title">Guest</div>
+						</div>
+					</label>
+				</div>
+				<div class="subset-form-arrow">▴</div>
+				<div class="subset-form active">
+					<div class="gridded-line equalize-line">
+						<div class="col-0">
+							You are a:
+						</div>
+						<div class="col-1">
+							<div class="mj-merged-choices hybrid-input">
+								<label>
+									<input type="radio" name="sex" value="male" />
+									<div class="person">
+										<div class="img"><img src="/images/icons/guy.png" /></div>
+										<div class="title">Guy</div>
+									</div>
+								</label><label>
+									<input type="radio" name="sex" value="female" />
+									<div class="person">
+										<div class="img"><img src="/images/icons/gal.png" /></div>
+										<div class="title">Gal</div>
+									</div>
+								</label>
+							</div>
+						</div>
+						<div class="col-2">
+							Looking for:
+						</div>
+						<div class="col-3">
+							<div class="mj-merged-choices hybrid-input">
+								<label>
+									<input type="radio" name="sex_preference" value="female" />
+									<div class="person">
+										<div class="img"><img src="/images/icons/gal.png" /></div>
+										<div class="title">Gals</div>
+									</div>
+								</label><label>
+									<input type="radio" name="sex_preference" value="both" />
+									<div class="person">
+										<div class="img"><img src="/images/icons/person.png" /></div>
+										<div class="title">Both</div>
+									</div>
+								</label><label>
+									<input type="radio" name="sex_preference" value="male" />
+									<div class="person">
+										<div class="img"><img src="/images/icons/guy.png" /></div>
+										<div class="title">Guys</div>
+									</div>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="gridded-line topsize-line">
+						<div class="col-0">
+							Your age:
+						</div>
+						<div class="col-1">
+							<label>
+								<input type="text" name="age" class="age-text-input" />
+							</label>
+						</div>
+						<div class="col-2">
+							<label class="mj-check-roll">
+								<input type="checkbox" />
+								Age matters to you?
+							</label>
+						</div>
+						<div class="col-3">
+							<label>
+								Min:
+								<input type="text" name="min_age" class="age-text-input" />
+							</label> ⬌
+							<label>
+								Max:
+								<input type="text" name="max_age" class="age-text-input" />
+							</label>
+						</div>
+					</div>
+					<div class="gridded-line topsize-line">
+						<div class="col-0">
+							Your height:
+						</div>
+						<div class="col-1">
+							<div class="mj-height-input">
+								<label><input type="text" name="height_ft" class="ft-text-input" /> <span class="unit">ft</span></label>
+								<label><input type="text" name="height_in" class="in-text-input" /> <span class="unit">in</span></label>
+							</div>
+						</div>
+						<div class="col-2">
+							<label class="mj-check-roll">
+								<input type="checkbox" />
+								Height matters to you?
+							</label>
+						</div>
+						<div class="col-3">
+							Min:
+							<div class="mj-height-input">
+								<label><input type="text" name="min_height_ft" class="ft-text-input" /> <span class="unit">ft</span></label>
+								<label><input type="text" name="min_height_in" class="in-text-input" /> <span class="unit">in</span></label>
+							</div> ⬌
+							Max:
+							<div class="mj-height-input">
+								<label><input type="text" name="max_height_ft" class="ft-text-input" /> <span class="unit">ft</span></label>
+								<label><input type="text" name="max_height_in" class="in-text-input" /> <span class="unit">in</span></label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="subset-form friend">
+					<div class="gridded-line topsize-line">
+						<div class="col-0">
+							Your friend's Email:
+						</div>
+						<div class="col-1">
+							<label>
+								<input type="text" name="friend_email" />
+							</label>
+						</div>
+					</div>
+					<div class="gridded-line equalize-line">
+						<div class="col-0">
+							Your friend is a:
+						</div>
+						<div class="col-1">
+							<div class="mj-merged-choices hybrid-input">
+								<label>
+									<input type="radio" name="friend_sex" value="male" />
+									<div class="person">
+										<div class="img"><img src="/images/icons/guy.png" /></div>
+										<div class="title">Guy</div>
+									</div>
+								</label><label>
+									<input type="radio" name="friend_sex" value="female" />
+									<div class="person">
+										<div class="img"><img src="/images/icons/gal.png" /></div>
+										<div class="title">Gal</div>
+									</div>
+								</label>
+							</div>
+						</div>
+						<div class="col-2">
+							Looking for:
+						</div>
+						<div class="col-3">
+							<div class="mj-merged-choices hybrid-input">
+								<label>
+									<input type="radio" name="friend_sex_preference" value="female" />
+									<div class="person">
+										<div class="img"><img src="/images/icons/gal.png" /></div>
+										<div class="title">Gals</div>
+									</div>
+								</label><label>
+									<input type="radio" name="friend_sex_preference" value="both" />
+									<div class="person">
+										<div class="img"><img src="/images/icons/person.png" /></div>
+										<div class="title">Both</div>
+									</div>
+								</label><label>
+									<input type="radio" name="friend_sex_preference" value="male" />
+									<div class="person">
+										<div class="img"><img src="/images/icons/guy.png" /></div>
+										<div class="title">Guys</div>
+									</div>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!--
+			<div class="form-item">
+				<div class="title">Your friend</div>
+				<div class="hybrid-input">
+					<label>
+						Your friend's Email:
+						<input type="text" name="friend_email" />
+					</label>
+				</div>
+				<div class="hybrid-input">
+					<label class="mj-choice">
+						<input type="radio" name="gender" value="male" /> <img src="/images/icons/guy.png" /> Guy
+					</label>
+					<label class="mj-choice">
+						<input type="radio" name="gender" value="female" /> <img src="/images/icons/gal.png" /> Gal
+					</label>
+					Looking for:
+					<label>
+						<input type="radio" name="gender_preference" value="female" />
+						Gal
+					</label>
+					<label>
+						<input type="radio" name="gender_preference" value="both" />
+						Both
+					</label>
+					<label>
+						<input type="radio" name="gender_preference" value="male" />
+						Guy
+					</label>
+				</div>
+			</div>
+			-->
+			
+			<div class="form-item">
+				<div class="hybrid-input mj-operation-choices">
+					<!--<div class="info-choice">
+						<div class="info">
+							It's free!
+						</div>
+					</div>-->
+					<label><input type="radio" name="operation" value="create" /> <strong>Create</strong> an activity</label>
+					or
+					<!--<div class="info-choice">
+						<div class="info">
+							<strong>5</strong> approximate matches.
+						</div>
+					</div>-->
+					<label><input type="radio" name="operation" value="join" /> <strong>Join</strong> an activity <span class="count">(3)</span></label>
+				</div>
+			</div>
+		</div>
+		
+		<div class="stepflow-position">
+			
+			<div class="previous">
+				<a href="/">Cancel and <br />Return to Homepage</a>
+			</div>
+			
+			<div class="list">
+				<ol>
+					<li class="current"><div class="step-bullet">•</div><div class="label">Create or Join?</div></li>
+					<li><div class="step-bullet">○</div><div class="label">Activity Details</div></li>
+					<li><div class="step-bullet">○</div><div class="label">Profile Information</div></li>
+				</ol>
+			</div>
+			
+			<div class="next">
+				<img class="ajax-loading" src="/images/ajax-loading.gif" alt="loading..." /> <button type="submit">Activity Details </button>
+			</div>
+			
+		</div>
+		
+		<div class="stepflow-time-remaining">
+			<span>2 more minutes to completion...</span>
+		</div>
+		
+	<% end %>
+</div>

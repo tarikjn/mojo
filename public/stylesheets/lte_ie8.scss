@@ -8,3 +8,11 @@
 		text-indent: -100em; // unsupported "color: transparent;"
 	}
 }
+
+.stepflow-frame {
+	
+	// IE not supporting :not and :last-of-type pseudo-selectors
+	.form-item:first-of-type {
+		border-top: none;
+	}
+}

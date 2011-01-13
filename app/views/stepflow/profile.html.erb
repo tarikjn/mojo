@@ -1,0 +1,76 @@
+<div class="stepflow-frame">
+
+	<%= form_tag '/stepflow/profile' do %>
+		
+		<div class="form-inputs column-titles">
+			<div class="form-item">
+				<div class="title">Name</div>
+				<div class="hybrid-input">
+					<div class="subinput">
+						<input type="text" name="first_name" />
+						<div class="title">First</div>
+					</div>
+					<div class="subinput">
+						<input type="text" name="last_name" />
+						<div class="title">Last</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-item">
+				<div class="title">Date of Birth</div>
+				<div class="hybrid-input">
+					<%= date_select 'obj', 'dob', :default => @def_dob %>
+				</div>
+			</div>
+			<div class="form-item">
+				<div class="title">Picture</div>
+				<div class="hybrid-input">
+					<input type="file" /><br />
+					<div class="mj-picture-tool">
+						<img src="/images/tarik-profile.jpg" />
+						<div class="mask"></div>
+						<div class="selection" style="background-image: url(/images/tarik-profile.jpg)"></div/>
+					</div>
+				</div>
+			</div>
+			<div class="form-item">
+				<div class="title">E-mail</div>
+				<div class="hybrid-input">
+					<input type="email" name="email" />
+				</div>
+			</div>
+			<div class="form-item">
+				<div class="title">Cell Phone</div>
+				<div class="hybrid-input">
+					<input type="text" name="cellphone" value="(650) 644-9308" class="mj-input-phone" />
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="stepflow-position">
+
+			<div class="previous">
+				<button type="submit" class="previous" formaction="/stepflow/create">Create Activity</button>
+			</div>
+
+			<div class="list">
+				<ol>
+					<li><div class="step-bullet">•</div><div class="label">Create or Join?</div></li>
+					<li><div class="step-bullet">•</div><div class="label">Create Activity</div></li>
+					<li class="current"><div class="step-bullet">•</div><div class="label">Your Profile</div></li>
+				</ol>
+			</div>
+
+			<div class="next">
+				<img class="ajax-loading" src="ajax-loading.gif" alt="loading..." /> <button type="submit">Done!</button>
+			</div>
+
+		</div>
+		
+		<div class="stepflow-time-remaining">
+			<span>30 seconds to completion...</span>
+		</div>
+		
+	<% end %>
+</div>

@@ -1,7 +1,21 @@
 Mojo::Application.routes.draw do
-  get "home/index"
 
-  get "homepage/index"
+  match "/userhome" => "userhome#index"
+
+  match "stepflow" => "stepflow#discover"
+  post "stepflow/discover" => "stepflow#discover_submit"
+  get "stepflow/discover"
+  get "stepflow/join"
+  post "stepflow/create" => "stepflow#create_submit"
+  get "stepflow/create"
+  post "stepflow/profile" => "stepflow#profile_submit"
+  get "stepflow/profile"
+  
+  get "stepflow/jsanim"
+  get "stepflow/map"
+  post "stepflow/map"
+  
+  get "stepflow/created"
 
   resources :waitlist_entries
 

@@ -33,6 +33,10 @@ GEM
     builder (2.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    geokit (1.5.0)
+    geokit-rails3 (0.1.2)
+      geokit (~> 1.5.0)
+      rails (~> 3.0.0)
     i18n (0.4.1)
     mail (2.2.6.1)
       activesupport (>= 2.3.6)
@@ -63,11 +67,15 @@ GEM
     thor (0.14.2)
     treetop (1.4.8)
       polyglot (>= 0.3.1)
+    twiliolib (2.0.7)
+      builder (>= 2.1.2)
     tzinfo (0.3.23)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  geokit-rails3
   rails (= 3.0.0)
   sqlite3-ruby
+  twiliolib

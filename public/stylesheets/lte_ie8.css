@@ -3,3 +3,6 @@
  */
 #head-content #logo-wrapper {
   text-indent: -100em; }
+
+.stepflow-frame .form-item:first-of-type {
+  border-top: none; }
