@@ -1,3 +1,23 @@
+<div id="top-frame">
+	<h2 class="tagline">Happy and dating.</h2>
+	<div class="quick-start">
+		<div class="opaque-layer"></div>
+		<div class="content-layer">
+			<div class="title">When are you free?</div>
+			<%= form_tag stepflow_path do %>
+				<select name="day">
+					<option>Today</option>
+				</select>
+				<select name="timeframe">
+					<option>6-9 pm</option>
+				</select>
+				<div class="submit">
+					<button type="submit" class="mojo">Get excited</button>
+				</div>
+			<% end %>
+		</div>
+	</div>
+</div>
 <div id="usage-flow-comic">
 	<div class="step-panel">
 		<div class="caption"><div class="opaque-layer"></div><div class="text-layer">Your area</div></div>
@@ -9,24 +29,58 @@
 		<div class="caption"><div class="opaque-layer"></div><div class="text-layer">You just met someone.</div></div>
 	</div>
 </div>
-
-<div id="process-box" style="display: none">
-	<div class="twin-choice-button">
-		<a href="#">I want to <em>create</em> an activity</a>
+<div id="flow">
+	<div class="step">
+		<img src="/images/icons/flow-date.png" alt="" />
+		<div class="caption">Create or<br />join a (double-)date</div>
+		<div class="link">➜</div>
 	</div>
-	<div class="twin-choice-button">
-		<a href="#">I want to <em>join</em> an activity</a>
+	<div class="step">
+		<img src="/images/icons/flow-participant.png" alt="" />
+		<div class="caption">Choose participant(s) or<br />wait to be selected</div>
+		<div class="link">➜</div>
+	</div>
+	<div class="step">
+		<img src="/images/icons/flow-message.png" alt="" />
+		<div class="caption">Arrange last-minute details<br />without revealing your number</div>
+		<div class="link">➜</div>
+	</div>
+	<div class="step">
+		<img src="/images/icons/flow-rate.png" alt="" />
+		<div class="caption">Rate your date so we can improve your matches!</div>
 	</div>
 </div>
-
-<%= form_tag stepflow_path, :class => 'start-process' do %>
-	<div class="title">When do you have free time?</div>
-	<%= mj_timerange %>
-	<div class="next">
-		<button type="submit">Continue...</button>
+<div id="testimonials">
+	<div class="block-left alternate-elements">
+		<div class="promo-block">
+			<img src="/images/icons/timer.png" />
+			<div class="title">Timely &amp; Actual</div>
+			<div class="text">We want you to spend as little time online as possible, and enjoy your time meeting people in the real world now. This is how we designed Mojo.</div>
+		</div>
+		<div class="promo-block" style="display: none;">
+			<img src="/images/icons/gears.png" />
+			<div class="title">Genuine &amp; Personal</div>
+			<div class="text">Mojo establishes your profile using progressive personnality testing and feedback agregation. The more you use it, the more you meet people like you.</div>
+		</div>
+		<div class="promo-block" style="display: none;">
+			<img src="/images/icons/privacy.png" />
+			<div class="title">Less exposing</div>
+			<div class="text">Only those wanting to join your activities or hosting an activity you are trying to join can find you on Mojo.</div>
+		</div>
+		<div class="promo-block" style="display: none;">
+			<img src="/images/icons/key.png" />
+			<div class="title">Safer</div>
+			<div class="text">Not only are double-dates meant so you can bring your friends along, but you actually meet people without ever revealing your contact info or full name.</div>
+		</div>
 	</div>
-<% end %>
-
+	<div class="block-center">
+		<div class="bigsparkle">⁑</div>
+	</div>
+	<div class="block-right">
+		<div class="bigsparkle">⁂</div>
+	</div>
+</div>
+<!--
 <div id="promo-twin-set">
 	<div class="promo-panel">
 		<div class="startline">Mojo is...</div>
@@ -66,3 +120,4 @@
 		</div>
 	</div>
 </div>
+-->

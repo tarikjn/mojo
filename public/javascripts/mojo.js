@@ -269,6 +269,39 @@ function TimeRangeInput(obj)
 	initialize.call(obj);
 };
 
+// class for testimonial fadein/out roller
+var AlternateElement = {
+	active: 0,
+	next: 1,
+	size: 4,
+	blocks: undefined,
+	animTime: 500,
+	rollTime: 5000,
+	
+	initialize: function(block) {
+		AlternateElement.blocks = $(block).children().toArray();
+		
+		// not using abort (return)
+		// NOTE: lead time is 5s, 4s after
+		// TODO: pause on mouseover
+		setInterval(AlternateElement.roll, AlternateElement.rollTime);
+	},
+	roll: function()
+	{
+		var active = AlternateElement.active;
+		var size = AlternateElement.size;
+		var animTime = AlternateElement.animTime;
+		
+		//animation
+		$(AlternateElement.blocks[active]).fadeOut(animTime, function() {
+			$(AlternateElement.blocks[AlternateElement.next]).fadeIn(animTime);
+			AlternateElement.active = ++active % size;
+			AlternateElement.next = (active + 1) % size;
+		});
+	}
+}
+
+
 $(function() {
 	
 	// the code after this point is executed when the DOM finished loading
@@ -349,6 +382,11 @@ $(function() {
 				contentEl.eq(id).removeAttr('style');
 			});
 		}
+	});
+	
+	// testimonials rolling
+	$("#testimonials .alternate-elements").each(function() {
+		AlternateElement.initialize(this);
 	});
 	
 	// JS support for formaction on button elements (HTML5)

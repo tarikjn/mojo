@@ -52,6 +52,12 @@ $inset-shadow: inset 0 0 16px #F0F0F0;
 	background: -webkit-gradient(linear, $from center, $to center, from($white), to($transparent));
 }
 
+@mixin std_gradient($from, $to) {
+	background: -webkit-gradient(linear, left top, left bottom, from($from), to($to));
+	background: -moz-linear-gradient(top,  $from,  $to);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to');
+}
+
 // Mojo font, works with Typekit
 @mixin mjfont {
 	font-family: brevia-1, brevia-2, sans-serif;
@@ -160,21 +166,27 @@ color: #e9e9e9;
 		color: #606060;
 		border: solid 1px #b7b7b7;
 		background: #fff;
-		background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
-		background: -moz-linear-gradient(top,  #fff,  #ededed);
-		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed');
+		@include std_gradient(#fff, #ededed);
 	}
 	&.white:hover {
 		background: #ededed;
-		background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#dcdcdc));
-		background: -moz-linear-gradient(top,  #fff,  #dcdcdc);
-		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dcdcdc');
+		@include std_gradient(#fff, #dcdcdc);
 	}
 	&.white:active {
 		color: #999;
-		background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff));
-		background: -moz-linear-gradient(top,  #ededed,  #fff);
-		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#ffffff');
+		@include std_gradient(#ededed, #fff);
+	}
+	
+	/* mojo */
+	&.mojo {
+		color: black;
+		border: outset 1px #9b9b9b;
+		background: #fff;
+		@include std_gradient(#fff, #e5e5e5);
+	}
+	&.mojo:hover {
+		background: #ededed;
+		@include std_gradient(#f2f2f2, #d9d9d9);
 	}
 	
 	&.small {
@@ -455,64 +467,196 @@ h2, h3 {
  */
 
 /* usage flow comic, homepage */
+#top-frame {
+	position: relative;
+	margin-bottom: 15px;
+	
+	.quick-start {
+		position: absolute;
+		right: 25px; top: 0;
+		z-index: 1;
+		
+		padding: 10px;
+	
+		.opaque-layer {
+			position: absolute;
+			top: 0; bottom: 0;
+			left: 0; right: 0;
+
+			background: black;
+			@include rounded(8px);
+			opacity: .8;
+			z-index: 0;
+		}
+		.content-layer {
+			color: white;
+			position: relative;
+			
+			form {
+				margin-top: 6px;
+				text-align: right;
+			}
+			
+			.submit {
+				margin-top: 6px;
+				
+				button {
+					@include wdw-button;
+					color: black !important;
+					padding: 3px 15px;
+					cursor: default !important;
+				}
+			}
+		}
+	}
+}
 
 #usage-flow-comic {
 	margin-bottom: 25px;
-}
-
-#usage-flow-comic .step-panel {
-	float: left;
-	width: 288px;
-	margin-right: 12px;
 	
-	border: 2px solid gray;
-	border-radius: 8px;
-	-webkit-border-radius: 8px;
-	height: 280px;
+	.step-panel {
+		float: left;
+		width: 288px;
+		margin-right: 12px;
+
+		border: 2px solid gray;
+		@include rounded(8px);
+		height: 280px;
+
+		background: #EDEDED url(/images/sf_scene.jpg);
+		position: relative;
+		
+		&:nth-of-type(2) {
+			background-position: -300px 0;
+		}
+		&:last-of-type {
+			margin-left: 608px;
+			margin-right: 0;
+			float: none;
+
+			background-position: -600px 0;
+			
+			.caption {
+				text-align: right;
+			}
+		}
+		
+		.caption {
+			color: white;
+			padding: 5px 10px;
+
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			
+			div.opaque-layer {
+				position: absolute;
+				top: 0; bottom: 0;
+				left: 0; right: 0;
+
+				background: gray;
+				opacity: .8;
+				z-index: 0;
+			}
+			
+			div.text-layer {
+				color: white;
+				position: relative;
+			}
+		}
+	}
+}
+
+#flow {
+	$border: 2px;
+	$usefull-width: (900px - 2*$border) / 4;
 	
-	background: #EDEDED url(/images/sf_scene.jpg);
-	position: relative;
-}
-
-#usage-flow-comic .step-panel:nth-of-type(2) {
-	background-position: -300px 0;
-}
-
-#usage-flow-comic .step-panel:last-of-type {
-	margin-left: 608px;
-	margin-right: 0;
-	float: none;
+	margin-bottom: 25px;
+	border: $border solid #BFBFBF;
+	@include rounded(8px);
 	
-	background-position: -600px 0;
+	.step {
+		position: relative;
+		width: $usefull-width;
+		padding: 15px 0;
+		
+		img {
+			width: 96px; height: 96px;
+			margin-bottom: 10px;
+		}
+		.caption {}
+		
+		font-size: 80%;
+		text-align: center;
+		
+		&:not(:last-of-type) {
+			float: left;
+		}
+		
+		&:last-of-type {
+			margin-left: 3 * $usefull-width;
+		}
+		
+		.link {
+			position: absolute;
+			top: 50%;
+			margin-top: -35px;
+			right: -15px;
+			
+			font-size: 25px;
+			width: 30px;
+			text-align: center;
+			
+			color: gray;
+		}
+	}
 }
 
-#usage-flow-comic .step-panel .caption {
-	color: white;
-	padding: 5px 10px;
+#testimonials {
+	$border: 2px;
+	$padding: 15px;
+	$line: 1px;
+	$usefull-width: (900px - 2*$border - 2*$line) / 3;
 	
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-}
-
-#usage-flow-comic .step-panel:last-of-type .caption {
-	text-align: right;
-}
-
-#usage-flow-comic .step-panel .caption div.opaque-layer {
-	position: absolute;
-	top: 0; bottom: 0;
-	left: 0; right: 0;
+	border: $border solid #BFBFBF;
+	@include rounded(8px);
+	background: #F5F5F5;
 	
-	background: gray;
-	opacity: .8;
-	z-index: 0;
-}
-
-#usage-flow-comic .step-panel .caption div.text-layer {
-	color: white;
-	position: relative;
+	> div { // .block-n
+		height: 100px;
+		width: $usefull-width - 2*$padding;
+		padding: $padding;
+		
+		&:not(:last-of-type) {
+			border-right: $line solid #DDD;
+			float: left;
+		}
+		
+		&:last-of-type {
+			margin-left: 2*$usefull-width + 2*$line;
+			float: none;
+		}
+		
+		div.bigsparkle {
+			@include mjfont;
+			font-size: 20pt;
+			text-align: center;
+			margin-top: 30px;
+		}
+	}
+	
+	.promo-block {
+		position: relative;
+		.title {
+			position: absolute;
+			left: 38px; top: 8px;
+		}
+		.text {
+			color: #3F3F3F;
+			font-size: 70%;
+		}
+	}
 }
 
 /* "Mojo is...", homepage */
@@ -582,6 +726,7 @@ h2, h3 {
 	margin-left: 1.75em;
 }
 
+// not used animore on homepage, could be recycled
 .tab-widget {
 	margin-top: 25px;
 }
@@ -1380,44 +1525,6 @@ select.mj-category-select {
 	position: absolute;
 	top: 50%;
 	right: 0;
-}
-
-.start-process {
-	position: relative;
-	
-	> .title {
-		@include mjfont;
-		font-size: 1.30em;
-	}
-}
-
-.start-process .hybrid-input {
-	margin-top: 0;
-	margin-right: 155px;
-}
-.start-process .next {
-	position: absolute;
-	right: 0;
-	bottom: 0;
-	padding-bottom: 5px;
-}
-.start-process .next button {
-	padding: 5px 12px;
-	font-size: 1.05em;
-	background: url(/images/buttons/button-start.png);
-	height: 56px;
-	width: 145px;
-	text-align: left;
-	border: none;
-	
-	font-size: 1.20em;
-}
-.start-process .next button:hover {
-	background-position: 0 56px;
-}
-.start-process .next button:active {
-	position:relative;
-	top: 1px;
 }
 
 .mj-location-input {

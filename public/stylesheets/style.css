@@ -150,53 +150,194 @@ h2, h3 {
  * Mockup elements
  */
 /* usage flow comic, homepage */
+#top-frame {
+  position: relative;
+  margin-bottom: 15px; }
+  #top-frame .quick-start {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    z-index: 1;
+    padding: 10px; }
+    #top-frame .quick-start .opaque-layer {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: black;
+      -moz-border-radius: 8px;
+      -webkit-border-radius: 8px;
+      border-radius: 8px;
+      opacity: .8;
+      z-index: 0; }
+    #top-frame .quick-start .content-layer {
+      color: white;
+      position: relative; }
+      #top-frame .quick-start .content-layer form {
+        margin-top: 6px;
+        text-align: right; }
+      #top-frame .quick-start .content-layer .submit {
+        margin-top: 6px; }
+        #top-frame .quick-start .content-layer .submit button {
+          display: inline-block;
+          outline: none;
+          cursor: pointer;
+          text-align: center;
+          text-decoration: none;
+          font: 14px/100% Arial, Helvetica, sans-serif;
+          padding: .5em 2em .55em;
+          -webkit-border-radius: .5em;
+          -moz-border-radius: .5em;
+          border-radius: .5em;
+          -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+          -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+          /* white */
+          /* mojo */
+          color: black !important;
+          padding: 3px 15px;
+          cursor: default !important; }
+          #top-frame .quick-start .content-layer .submit button:hover {
+            text-decoration: none; }
+          #top-frame .quick-start .content-layer .submit button:active {
+            position: relative;
+            top: 1px; }
+          #top-frame .quick-start .content-layer .submit button.white {
+            color: #606060;
+            border: solid 1px #b7b7b7;
+            background: #fff;
+            background: -webkit-gradient(linear, left top, left bottom, from(white), to(#ededed));
+            background: -moz-linear-gradient(top, white, #ededed);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to'); }
+          #top-frame .quick-start .content-layer .submit button.white:hover {
+            background: #ededed;
+            background: -webkit-gradient(linear, left top, left bottom, from(white), to(#dcdcdc));
+            background: -moz-linear-gradient(top, white, #dcdcdc);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to'); }
+          #top-frame .quick-start .content-layer .submit button.white:active {
+            color: #999;
+            background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(white));
+            background: -moz-linear-gradient(top, #ededed, white);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to'); }
+          #top-frame .quick-start .content-layer .submit button.mojo {
+            color: black;
+            border: outset 1px #9b9b9b;
+            background: #fff;
+            background: -webkit-gradient(linear, left top, left bottom, from(white), to(#e5e5e5));
+            background: -moz-linear-gradient(top, white, #e5e5e5);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to'); }
+          #top-frame .quick-start .content-layer .submit button.mojo:hover {
+            background: #ededed;
+            background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#d9d9d9));
+            background: -moz-linear-gradient(top, #f2f2f2, #d9d9d9);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to'); }
+          #top-frame .quick-start .content-layer .submit button.small {
+            font-size: 11px;
+            padding: .2em 1em .275em; }
+
 #usage-flow-comic {
   margin-bottom: 25px; }
+  #usage-flow-comic .step-panel {
+    float: left;
+    width: 288px;
+    margin-right: 12px;
+    border: 2px solid gray;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+    height: 280px;
+    background: #ededed url(/images/sf_scene.jpg);
+    position: relative; }
+    #usage-flow-comic .step-panel:nth-of-type(2) {
+      background-position: -300px 0; }
+    #usage-flow-comic .step-panel:last-of-type {
+      margin-left: 608px;
+      margin-right: 0;
+      float: none;
+      background-position: -600px 0; }
+      #usage-flow-comic .step-panel:last-of-type .caption {
+        text-align: right; }
+    #usage-flow-comic .step-panel .caption {
+      color: white;
+      padding: 5px 10px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0; }
+      #usage-flow-comic .step-panel .caption div.opaque-layer {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: gray;
+        opacity: .8;
+        z-index: 0; }
+      #usage-flow-comic .step-panel .caption div.text-layer {
+        color: white;
+        position: relative; }
 
-#usage-flow-comic .step-panel {
-  float: left;
-  width: 288px;
-  margin-right: 12px;
-  border: 2px solid gray;
-  border-radius: 8px;
+#flow {
+  margin-bottom: 25px;
+  border: 2px solid #bfbfbf;
+  -moz-border-radius: 8px;
   -webkit-border-radius: 8px;
-  height: 280px;
-  background: #ededed url(/images/sf_scene.jpg);
-  position: relative; }
+  border-radius: 8px; }
+  #flow .step {
+    position: relative;
+    width: 224px;
+    padding: 15px 0;
+    font-size: 80%;
+    text-align: center; }
+    #flow .step img {
+      width: 96px;
+      height: 96px;
+      margin-bottom: 10px; }
+    #flow .step:not(:last-of-type) {
+      float: left; }
+    #flow .step:last-of-type {
+      margin-left: 672px; }
+    #flow .step .link {
+      position: absolute;
+      top: 50%;
+      margin-top: -35px;
+      right: -15px;
+      font-size: 25px;
+      width: 30px;
+      text-align: center;
+      color: gray; }
 
-#usage-flow-comic .step-panel:nth-of-type(2) {
-  background-position: -300px 0; }
-
-#usage-flow-comic .step-panel:last-of-type {
-  margin-left: 608px;
-  margin-right: 0;
-  float: none;
-  background-position: -600px 0; }
-
-#usage-flow-comic .step-panel .caption {
-  color: white;
-  padding: 5px 10px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0; }
-
-#usage-flow-comic .step-panel:last-of-type .caption {
-  text-align: right; }
-
-#usage-flow-comic .step-panel .caption div.opaque-layer {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: gray;
-  opacity: .8;
-  z-index: 0; }
-
-#usage-flow-comic .step-panel .caption div.text-layer {
-  color: white;
-  position: relative; }
+#testimonials {
+  border: 2px solid #bfbfbf;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  background: #F5F5F5; }
+  #testimonials > div {
+    height: 100px;
+    width: 268px;
+    padding: 15px; }
+    #testimonials > div:not(:last-of-type) {
+      border-right: 1px solid #dddddd;
+      float: left; }
+    #testimonials > div:last-of-type {
+      margin-left: 598px;
+      float: none; }
+    #testimonials > div div.bigsparkle {
+      font-family: brevia-1, brevia-2, sans-serif;
+      font-size: 20pt;
+      text-align: center;
+      margin-top: 30px; }
+  #testimonials .promo-block {
+    position: relative; }
+    #testimonials .promo-block .title {
+      position: absolute;
+      left: 38px;
+      top: 8px; }
+    #testimonials .promo-block .text {
+      color: #3F3F3F;
+      font-size: 70%; }
 
 /* "Mojo is...", homepage */
 #promo-twin-set {
@@ -899,39 +1040,6 @@ select.mj-category-select {
   top: 50%;
   right: 0; }
 
-.start-process {
-  position: relative; }
-  .start-process > .title {
-    font-family: brevia-1, brevia-2, sans-serif;
-    font-size: 1.30em; }
-
-.start-process .hybrid-input {
-  margin-top: 0;
-  margin-right: 155px; }
-
-.start-process .next {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  padding-bottom: 5px; }
-
-.start-process .next button {
-  padding: 5px 12px;
-  font-size: 1.05em;
-  background: url(/images/buttons/button-start.png);
-  height: 56px;
-  width: 145px;
-  text-align: left;
-  border: none;
-  font-size: 1.20em; }
-
-.start-process .next button:hover {
-  background-position: 0 56px; }
-
-.start-process .next button:active {
-  position: relative;
-  top: 1px; }
-
 .mj-location-input {
   position: relative;
   background: transparent;
@@ -1434,7 +1542,8 @@ h2 {
   -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  /* white */ }
+  /* white */
+  /* mojo */ }
   .userhome-container button:hover {
     text-decoration: none; }
   .userhome-container button:active {
@@ -1446,17 +1555,29 @@ h2 {
     background: #fff;
     background: -webkit-gradient(linear, left top, left bottom, from(white), to(#ededed));
     background: -moz-linear-gradient(top, white, #ededed);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed'); }
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to'); }
   .userhome-container button.white:hover {
     background: #ededed;
     background: -webkit-gradient(linear, left top, left bottom, from(white), to(#dcdcdc));
     background: -moz-linear-gradient(top, white, #dcdcdc);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dcdcdc'); }
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to'); }
   .userhome-container button.white:active {
     color: #999;
     background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(white));
     background: -moz-linear-gradient(top, #ededed, white);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#ffffff'); }
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to'); }
+  .userhome-container button.mojo {
+    color: black;
+    border: outset 1px #9b9b9b;
+    background: #fff;
+    background: -webkit-gradient(linear, left top, left bottom, from(white), to(#e5e5e5));
+    background: -moz-linear-gradient(top, white, #e5e5e5);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to'); }
+  .userhome-container button.mojo:hover {
+    background: #ededed;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#d9d9d9));
+    background: -moz-linear-gradient(top, #f2f2f2, #d9d9d9);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to'); }
   .userhome-container button.small {
     font-size: 11px;
     padding: .2em 1em .275em; }
