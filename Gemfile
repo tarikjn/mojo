@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.0'
+gem 'rails', '3.0.3'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -34,3 +34,9 @@ gem 'geokit-rails3'
 
 # twilio ruby gem
 gem 'twiliolib'
+
+# authlogic (rails3)
+gem "authlogic"
+gem "rails3-generators"
+
+gem "httparty"

@@ -1,3 +1,16 @@
+// setup of accept format for Rails' respond_to format.js
+jQuery.ajaxSetup({
+    'beforeSend': function(xhr) {
+        xhr.setRequestHeader("Accept", "text/javascript")
+    }
+});
+
+jQuery.fn.cleanWhitespace = function() {
+    textNodes = this.contents().filter(
+        function() { return (this.nodeType == 3 && !/\S/.test(this.nodeValue)); })
+        .remove();
+}
+
 // http://evilstreak.co.uk/blog/fixing-change-events-on-radios
 $.fn.fix_radios = function() {
   function focus() {
@@ -301,21 +314,155 @@ var AlternateElement = {
 	}
 }
 
+var Flash = {
+	timing: 50,
+	set: function(id) {
+		var el = Flash.getEl(id);
+		el.mj_flashInterval = setInterval(function() {Flash.toggle(el)}, Flash.timing);
+	},
+	toggle: function(el) {
+		$(el).toggle();
+	},
+	stop: function(id) {
+		var el = Flash.getEl(id);
+		if (el.mj_flashInterval)
+		{
+			clearInterval(el.mj_flashInterval);
+			mj_flashInterval = null;
+		}
+		$(el).show();
+	},
+	getEl: function(date_id) {
+		return $(".mj-timeline-input .activities .activity.date-"+date_id)[0];
+	}
+};
+
+var DateList = {
+	getId: function(el) {
+		var match = (el.id).match(/(\d+)$/g);
+		return match[0];
+	}
+}
+
 
 $(function() {
 	
 	// the code after this point is executed when the DOM finished loading
 	
-	// animate
-	//$("#anim .sliding")[0].left 0 -> -898
-	$("#clickme").click(function() {
-		var manager = new jsAnimManager(40);
-		var anim = manager.createAnimObject("animit");
-		anim.add({property: Prop.left, from: 0, to: -898, duration: 1500, ease: jsAnimEase.parabolicNeg});
+	// flash date pointers and markers
+	$(".mj-activity").mouseenter(function(){
+		var id = DateList.getId(this);
+		
+		Flash.set(id);
+		Geo.animateMarker(id);
+	}).mouseleave(function(){
+		var id = DateList.getId(this);
+		
+		// stop flashing
+		Flash.stop(id)
+		// stop bouncing
+		Geo.stopAnimateMarker(id);
+	});
+	
+	// afinity
+	$("canvas.afinity-chart").each(function(){
+		var r = this.width / 2; // radius
+		var a = parseInt($(this.parentNode.parentNode).find(".score .int").text()) / 100; // afinity
+		
+		var red = Math.round(255 - ((a > .5)? 255 * (a - .5) * 2 : 0));
+		var green = Math.round((a > .5)? 255 : 255 * a * 2);
+		
+		var ctx = this.getContext("2d");
+		
+		// colored
+		ctx.beginPath();
+		ctx.arc(r, r, r, -.5*Math.PI, -.5*Math.PI + Math.PI*2*a, false);
+		ctx.lineTo(r, r);
+		ctx.closePath();
+		ctx.fillStyle = 'rgb('+red+', '+green+', 0)';
+		ctx.fill();
+		
+		// remaining in gray
+		ctx.beginPath();
+		ctx.arc(r, r, r, -.5*Math.PI + Math.PI*2*a, -.5*Math.PI + Math.PI*2, false);
+		ctx.lineTo(r, r);
+		ctx.closePath();
+		ctx.fillStyle = 'rgba('+red+', '+green+', 0, .25)';
+		ctx.fill();
+	});
+	
+	// animating stepflow
+	$(".stepflow-frame > form").submit(function() {
+		
+		// save reference
+		var form = this;
+		
+		// nav loading
+		$("#stepflow-nav button").attr('disabled', 'disabled');
+		$("#stepflow-nav .ajax-loading").show();
+		
+		$.post(this.action, $(this).serialize(), function(r) {
+			
+			if (r.move == 'next')
+			{
+				var outgoing = $('#stepflow-blocks').children().first();
+				var timing = 1000;
+
+				var incoming = $(r.block).appendTo($('#stepflow-blocks')).css({opacity: 0});
+				$('#stepflow-blocks').cleanWhitespace();
+
+				// nav loaded
+				var nav = $(r.nav);
+				nav.find("button").attr('disabled', 'disabled');
+				$("#stepflow-nav").html(nav);
+
+				// update form action
+				form.action = r.action;
+
+				// sliding animation
+				outgoing.animate({opacity: 0}, timing, 'swing');
+				incoming.animate({opacity: 1}, timing, 'swing');
+				$("#stepflow-blocks").animate({left: -898}, timing, 'swing', function() {
+					// complete
+					outgoing.remove();
+					$('#stepflow-blocks').css({left: 0});
+					// nav activate
+					$("#stepflow-nav button").removeAttr('disabled');
+				});
+			}
+			else if (r.move = 'redirect')
+			{
+				window.location = r.redirect_path;
+			}
+			
+		});
+		
+		return false;
+	});
+	
+	
+	// login bubble
+	$("#login-link").click(function() {
+		$("#login-bubble").toggle(250);
+		return ($("#login-bubble").length > 0)? false : true;
 	});
 	
 	// load Google Maps (code in mojo-geo.js)
 	if ($('#map_canvas').length)
+	
+		if ($("label.mj-activity").length)
+		{
+			var points = {};
+			
+			$("label.mj-activity").each(function() {
+				var lat = $(this).find(".point .lat").text();
+				var lng = $(this).find(".point .lng").text();
+				points[this.id] = [lat, lng];
+			});
+			
+			Geo.setDatePoints(points);
+		}
+		
 		Geo.initialize();
 	
 	$("input[type=radio]").fix_radios();
@@ -334,7 +481,7 @@ $(function() {
 	}
 	
 	// apply "selected" class to label when switching radio
-	$(".mj-choice, .mj-merged-choices, .mj-operation-choices").find("input[type=radio]").change(function() {
+	$(".mj-choice, .mj-merged-choices, .mj-operation-choices, .mj-micro-select").find("input[type=radio]").change(function() {
 		
 		var label = $(this).parent();
 		var group = label.parents(".hybrid-input:eq(0)");

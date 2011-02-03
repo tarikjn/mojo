@@ -1,0 +1,12 @@
+defaults: &defaults
+  # Yelp API v2
+  YWSID: X08AJn-0KHLor3qK4DHrMA
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

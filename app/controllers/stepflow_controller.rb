@@ -8,6 +8,9 @@ class StepflowController < ApplicationController
     
     #@def_startdate = params[:obj][:start_time]
     #@def_enddate = params[:obj][:end_time]
+    
+    @step = 0
+    @remaining = '2 more minutes'
   end
   
   def discover_submit
@@ -40,7 +43,23 @@ class StepflowController < ApplicationController
       render "discover"
     else
       # all good? display join or create form
-      redirect_to :action => op
+      #redirect_to :action => op
+      
+      # quick & dirty testing
+      @step = 1
+      @remaining = '1 more minute'
+      @previous_action = '/stepflow/discover'
+      respond_to do |format|
+        format.html { redirect_to :action => op }
+        format.js {
+          render :json => {
+            :move => 'next',
+            :action => '/stepflow/' + op,
+            :block => render_to_string(op),
+            :nav => render_to_string(:partial => "nav")
+          }, :content_type => 'application/json'
+        }
+      end
     end
     
   end
@@ -57,6 +76,67 @@ class StepflowController < ApplicationController
     
     # respond ajax/json for map refresh
     
+    @step = 1
+    @remaining = '1 more minute'
+    @previous_action = '/stepflow/discover'
+    
+    @activities = Activity.find_activities_for_user(current_user)
+    
+  end
+  
+  def join_submit
+    
+    session[:selected_dates] = params[:dates]
+    
+    # quick & dirty testing
+    @step = 2
+    @remaining = '5 seconds'
+    @previous_action = '/stepflow/join'
+    
+    current_action = '/stepflow/review'
+    
+    respond_to do |format|
+      format.html { redirect_to :action => current_action }
+      format.js {
+        render :json => {
+          :move => 'next',
+          :action => current_action,
+          :block => render_to_string(current_action),
+          :nav => render_to_string(:partial => "nav")
+        }, :content_type => 'application/json'
+      }
+    end
+    
+  end
+  
+  def review
+  
+  end
+  
+  def review_submit
+    
+    # add user to waitlists
+    selected_dates = session[:selected_dates]
+    selected_dates.each{ |d| Activity.find(d).add_entrant(current_user) }
+    
+    current_action = '/stepflow/finish'
+    
+    respond_to do |format|
+      format.html { redirect_to :action => current_action }
+      format.js {
+        render :json => {
+          :move => 'redirect', # any of next, prev, redirect, error
+          :redirect_path => path_to_url(current_action)
+        }, :content_type => 'application/json'
+      }
+    end
+  end
+  
+  def finish
+    @selected_dates = session[:selected_dates]
+    render :layout => 'application'
+    
+    # clear session data?
   end
   
   def create
@@ -64,6 +144,9 @@ class StepflowController < ApplicationController
     # not much to do
     @user = session[:user]
     
+    @step = 1
+    @remaining = '1 more minute'
+    @previous_action = '/stepflow/discover'
   end
   
   def create_submit
@@ -88,6 +171,9 @@ class StepflowController < ApplicationController
     
     # set up dob year based on age
     
+    @step = 2
+    @remaining = '30 more seconds'
+    @previous_action = '/stepflow/create'
   end
   
   def profile_submit
@@ -115,6 +201,8 @@ class StepflowController < ApplicationController
   
   def map
     flash[:list] = params[:p]
+    #@step = 1
+    #@previous_action = ''
   end
 
 end

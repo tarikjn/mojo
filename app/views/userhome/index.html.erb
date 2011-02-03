@@ -1,6 +1,6 @@
 <div class="userhome-container">
 	<div class="header">
-		<h2>Hello, Tarik :)</h2>
+		<h2>Hello, <%= current_user.first_name %> :)</h2>
 		<div class="links"><a href="#">Settings</a></div>
 	</div>
 	<div class="body">
@@ -9,7 +9,7 @@
 				<div class="title">Profile</div>
 				<div class="content">
 					<div class="picture">
-						<div class="pic96"></div>
+						<div class="pic96"><%= image_tag "/images/users/"+@user.id.to_s+"-96.jpg" %></div>
 						<div class="title">(you)</div>
 					</div>
 					<div class="info">
@@ -38,30 +38,12 @@
 				</div>
 				<div class="content">
 					<ul class="friendlist">
-						<li>
-							<div class="pic48"></div>
-							<div class="name">Anna</div>
-						</li>
-						<li>
-							<div class="pic48"></div>
-							<div class="name">Helen</div>
-						</li>
-						<li>
-							<div class="pic48"></div>
-							<div class="name">Jordan</div>
-						</li>
-						<li>
-							<div class="pic48"></div>
-							<div class="name">Isidro</div>
-						</li>
-						<li>
-							<div class="pic48"></div>
-							<div class="name">Guillaume</div>
-						</li>
-						<li>
-							<div class="pic48"></div>
-							<div class="name">Christophe</div>
-						</li>
+						<% @buddies.each do |buddy| %>
+							<li>
+								<div class="pic48"><%= image_tag "/images/users/"+buddy.id.to_s+"-48.jpg" %></div>
+								<div class="name"><%= buddy.first_name %></div>
+							</li>
+						<% end %>
 					</ul>
 					<div class="clearing-block"></div>
 				</div>
@@ -116,6 +98,70 @@
 				</div>
 				<div class="clearing-block"></div>
 			</div>
+		</div>
+		<div class="row">
+			<div class="section quick-create">
+				<div class="heading">
+					<div class="title">Create a date</div>
+					<div class="extra"><button class="white small">+ Buddy</button></div>
+				</div>
+				<div class="content">
+					<%= form_tag '#todo' do %>
+						<div class="input-row">
+							<div class="smart-labeled-input">
+								<%= text_field_tag :title, '', :size => nil %>
+								<div class="smart-label">Title</div>
+							</div>
+							<div class="hybrid-input mj-micro-select">
+								<label title="Food and Drinks"><input type="radio" name="date_type" value="foodanddrinks"><img src="/images/icons/date-food_and_drinks-micro-gray.png" alt="" /></label><label title="Entertainment"><input type="radio" name="date_type" value="entertainment"><img src="/images/icons/date-entertainment-micro-gray.png" alt="" /></label><label title="Outdoor"><input type="radio" name="date_type" value="outdoor"><img src="/images/icons/date-outdoor-micro-gray.png" alt="" /></label>
+							</div>
+						</div>
+						<div class="input-row description">
+							<div class="smart-labeled-input">
+								<div class="smart-label">Description</div>
+								<%= text_area_tag :title, '', :size => nil %>
+							</div>
+						</div>
+						<div class="input-row labeled">
+							<label>When</label>
+							<div class="input">
+								<%= text_field_tag :smart_time, '', :size => nil %>
+							</div>
+						</div>
+						<div class="input-row labeled">
+							<label>Where</label>
+							<div class="input">
+								<span class="thumb">San Francisco</span> <%= text_field_tag :smart_location, '', :size => nil %>
+							</div>
+						</div>
+						<div class="submit">
+							<button type="submit">Create</button>
+						</div>
+					<% end %>
+				</div>
+			</div>
+			<div class="section quick-join">
+				<div class="heading">
+					<div class="title">Join a date</div>
+					<div class="extra"><button class="white small">+ Buddy</button></div>
+				</div>
+				<div class="content">
+					<form>
+						<div class="header">Filters</div>
+						<div class="date-feed">
+							<ul>
+								<li></li>
+								<li></li>
+							</ul>
+						</div>
+						<div class="footer">
+							<div class="submit">
+								<button type="submit">Join Selected</button>
+							</div>
+						</div>
+				</div>
+			</div>
+			<div class="clearing-block"></div>
 		</div>
 	</div>
 </div>

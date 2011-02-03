@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101012055423) do
+ActiveRecord::Schema.define(:version => 20110202191312) do
 
   create_table "activities", :force => true do |t|
     t.string   "activity_type"
@@ -19,9 +19,11 @@ ActiveRecord::Schema.define(:version => 20101012055423) do
     t.datetime "time"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "state"
+    t.string   "state",          :default => "open"
     t.integer  "creator_duo_id"
     t.integer  "invitee_duo_id"
+    t.float    "lat"
+    t.float    "lng"
   end
 
   create_table "duos", :force => true do |t|
@@ -47,6 +49,9 @@ ActiveRecord::Schema.define(:version => 20101012055423) do
     t.integer  "max_height"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "crypted_password"
+    t.string   "password_salt"
+    t.string   "persistence_token"
   end
 
   create_table "users_buddies", :id => false, :force => true do |t|
@@ -59,7 +64,7 @@ ActiveRecord::Schema.define(:version => 20101012055423) do
   create_table "waitlist_entries", :force => true do |t|
     t.integer  "user_id"
     t.integer  "activity_id"
-    t.string   "state"
+    t.string   "state",       :default => "waiting"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

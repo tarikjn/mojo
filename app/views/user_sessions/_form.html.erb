@@ -1,0 +1,17 @@
+<% form_for session, :url => {:controller => "user_sessions", :action => "create"} do |f| %>
+	<div class="labeled-input">
+		<%= format_errors_for session, :email, 'Email' %>
+	    <div><%= f.text_field :email, :size => nil %></div>
+		<%= f.label :email, 'Email' %>
+	</div>
+	<div class="labeled-input space">
+		<%= format_errors_for session, :password, 'Password' %>
+	    <div><%= f.password_field :password, :size => nil %></div>
+		<%= f.label :password, 'Password' %>
+	</div>
+	<div class="labeled-checkbox">
+		<%= f.check_box :remember_me %>
+		<%= f.label :remember_me %>
+	</div>
+	<div class="submit"><button type="submit" class="mojo small">Login</button></div>
+<% end %>

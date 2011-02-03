@@ -1,0 +1,43 @@
+<%
+	steps = ['Create or Join?', 'Activity Details', 'Profile Information', 'Finish :)']
+	# 'Create Activity' when in create mode
+%>
+<div class="stepflow-position">
+	
+	<div class="previous">
+		
+		<%
+			if @step == 0
+		%>
+		<a href="/">Cancel and <br />Return to Homepage</a>
+		<%
+			else
+		%>
+			<button type="submit" class="previous" formaction="<%= @previous_action %>"><%= steps[@step - 1] %></button> 
+		<%
+			end
+		%>
+	</div>
+	
+	<div class="list">
+		<ol>
+			<%
+				
+				(0..2).each do |i|
+			%>
+			<li<% if i == @step %> class="current"<% end %>><div class="step-bullet"><% if i <= @step %>•<% else %>○<% end %></div><div class="label"><%= steps[i] %></div></li>
+			<%
+				end
+			%>
+		</ol>
+	</div>
+	
+	<div class="next">
+		<img class="ajax-loading" src="/images/ajax-loading.gif" alt="loading..." /> <button type="submit"><%= steps[@step + 1] %></button>
+	</div>
+	
+</div>
+
+<div class="stepflow-time-remaining">
+	<span><%= @remaining %> to completion...</span>
+</div>

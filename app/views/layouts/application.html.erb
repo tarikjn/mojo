@@ -12,10 +12,10 @@
 	<%#= stylesheet_link_tag :all %>
 	
 	<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>-->
+	<!-- rails.js not working with jQuery, required for DELETE http method -->
 	<%= javascript_include_tag 'jquery-1.4.2.min' %>
 	<%= javascript_include_tag 'mojo-geo' %>
 	<%= javascript_include_tag 'mojo' %>
-	<%= javascript_include_tag 'jsAnim' %>
 	
 	<!-- Typekit -->
 	<script type="text/javascript" src="http://use.typekit.com/tmd7ups.js"></script>
@@ -33,17 +33,28 @@
 <body>
 	<div id="head-content">
 		<div class="auto-margin-cell">
-			<div id="logo-wrapper">Mojo</div>
+			<div id="logo-wrapper"><a href="/">Mojo</a></div>
 			<div id="auth-links">
-				<a href="#">Home</a>
-				<a href="#">Logout</a>
+				<% if current_user %>
+					<%= link_to "Home", userhome_path %>
+					<%= link_to "Sign out", logout_path %>
+				<% else %>
+					<%= link_to "Sign In", login_path, :id => "login-link" %>
+					<% if controller.controller_name != 'user_sessions' %>
+					<div class="relative-container">
+						<div id="login-bubble">
+							<%= login_form %>
+						</div>
+					</div>
+					<% end %>
+				<% end %>
 			</div>
 		</div>
 	</div>
 	
 	<div id="main-content">
 		<div class="auto-margin-cell">
-			<%= yield %>
+			<%= content_for?(:content) ? yield(:content) : yield %>
 		</div>
 	</div>
 

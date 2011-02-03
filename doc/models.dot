@@ -1,0 +1,9 @@
+digraph models_diagram {
+	graph[overlap=false, splines=true]
+	"Activity" [shape=Mrecord, label="{Activity|activity_type :string\ltitle :string\ldescription :text\ltime :datetime\lcreated_at :datetime\lupdated_at :datetime\lstate :string\llat :float\llng :float\l}"]
+	"Duo" [shape=Mrecord, label="{Duo|created_at :datetime\lupdated_at :datetime\l}"]
+	"User" [shape=Mrecord, label="{User|first_name :string\llast_name :string\lemail :string\lcellphone :string\lpicture_url :string\lsex :string\lsex_preference :string\ldob :date\lmin_age :integer\lmax_age :integer\lheight :integer\lmin_height :integer\lmax_height :integer\lcreated_at :datetime\lupdated_at :datetime\lcrypted_password :string\lpassword_salt :string\lpersistence_token :string\l}"]
+	"WaitlistEntry" [shape=Mrecord, label="{WaitlistEntry|state :string\lcreated_at :datetime\lupdated_at :datetime\l}"]
+	"Duo" -> "Activity" [arrowtail=odot, arrowhead=dot, dir=both]
+	"User" -> "User" [label="buddies", arrowtail=crow, arrowhead=crow, dir=both]
+}

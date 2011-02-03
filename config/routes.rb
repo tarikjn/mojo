@@ -1,4 +1,8 @@
 Mojo::Application.routes.draw do
+  
+  resources :user_sessions
+  match 'login' => "user_sessions#new",      :as => :login
+  match 'logout' => "user_sessions#destroy", :as => :logout
 
   match "/userhome" => "userhome#index"
 
@@ -6,12 +10,16 @@ Mojo::Application.routes.draw do
   post "stepflow/discover" => "stepflow#discover_submit"
   get "stepflow/discover"
   get "stepflow/join"
+  post "stepflow/join" => "stepflow#join_submit"
   post "stepflow/create" => "stepflow#create_submit"
   get "stepflow/create"
   post "stepflow/profile" => "stepflow#profile_submit"
   get "stepflow/profile"
+  post "stepflow/review" => "stepflow#review_submit"
+  get "stepflow/review"
   
-  get "stepflow/jsanim"
+  get "stepflow/finish"
+  
   get "stepflow/map"
   post "stepflow/map"
   
