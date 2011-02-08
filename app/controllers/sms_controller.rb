@@ -1,5 +1,6 @@
 class SmsController < ApplicationController
   # Trails can be used to have testing (SMS simulation?)
+  skip_before_filter :restricted_access
   
   def receive
     # should log messages
