@@ -2,8 +2,17 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   helper_method :current_user_session, :current_user
+  
+  # if Rails.env == 'staging' and params[:controller] == 'sms', require auth
+  before_filter lambda { |c| restricted_access if (Rails.env == 'staging') }, :except => :sms
 
   private
+
+  def restricted_access
+    authenticate_or_request_with_http_basic do |user_name, password|
+      SETTINGS[Rails.env]['auth'][user_name] and SETTINGS[Rails.env]['auth'][user_name] == password
+    end
+  end
   
   def current_user_session
     logger.debug "ApplicationController::current_user_session"
