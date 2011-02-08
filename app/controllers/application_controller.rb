@@ -4,13 +4,15 @@ class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user
   
   # if Rails.env == 'staging' and params[:controller] == 'sms', require auth
-  before_filter lambda { |c| restricted_access if (Rails.env == 'staging') }
+  before_filter :restricted_access
 
   private
 
   def restricted_access
-    authenticate_or_request_with_http_basic do |user_name, password|
-      SETTINGS[Rails.env]['auth'][user_name] and SETTINGS[Rails.env]['auth'][user_name] == password
+    if (Rails.env == 'staging') then
+      authenticate_or_request_with_http_basic do |user_name, password|
+        SETTINGS[Rails.env]['auth'][user_name] and SETTINGS[Rails.env]['auth'][user_name] == password
+      end
     end
   end
   
