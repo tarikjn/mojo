@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user
   
   # if Rails.env == 'staging' and params[:controller] == 'sms', require auth
-  before_filter lambda { |c| restricted_access if (Rails.env == 'staging') }, :except => :sms
+  before_filter lambda { |c| restricted_access if (Rails.env == 'staging') }, :except => 'sms'
 
   private
 
