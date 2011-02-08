@@ -6,6 +6,7 @@ Mojo::Application.routes.draw do
 
   match "/userhome" => "userhome#index"
 
+  # todo: refactor stepflow routes, at least namespace
   match "stepflow" => "stepflow#discover"
   post "stepflow/discover" => "stepflow#discover_submit"
   get "stepflow/discover"
@@ -24,7 +25,14 @@ Mojo::Application.routes.draw do
   post "stepflow/map"
   
   get "stepflow/created"
+  
+  match "/sms" => "sms#receive"
 
+  # todo: namespace it
+  match "/entries/:id/confirmation", :to => "waitlist_entries#confirmation", :constraints => {:id => /\d+/}
+  match "/entries/pass/:entry", :to => "waitlist_entries#pass", :constraints => {:entry => /\d+/}
+  match "/entries/invite/:entry", :to => "waitlist_entries#invite", :constraints => {:entry => /\d+/}
+  match "/entries/:id", :to => "waitlist_entries#waitlist", :constraints => {:id => /\d+/}
   resources :waitlist_entries
 
   resources :users

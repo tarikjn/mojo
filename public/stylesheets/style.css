@@ -5,6 +5,33 @@
  * Mixins
  */
 /*
+ * Drag and Drop (HTML5)
+ */
+[draggable=true] {
+  -moz-user-select: none;
+  -khtml-user-drag: element;
+  cursor: move; }
+
+.drag-icon {
+  padding: 8px;
+  background: #f9f9f9;
+  border: 1px solid #e6e6e6;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  opacity: .8;
+  position: absolute;
+  z-index: -100; }
+
+.drop-loading {
+  background: url(/images/ajax-loading.gif) no-repeat center center; }
+  .drop-loading > * {
+    opacity: 0; }
+
+.drag-over {
+  background-color: #e1ecff; }
+
+/*
  * General elements
  */
 body {
@@ -1483,12 +1510,8 @@ h2 {
       .participants-view .activity-box .user > .picture {
         display: inline-block;
         vertical-align: middle;
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
-        border-radius: 5px;
         width: 48px;
-        height: 48px;
-        background-image: url(/images/anna-profile_small.jpg); }
+        height: 48px; }
       .participants-view .activity-box .user > .title {
         display: inline-block;
         vertical-align: middle;
@@ -1504,58 +1527,57 @@ h2 {
       padding: 8px 10px;
       border: 2px dashed gray;
       height: 32px; }
-
-.participants-view .eject {
-  position: absolute;
-  width: 100px;
-  top: 0;
-  right: 0; }
-
-.participants-view .participants {
-  margin-left: 320px;
-  margin-right: 120px;
-  padding-bottom: 200px; }
-
-.participants .host-info {
-  margin-left: 0;
-  background: #F9F9F9;
-  padding: 8px 10px;
-  border-radius: 5px;
-  border: 2px solid gray; }
-
-.participants > .current {
-  cursor: -webkit-grab;
-  cursor: grab; }
-
-.participants > .incoming {
-  padding: 16px 8px 10px;
-  border-radius: 0 0 5px 5px;
-  border: 2px dotted gray;
-  border-bottom-style: solid;
-  border-top: none;
-  background: url(/images/incoming-bg.png) bottom repeat-x;
-  margin-bottom: 10px;
-  text-align: center;
-  font-size: 1.25em;
-  color: #333; }
-
-.eject {
-  text-align: center; }
-
-.eject > .symbol {
-  font-size: 32px;
-  border: 2px dashed gray;
-  display: inline-block;
-  padding: 5px 10px;
-  border-radius: 5px; }
-
-.eject > .title {
-  color: white;
-  background: black;
-  padding: 5px 5px;
-  border-radius: 15px;
-  margin-top: 10px;
-  font-size: .85em; }
+  .participants-view .participants-viewport {
+    position: relative;
+    height: 140px;
+    overflow: hidden;
+    margin-bottom: 200px; }
+    .participants-view .participants-viewport .participants {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin-left: 320px;
+      margin-right: 120px; }
+      .participants-view .participants-viewport .participants .host-info {
+        margin-left: 0;
+        background: #F9F9F9;
+        padding: 8px 10px;
+        border-radius: 5px;
+        border: 2px solid gray; }
+      .participants-view .participants-viewport .participants > .current {
+        cursor: -webkit-grab;
+        cursor: grab; }
+      .participants-view .participants-viewport .participants > .incoming {
+        padding: 16px 8px 10px;
+        border-radius: 0 0 5px 5px;
+        border: 2px dotted gray;
+        border-bottom-style: solid;
+        border-top: none;
+        background: url(/images/incoming-bg.png) bottom repeat-x;
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 1.25em;
+        color: #333; }
+  .participants-view .eject {
+    position: absolute;
+    width: 100px;
+    top: 0;
+    right: 0;
+    text-align: center; }
+    .participants-view .eject > .symbol {
+      font-size: 32px;
+      border: 2px dashed gray;
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 5px; }
+    .participants-view .eject > .title {
+      color: white;
+      background: black;
+      padding: 5px 5px;
+      border-radius: 15px;
+      margin-top: 10px;
+      font-size: .85em; }
 
 /*
  * userhome

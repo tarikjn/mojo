@@ -39,4 +39,5 @@ gem 'twiliolib'
 gem "authlogic"
 gem "rails3-generators"
 
+# used to access Yelp API
 gem "httparty"

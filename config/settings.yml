@@ -1,12 +1,32 @@
 defaults: &defaults
   # Yelp API v2
   YWSID: X08AJn-0KHLor3qK4DHrMA
+  Twilio:
+    # your Twilio authentication credentials
+    ACCOUNT_SID: ACe04542bb0bb52dd68d5ed9e03b87ef99
+    ACCOUNT_TOKEN: ce45261ee3ced1c7c3af8deb41fddf93
+
+    # version of the Twilio REST API to use
+    API_VERSION: 2010-04-01
+
+    # base URL of this application
+    BASE_URL: http://staging.mojo.co/sms
+
+    # Outgoing Caller ID you have previously validated with Twilio
+    CALLER_ID: (415) 236-3526
+  
 
 development:
   <<: *defaults
 
 test:
   <<: *defaults
+
+staging:
+  <<: *defaults
+  auth:
+    tarik: password
+    jordan: password
 
 production:
   <<: *defaults

@@ -1,0 +1,32 @@
+<% content_for :body do %>
+<div class="remaining-time">5 hours left</div>
+<div class="participants-view">
+	<div class="activity-box">
+		<div class="title"><%= @activity.title %></div>
+		<div class="content">
+			<div class="user host">
+				<div class="picture" style="background-image: url(/images/users/<%= @activity.creator.id %>-48.jpg)">
+				</div>
+				<div class="title">
+					<div class="name"><%= @activity.creator.first_name %></div>
+					<div class="rating">★★★☆</div>
+				</div>
+			</div>
+			<div class="spot" id="drop-invite" data-action="invite">
+			</div>
+		</div>
+	</div>
+
+	<div class="participants-viewport">
+		<div class="participants">
+		<%= yield %>
+		</div>
+	</div>
+
+	<div class="eject">
+		<div class="symbol" id="drop-pass" data-action="pass"><span>⏏</span></div>
+		<div class="title">Good luck!</div>
+	</div>
+</div>
+<% end %>
+<%= render :file => 'layouts/userhome' %>

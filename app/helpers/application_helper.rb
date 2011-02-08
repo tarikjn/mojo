@@ -7,7 +7,7 @@ module ApplicationHelper
   
   def mj_timerange(show_activities = false)
     # TODO: move to helper
-    render :partial => "layouts/mj_timeline", :locals => {:show_activities => show_activities}
+    render :partial => "shared/mj_timeline", :locals => {:show_activities => show_activities}
   end
   
   def login_form

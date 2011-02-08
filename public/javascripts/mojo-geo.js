@@ -80,7 +80,7 @@ var Geo = {
 
 	addDateMarkers: function(map_obj) {
 		
-		for (var i in (Geo.date_points))
+		for (var i in Geo.date_points)
 		{
 			Geo.date_markers[i] = Geo.addMarker(Geo.L(Geo.date_points[i]), "", 'in_range');
 		}

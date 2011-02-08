@@ -273,9 +273,8 @@ color: #e9e9e9;
 	> .picture {
 		display: inline-block;
 		vertical-align: middle;
-		@include rounded;
+		//@include rounded;
 		width: 48px; height: 48px;
-		background-image: url(/images/anna-profile_small.jpg);
 	}
 	> .title {
 		display: inline-block;
@@ -285,6 +284,37 @@ color: #e9e9e9;
 		.name { font-size: 1.25em; }
 		.rating { font-size: .85em; }
 	}	
+}
+
+/*
+ * Drag and Drop (HTML5)
+ */
+[draggable=true] {
+	-moz-user-select: none;
+	-khtml-user-drag: element;
+	cursor: move;
+}
+.drag-icon {
+	padding: 8px;
+	background: $light-gray;
+	border: 1px solid $border-gray;
+	@include rounded;
+	opacity: .8;
+	
+	// required so drag and drop can pick up the CSS style
+	// requires making sure there is a background on top
+	position: absolute;
+	z-index: -100;
+}
+.drop-loading {
+	background: url(/images/ajax-loading.gif) no-repeat center center;
+	
+	> * {
+		opacity: 0;
+	}
+}
+.drag-over {
+	background-color: $light-blue;
 }
 
 /*
@@ -2066,60 +2096,71 @@ h2 {
 			height: 32px;
 		}
 	}
-}
 
-.participants-view .eject {
-	position: absolute;
-	width: 100px;
-	top: 0; right: 0;
-}
+	.participants-viewport {
+		
+		position: relative;
+		height: 140px;
+		overflow: hidden;
+		margin-bottom: 200px;
+		
+		.participants {
+			position: absolute;
+			bottom: 0;
+			left: 0; right: 0;
+			
+			margin-left: 320px;
+			margin-right: 120px;
 
-.participants-view .participants {
-	margin-left: 320px;
-	margin-right: 120px;
-	padding-bottom: 200px;
-}
-.participants .host-info {
-	margin-left: 0;
-	background: #F9F9F9;
-	padding: 8px 10px;
-	border-radius: 5px;
-	border: 2px solid gray;
-}
-.participants > .current {
-	cursor: -webkit-grab;
-	cursor: grab;
-}
-.participants > .incoming {
-	padding: 16px 8px 10px;
-	border-radius: 0 0 5px 5px;
-	border: 2px dotted gray;
-	border-bottom-style: solid;
-	border-top: none;
-	background: url(/images/incoming-bg.png) bottom repeat-x;
-	margin-bottom: 10px;
-	text-align: center;
-	font-size: 1.25em;
-	color: #333;
-}
+			.host-info {
+				margin-left: 0;
+				background: #F9F9F9;
+				padding: 8px 10px;
+				border-radius: 5px;
+				border: 2px solid gray;
+			}
+			> .current {
+				cursor: -webkit-grab;
+				cursor: grab;
+			}
+			> .incoming {
+				padding: 16px 8px 10px;
+				border-radius: 0 0 5px 5px;
+				border: 2px dotted gray;
+				border-bottom-style: solid;
+				border-top: none;
+				background: url(/images/incoming-bg.png) bottom repeat-x;
+				margin-bottom: 10px;
+				text-align: center;
+				font-size: 1.25em;
+				color: #333;
+			}
+		}
+	}
 
-.eject {
-	text-align: center;
-}
-.eject > .symbol {
-	font-size: 32px;
-	border: 2px dashed gray;
-	display: inline-block;
-	padding: 5px 10px;
-	border-radius: 5px;
-}
-.eject > .title {
-	color: white;
-	background: black;
-	padding: 5px 5px;
-	border-radius: 15px;
-	margin-top: 10px;
-	font-size: .85em;
+	.eject {
+		position: absolute;
+		width: 100px;
+		top: 0; right: 0;
+
+		text-align: center;
+
+		> .symbol {
+			font-size: 32px;
+			border: 2px dashed gray;
+			display: inline-block;
+			padding: 5px 10px;
+			border-radius: 5px;
+		}
+		> .title {
+			color: white;
+			background: black;
+			padding: 5px 5px;
+			border-radius: 15px;
+			margin-top: 10px;
+			font-size: .85em;
+		}
+	}
 }
 
 /*

@@ -344,10 +344,149 @@ var DateList = {
 	}
 }
 
+var DragAndDrop = {
+	blinkTime: 200, // ms
+	
+	init: function() {
+		
+		var droppable = {
+			invite: document.getElementById("drop-invite"),
+			pass: document.getElementById("drop-pass")
+		}
+		
+		for (var el in droppable)
+		{
+			// Tells the browser that we *can* drop on this target
+			$(droppable[el]).bind('dragover', DragAndDrop.cancel);
+			$(droppable[el]).bind('dragenter', DragAndDrop.cancel);
+			$(droppable[el]).bind('dragleave', DragAndDrop.leave);
+
+			$(droppable[el]).bind('drop', DragAndDrop.drop);
+		}
+		
+		DragAndDrop.initDraggable();
+	},
+	initDraggable: function() {
+		
+		$("[draggable=true]").bind('dragstart', DragAndDrop.start);
+	},
+	drop: function(event) {
+		
+		// jQuery access
+		var dataTransfer = event.originalEvent.dataTransfer;
+		
+		// stops the browser from redirecting off to the text.
+		if (event.preventDefault) { event.preventDefault(); }
+
+		var id = dataTransfer.getData('Text') ;
+		
+		//this.innerHTML += '<p>' + dataTransfer.getData('Text') + '</p>';
+		$(this).addClass("drop-loading");
+		$(this).removeClass("drag-over");
+		
+		// disable dragging
+		$("#" + id).attr("draggable", false);
+		
+		var drop = this;
+		
+		// send action, removed (document.location)
+		$.get("/entries/" + this.getAttribute("data-action") + "/" + id.match(/(\d+)$/g)[0], function(r) {
+			
+			$(drop).removeClass("drop-loading");
+			
+			switch (r.message)
+			{
+				case 'done':
+					// redirect
+					window.location = r.redirect_path;
+					break;
+				case 'removed':
+					// TODO: handle case where no entry is remaining
+					var removed_entry = $("#" + id);
+					var block = $(".participants-viewport .participants");
+					var eject = $(".participants-view .eject .symbol span");
+					var incoming = block.find(".incoming");
+					
+					// hide for blink
+					removed_entry.css({visibility: 'hidden'});
+					eject.css({visibility: 'hidden'});
+					
+					setTimeout(function() {
+						// blink removed_entry and eject
+						removed_entry.css({visibility: 'visible'});
+						eject.css({visibility: 'visible'});
+						
+						setTimeout(function() {
+							removed_entry.css({visibility: 'hidden'});
+							eject.css({visibility: 'hidden'});
+							
+							setTimeout(function() {
+								// blink only eject
+								eject.css({visibility: 'visible'});
+
+								// replace
+								incoming.replaceWith(r.new_list);
+								// remove
+								removed_entry.remove();
+								// position bottom
+								block.css({bottom: "90px"});
+								// animate
+								block.animate({bottom: 0}, 500, function() {
+									
+									// re-assign dragstart event
+									DragAndDrop.initDraggable();
+								});
+
+							}, DragAndDrop.blinkTime);
+							
+						}, DragAndDrop.blinkTime);
+						
+					}, DragAndDrop.blinkTime);
+					
+					break;
+				case 'error':
+					// TODO: implement
+					break;
+			}
+		});
+		
+		return false;
+	},
+	cancel: function(event) {
+		
+		$(this).addClass("drag-over");
+		
+		if (event.preventDefault) { event.preventDefault(); }
+		  return false;
+	},
+	leave: function(event) {
+		
+		$(this).removeClass("drag-over");
+	},
+	start: function(event) {
+		
+		// jQuery access
+		var dataTransfer = event.originalEvent.dataTransfer;
+	
+		// setup drag icon
+		var dragIcon = $(this).find(".drag-icon")[0];
+		dataTransfer.setDragImage(dragIcon, 18, 18);
+		
+		// store the ID of the element, and collect it on the drop later on, required for Firefox support
+	    dataTransfer.setData('Text', this.id);
+	}
+}
+
 
 $(function() {
 	
 	// the code after this point is executed when the DOM finished loading
+	
+	// drag and drop
+	if ($(".participants-view").length) {
+		
+		DragAndDrop.init();
+	}
 	
 	// flash date pointers and markers
 	$(".mj-activity").mouseenter(function(){
@@ -449,7 +588,7 @@ $(function() {
 	
 	// load Google Maps (code in mojo-geo.js)
 	if ($('#map_canvas').length)
-	
+	{
 		if ($("label.mj-activity").length)
 		{
 			var points = {};
@@ -464,6 +603,7 @@ $(function() {
 		}
 		
 		Geo.initialize();
+	}
 	
 	$("input[type=radio]").fix_radios();
 	

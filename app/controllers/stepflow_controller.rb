@@ -1,5 +1,3 @@
-require 'phone_service'
-
 class StepflowController < ApplicationController
   
   def discover
@@ -196,7 +194,7 @@ class StepflowController < ApplicationController
   end
   
   def created
-    PhoneService.send_sms
+    PhoneService.deliver("+16506449308", "This is Mojo Monkey!")
   end
   
   def map
@@ -204,5 +202,8 @@ class StepflowController < ApplicationController
     #@step = 1
     #@previous_action = ''
   end
-
+  
+private
+  # methods for re-using code here
+  
 end

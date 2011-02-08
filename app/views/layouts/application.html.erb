@@ -36,7 +36,7 @@
 			<div id="logo-wrapper"><a href="/">Mojo</a></div>
 			<div id="auth-links">
 				<% if current_user %>
-					<%= link_to "Home", userhome_path %>
+					<%= link_to current_user.first_name, userhome_path %>
 					<%= link_to "Sign out", logout_path %>
 				<% else %>
 					<%= link_to "Sign In", login_path, :id => "login-link" %>

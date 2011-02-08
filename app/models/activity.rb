@@ -27,6 +27,35 @@ class Activity < ActiveRecord::Base
     # return both creator and invitee
   end
   
+  def update_state
+    # figure out if state of activity changed
+    if (self.state == 'open')
+      # probably there is a cleaner way to do that
+      # !self.invitee_duo assume we assing 2 duos for activities
+      if (self.creator_duo.participant and (!self.invitee_duo or (self.invitee_duo and self.invitee_duo.participant)))
+        self.close()
+      end
+    end
+  end
+  
+  def close
+    # entrants have been invited, activity is confirmed/no longer accepts entries
+    
+    # send confirmations to co-hosts and participants
+    
+    # set up SMS service?
+    
+    # update state
+    self.state = 'closed'
+    
+    #commit
+    self.save
+  end
+  
+  def get_people
+    User.find(1, 4)
+  end
+  
   def location_district
     # use yelp API
     # need to cache results 100 limit right now
@@ -65,5 +94,10 @@ class Activity < ActiveRecord::Base
     end
     # Geokit radius:
     # Store.find(:all, :origin =>[37.792,-122.393], :within=>10)
+  end
+  
+  def self.find_active_activity_for(user)
+    # implement
+    self.find(6)
   end
 end

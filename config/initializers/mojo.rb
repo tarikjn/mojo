@@ -4,3 +4,6 @@
 
 # load YAML config
 SETTINGS = YAML.load_file("#{Rails.root}/config/settings.yml")
+
+# include libs
+require 'sms'

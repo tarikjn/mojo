@@ -1,0 +1,30 @@
+<%
+	if (@left_on_list > 0) then
+%>
+	<div class="incoming">
+		<%= @left_on_list %> more guys
+	</div>
+<%
+	end
+%>
+<div class="current" draggable="true" id="entry-<%= @entry.id %>">
+	<img src="/images/users/<%= @entry.user.id %>-48.jpg" class="drag-icon" alt="" />
+	<div class="host-info">
+		<div class="picture" style="background-image: url(/images/users/<%= @entry.user.id %>-48.jpg)">
+			<div class="picture-feedback">+1.0</div>
+		</div>
+		<div class="info">
+			<div class="title">
+				<div class="name"><%= @entry.user.first_name %></div>
+				<div class="rating">★★★☆</div>
+			</div>
+			<div class="compatibility">
+				82%
+			</div>
+			<div class="ratings">
+				<div class="rating-ttr">Average time to respond: <em>1 hours</em></div>
+				<div class="rating-ttr">Punctuality: <em>Mostly on-time</em></div>
+			</div>
+		</div>
+	</div>
+</div>

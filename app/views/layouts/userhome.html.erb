@@ -1,0 +1,11 @@
+<% content_for :content do %>
+	<div class="userhome-container">
+		<div class="header">
+			<h2>Hello, <%= current_user.first_name %> :)</h2>
+			<div class="links"><a href="#">Settings</a></div>
+		</div>
+		<div class="body">
+			<%= content_for?(:body) ? yield(:body) : yield %>
+		</div>
+<% end %>
+<%= render :file => 'layouts/application' %>
