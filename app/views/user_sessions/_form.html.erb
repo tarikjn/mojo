@@ -1,4 +1,4 @@
-<% form_for session, :url => {:controller => "user_sessions", :action => "create"} do |f| %>
+<%= form_for session, :url => {:controller => "user_sessions", :action => "create"} do |f| %>
 	<div class="labeled-input">
 		<%= format_errors_for session, :email, 'Email' %>
 	    <div><%= f.text_field :email, :size => nil %></div>
