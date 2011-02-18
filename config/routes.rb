@@ -4,28 +4,28 @@ Mojo::Application.routes.draw do
   match 'login' => "user_sessions#new",      :as => :login
   match 'logout' => "user_sessions#destroy", :as => :logout
 
-  match "/userhome" => "userhome#index"
+  # route bellow uses userhome_path(:action) as helper
+  # match "/userhome(/:action)", :controller => :userhome, :as => "userhome"
+  scope '/userhome', :controller => :userhome, :as => "userhome" do
+    # match "(/index)" interferes with link_to_unless_current
+    root :to => :index, :as => ""
+    match "/dates"
+    match "/settings"
+  end
 
   # todo: refactor stepflow routes, at least namespace
-  match "stepflow" => "stepflow#discover"
-  post "stepflow/discover" => "stepflow#discover_submit"
-  get "stepflow/discover"
-  get "stepflow/join"
-  post "stepflow/join" => "stepflow#join_submit"
-  post "stepflow/create" => "stepflow#create_submit"
-  get "stepflow/create"
-  post "stepflow/profile" => "stepflow#profile_submit"
-  get "stepflow/profile"
-  post "stepflow/review" => "stepflow#review_submit"
-  get "stepflow/review"
+  scope '/stepflow', :controller => :stepflow, :as => "stepflow" do
+    #get "/finish"
+    #get "/created"
+    get "/:action" # discover, join/create, profile/review, created/finish
+    post "/discover" => :discover_submit
+    post "/join" => :join_submit
+    post "/create" => :create_submit
+    post "/profile" => :profile_submit
+    post "/review" => :review_submit
+  end
   
-  get "stepflow/finish"
-  
-  get "stepflow/map"
-  post "stepflow/map"
-  
-  get "stepflow/created"
-  
+  # Twilio, TODO: use https and twilio-ruby verification
   match "/sms" => "sms#receive"
 
   # todo: namespace it

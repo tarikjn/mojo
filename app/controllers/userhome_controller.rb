@@ -7,4 +7,10 @@ class UserhomeController < ApplicationController
     @buddies = current_user.buddies
   end
 
+  def dates
+  end
+  
+  def settings
+  end
+
 end

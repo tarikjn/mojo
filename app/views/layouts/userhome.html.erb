@@ -2,7 +2,11 @@
 	<div class="userhome-container">
 		<div class="header">
 			<h2>Hello, <%= current_user.first_name %> :)</h2>
-			<div class="links"><a href="#">Settings</a></div>
+			<ul class="links">
+				<li<% if current_page?(userhome_path) then %> class="current"<% end %>><%= link_to_unless_current "Dashboard", userhome_path %></li>
+				<li<% if current_page?(userhome_dates_path) then %> class="current"<% end %>><%= link_to_unless_current "Your dates", userhome_dates_path %></li>
+				<li<% if current_page?(userhome_settings_path) then %> class="current"<% end %>><%= link_to_unless_current "Settings", userhome_settings_path %></li>
+			</ul>
 		</div>
 		<div class="body">
 			<%= content_for?(:body) ? yield(:body) : yield %>

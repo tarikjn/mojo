@@ -1,5 +1,10 @@
 class StepflowController < ApplicationController
   
+  # different actions:
+  # next : submit
+  # previous : save, draw previous
+  # 
+  
   def discover
     # GET: we are getting here from the homepage
     #@params = params[:obj]
@@ -9,6 +14,9 @@ class StepflowController < ApplicationController
     
     @step = 0
     @remaining = '2 more minutes'
+    
+    # fill-in if coming back
+    # + 
   end
   
   def discover_submit

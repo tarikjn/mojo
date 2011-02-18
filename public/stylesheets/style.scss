@@ -37,6 +37,14 @@ $inset-shadow: inset 0 0 16px #F0F0F0;
 	-webkit-border-radius: $radius;
 	border-radius: $radius;
 }
+@mixin rounded-top($radius: 5px) {
+	-moz-border-radius-topleft: $radius;
+	-moz-border-radius-topright: $radius;
+	-webkit-border-top-left-radius: $radius;
+	-webkit-border-top-right-radius: $radius;
+	border-top-left-radius: $radius;
+	border-top-right-radius: $radius;
+}
 
 @mixin opacity($o) {
 	filter: alpha(opacity = $o x 100);
@@ -56,6 +64,12 @@ $inset-shadow: inset 0 0 16px #F0F0F0;
 	background: -webkit-gradient(linear, left top, left bottom, from($from), to($to));
 	background: -moz-linear-gradient(top,  $from,  $to);
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to');
+}
+
+@mixin transitions {
+	-webkit-transition: background-color 0.2s linear;  
+	-moz-transition: background-color 0.2s linear;  
+	-o-transition: background-color 0.2s linear;
 }
 
 // Mojo font, works with Typekit
@@ -379,6 +393,9 @@ a {
 	}
 	
 	#logo-wrapper {
+		// stealth dev
+		//visibility: hidden;
+		
 		color: transparent;
 		font-size: 132.5%;
 		overflow: hidden;
@@ -402,8 +419,8 @@ a {
 		right: 0; bottom: 0;
 		font-size: .80em;
 		font-family: "Lucida Grande";
-		font-weight: bold;
-		padding-bottom: 4px;
+		//font-weight: bold;
+		//padding-bottom: 4px;
 		text-transform: lowercase;
 		
 		a {
@@ -411,10 +428,18 @@ a {
 			color: $border-gray;
 			margin-left: 8px;
 			
+			padding: 2px 4px 3px;
+			background-color: #575757;
+			
+			border: 1px solid #575757;
+			border-width: 1px 1px 0 1px;
+			@include rounded-top;
+			
 			display: inline-block;
+			@include transitions;
 			
 			&:hover {
-				background: transparent;
+				//background: transparent;
 				color: white;
 				//text-decoration: underline;
 			}
@@ -687,47 +712,133 @@ ul.errors {
  * Mockup elements
  */
 
+// Twitter
+// based on http://www.makkintosshu.com/journal/twitter-statuses-badge
+#mtaTwitter { padding: 0; }
+#mtaTwitter > a {
+	float: left;
+	
+	&:hover {
+		background-color: transparent;
+	}
+}
+#mtaTwitter a img {
+	height: 48px;
+    width: 48px;
+    //border: 1px solid #CCC;
+	background: white;
+}
+#mtaTwitter ul:before {
+	display: block;
+    position: absolute;
+    top: 16px;
+    left: -10px;
+    margin: 0;
+    content: '';
+    border-top: 10px solid transparent;
+    border-right: 10px solid #fff;
+    border-bottom: 10px solid transparent;
+    line-height: 0;
+    font-size: 0;
+    width: 0;
+}
+#mtaTwitter ul {
+	position: relative;
+    background-color: $light-gray;
+	border: 1px solid #fff;
+    -moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+    list-style: none;
+    margin: 0;
+    margin-left: 66px;
+    padding: 0px;
+    //font-family: Helvetica, sans-serif;
+	font-family: "Lucida Grande";
+	//@include mjfont
+}
+#mtaTwitter ul li { padding: 10px 10px; font-size: 10pt; }
+#mtaTwitter ul li.first { font-size: 11pt; /* font-weight: bold; */ }
+#mtaTwitter ul li.even { background-color: #EDEEFD; }
+#mtaTwitter ul li.first span { font-size: 10pt; font-weight: normal; }
+#mtaTwitter ul li span { font-style: normal; font-family: Verdana, Arial, Helvetica, sans-serif; } // span is the time
+
 /* usage flow comic, homepage */
 #top-frame {
 	position: relative;
 	margin-bottom: 15px;
 	
-	.quick-start {
+	.start-stepflow {
+		
+		> div {
+			float: left;
+		}
+		
 		position: absolute;
-		right: 25px; top: 0;
+		right: 0; top: 0;
 		z-index: 1;
 		
-		padding: 10px;
-	
-		.opaque-layer {
-			position: absolute;
-			top: 0; bottom: 0;
-			left: 0; right: 0;
-
-			background: black;
-			@include rounded(8px);
-			opacity: .8;
-			z-index: 0;
-		}
-		.content-layer {
-			color: white;
+		.quick-start {
 			position: relative;
-			
-			form {
-				margin-top: 6px;
-				text-align: right;
+			padding: 10px;
+
+			.opaque-layer {
+				position: absolute;
+				top: 0; bottom: 0;
+				left: 0; right: 0;
+
+				background: black;
+				@include rounded(8px);
+				opacity: .8;
+				z-index: 0;
 			}
-			
-			.submit {
-				margin-top: 6px;
-				
-				button {
-					@include wdw-button;
-					color: black !important;
-					padding: 3px 15px;
-					cursor: default !important;
+			.content-layer {
+				color: white;
+				position: relative;
+
+				form {
+					margin-top: 6px;
+					text-align: right;
+				}
+
+				.submit {
+					margin-top: 6px;
+
+					button {
+						@include wdw-button;
+						color: black !important;
+						padding: 3px 15px;
+						cursor: default !important;
+					}
 				}
 			}
+		}
+		
+		.numbers > div {
+			float: left;
+			font-size: 14pt;
+			padding: 3px 15px;
+			color: white;
+			@include rounded(8px);
+			margin-left: 5px;
+			background: black;
+			
+			&:nth-of-type(1) { //background-color: #5fbd55;
+								opacity: .7 ;}
+			&:nth-of-type(2) { //background-color: #ff9933;
+								opacity: .6; }
+			&:nth-of-type(3) { //background-color: #5581ff;
+								opacity: .5;}
+		
+			opacity: .8;
+		}
+		
+		.caption {
+			font-size: 8pt;
+			clear: left;
+			text-align: right;
+			padding-top: 2px;
+			color: gray;
 		}
 	}
 }
@@ -794,19 +905,33 @@ ul.errors {
 	$usefull-width: (900px - 2*$border) / 4;
 	
 	margin-bottom: 25px;
-	border: $border solid #BFBFBF;
+	//#BFBFBF
+	//border: $border solid $light-gray;
 	@include rounded(8px);
 	
 	.step {
 		position: relative;
 		width: $usefull-width;
-		padding: 15px 0;
+		padding: 10px 0 5px;
 		
 		img {
 			width: 96px; height: 96px;
 			margin-bottom: 10px;
 		}
-		.caption {}
+		.caption {
+			//visibility: hidden;
+			color: $lighter-color;
+			@include inset;
+			background: $light-gray;
+			@include rounded;
+			padding: 5px;
+			width: auto;
+			margin: 0 10px;
+		}
+		
+		&:hover {
+			.caption { visibility: visible; }
+		}
 		
 		font-size: 80%;
 		text-align: center;
@@ -878,117 +1003,6 @@ ul.errors {
 			font-size: 70%;
 		}
 	}
-}
-
-/* "Mojo is...", homepage */
-
-#promo-twin-set {
-	margin-top: 35px;
-	position: relative;
-}
-#promo-twin-set .promo-panel {
-	width: 400px;
-	padding: 0 50px 0 0;
-	border-right: 1px dashed gray;
-}
-#promo-twin-set .promo-panel:last-of-type {
-	position: absolute;
-	right: 0;
-	top: 0;
-	
-	border-right: none;
-	padding: 0 0 0 49px;
-}
-
-#promo-twin-set .promo-panel .startline,
-#promo-twin-set .promo-panel .panel-title {
-	font-size: 125%;
-	@include mjfont;
-}
-#promo-twin-set .promo-panel .endline {
-	text-align: right;
-}
-.promo-panel dl {
-	margin-left: 36px;
-	
-}
-.promo-panel dt img {
-	position: absolute;
-	margin-left: -38px;
-	margin-top: 10px;
-}
-.promo-panel dd {
-	margin-left: 0;
-	margin-bottom: 10px;
-	font-size: 80%;
-	color: #6A6A6A;
-	
-	text-align: justify;
-}
-
-.promo-panel ol {
-	padding-left: 1em;
-}
-.promo-panel ol li {
-	margin-bottom: 10px;
-	list-style-type: none;
-	margin-left: 0;
-	padding-left: 0;
-	position: relative;
-}
-.promo-panel ol li .bullet { 
-	position: absolute;
-	font-size: 22px;
-	color: gray;
-	top: -4px;
-}
-.promo-panel ol li .text { 
-	display: block;
-	margin-left: 1.75em;
-}
-
-// not used animore on homepage, could be recycled
-.tab-widget {
-	margin-top: 25px;
-}
-
-.tab-widget .tab-content {
-	padding: 10px;
-	border: 2px solid gray;
-	border-radius: 0 8px 8px 8px;
-	-webkit-border-top-right-radius: 8px;
-	-webkit-border-bottom-left-radius: 8px;
-	-webkit-border-bottom-right-radius: 8px;
-	background: #F9F9F9;
-	position: relative;
-}
-
-.tab-widget .tab-button {
-	margin-bottom: -3px;
-	position: relative;
-}
-.tab-widget .tab-button>div {
-	display: inline-block;
-	position: relative;
-	top: 0;
-	background: #ABABAB;
-	color: white;
-	
-	border-radius: 8px 8px 0 0;
-	-webkit-border-top-left-radius: 8px;
-	-webkit-border-top-right-radius: 8px;
-	border-bottom: none;
-	padding: 5px 9px 3px;
-	
-	cursor: default;
-}
-.tab-widget .tab-button div.selected {
-	background: gray;
-	font-size: 1em;
-	top: -3px;
-}
-.tab-widget .tab-button div:not(.selected):hover {
-	background: #9B9B9B;
 }
 
 .stepflow-frame {
@@ -2181,10 +2195,41 @@ h2 {
 			padding-bottom: 0;
 		}
 		
-		> .links {
+		> ul.links {
 			position: absolute;
-			right: 0;
-			bottom: 5px;
+			right: 15px;
+			bottom: 0;
+			
+			margin: 0;
+			
+			li {
+				list-style-type: none;
+				display: inline-block;
+				margin-left: 5px;
+				
+				a, &.current {
+					position: relative;
+					display: inline-block;
+					padding: 5px 10px;
+					
+					border: 1px solid $border-gray;
+					border-width: 1px 1px 0;
+					@include rounded-top;
+				}
+				
+				a {
+					//background: $light-gray;
+					//color: black;
+					//padding-top: 4px;
+					margin-bottom: -1px;
+				}
+				
+				&.current {
+					margin-bottom: -1px;
+					//z-index: 10;
+					border-bottom: 1px solid white;
+				}
+			}
 		}
 	}
 	
