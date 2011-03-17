@@ -26,7 +26,7 @@ staging:
   <<: *defaults
   auth:
     tarik: meetox
-    jordan: bigtits
+    jordan: bigtitsdoh
 
 production:
   <<: *defaults
