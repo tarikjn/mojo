@@ -17,16 +17,24 @@ class ApplicationController < ActionController::Base
         body = "#{request.remote_ip}, #{request.remote_host}, #{Time.new.inspect}\n" +
                "#{user_name}: "
         env = Rails.env
+        smtp = {
+            :host     => 'smtp.gmail.com',
+            :port     => 587,
+            :user     => 'mailer@mojo.co',
+            :password => 'br8pRasw',
+            :auth     => :plain,       # :plain, :login, :cram_md5, no auth by default
+            :domain   => "mojo.co"     # the HELO domain provided by the client to the server
+          }
         
         if (SETTINGS[env]['auth'][user_name] and SETTINGS[env]['auth'][user_name] == password)
           # log ok
           Pony.mail(:to => 'tarik@mojo.co', :from => 'mailer@mojo.co',
-                    :subject => 'Log-in to app', :body => body + "granted")
+                    :subject => 'Log-in to app', :body => body + "granted", :via => :smtp, :smtp => smtp)
           true
         else
           # log denied
           Pony.mail(:to => 'tarik@mojo.co', :from => 'mailer@mojo.co',
-                    :subject => 'Log-in to app', :body => body + "denied")
+                    :subject => 'Log-in to app', :body => body + "denied", :via => :smtp, :smtp => smtp)
           false
         end
         
