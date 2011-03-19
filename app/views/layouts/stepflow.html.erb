@@ -1,11 +1,11 @@
 <% content_for :content do %>
 	<div class="stepflow-frame"> 
 
-		<%= form_tag request.request_uri do %>
+		<%= form_tag url_for do %>
 
 			<div id="stepflow-blocks"> 
 				<%= yield %>
-			</div> 
+			</div>
 			<div id="stepflow-nav">
 				<%= render 'nav' %>
 			</div>

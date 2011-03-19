@@ -5,7 +5,7 @@
 			<div class="opaque-layer"></div>
 			<div class="content-layer">
 				<div class="title">Schedule your date:</div>
-				<%= form_tag stepflow_discover_path do %>
+				<%= form_tag stepflow_discover_path, :method => :get do %>
 					<select name="day">
 					<%
 						0.upto 7 do |d|

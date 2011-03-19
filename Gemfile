@@ -41,3 +41,6 @@ gem "rails3-generators"
 
 # used to access Yelp API
 gem "httparty"
+
+# simple email (temporary)
+gem "pony"

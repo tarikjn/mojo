@@ -1,30 +1,54 @@
+<%
+	qs = 12   # quarter size in px
+	base = 24 # position of 00:00
+	# elasped quarters in the day * qs
+	elapsed = (((Time.now - Date.today.to_time) / (60 * 15)) * qs).floor
+	# todo: show night/day, need latitude
+%>
+
+
+
 <div class="hybrid-input">
 	<!--<%= datetime_select 'obj', 'start_time', :default => @def_startdate %> (start)<br />
 	<%= datetime_select 'obj', 'end_time', :default => @def_enddate %> (end)-->
+	<input type="hidden" name="timerange_start" value="" />
+	<input type="hidden" name="timerange_end" value="" />
 	<div class="mj-timeline-input">
 		<button class="slide-before" type="button" disabled="disabled">◀</button>
 		<div class="view-container">
-			<%
-				now = Time.now
-				t = Time.local(now.year, now.month, now.day)
-				t.strftime("%i%p");
-			%>
-			<div class="day-title">Today</div>
+			<div class="day-title">
+				<div class="view-area"></div>
+				<div class="labels">
+				<%
+					0.upto 7 do |d|
+						day = Date.today + d.days
+				%>
+					<span><%= (d == 0)? "Today" : day.strftime("%a") %></span>
+				<%
+					end
+				%>
+				</div>
+			</div>
 			<div class="timeline-container">
+				<%
+					now = Time.now
+					t = Time.local(now.year, now.month, now.day)
+					#t.strftime("%i%p");
+				%>
 				<div class="timeline-bar"></div>
 				<div class="timeline-marks">
 					<%
-						for n in 0..24 do
+						0.upto 24 * 8 do
 					%>
 					<div class="mark">
-						<div class="line"></div>
-						<div class="title"><%= t.strftime("%l%p").downcase %></div>
+						<div class="line-hour"></div>
+						<div class="title-hour"><%= t.strftime("%l%p").downcase %></div>
 						<div class="line-quarter"></div>
 						<div class="line-half"></div>
 						<div class="line-3rd-quarter"></div>
 					</div>	
 					<%
-							t += (60 * 60) # add 1 hour
+							t += 1.hours
 						end
 					%>
 				</div>
@@ -50,8 +74,8 @@
 				<%
 					end
 				%>
-				<div class="elapsed-and-current-time"></div>
-				<div class="selected-time" tabindex="0">
+				<div class="elapsed-and-current-time" style="width: <%= elapsed %>px;"></div>
+				<div class="selected-time" tabindex="0" style="left: <%= base + qs * 4 * 15 %>px; width: <%= qs * 4 * 3 %>px;">
 					<div class="start-hand" tabindex="0"></div>
 					<div class="stop-hand" tabindex="0"></div>
 				</div>

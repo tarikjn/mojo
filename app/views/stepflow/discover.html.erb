@@ -1,4 +1,12 @@
+<%
+	@step = 0
+	@remaining = '2 more minutes'
+%>
 <div class="form-inputs">
+	<div class="form-item">
+		<div class="title">Timeframe</div>
+		<%= mj_timerange %>
+	</div>
 	<div class="form-item">
 		<div class="title">Where?</div><!-- replace with 'City', remove from other part -->
 		<div class="hybrid-input mj-location-input">
@@ -18,10 +26,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="form-item">
-		<div class="title">Timeframe</div>
-		<%= mj_timerange %>
 	</div>
 	<div class="form-item" id="form_item_who">
 		<div class="title">Who?</div>

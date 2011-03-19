@@ -5,13 +5,31 @@ class ApplicationController < ActionController::Base
   
   # if Rails.env == 'staging' and params[:controller] == 'sms', require auth
   before_filter :restricted_access
+  
+  require 'pony'
 
   private
 
   def restricted_access
     if (Rails.env == 'staging') then
       authenticate_or_request_with_http_basic do |user_name, password|
-        SETTINGS[Rails.env]['auth'][user_name] and SETTINGS[Rails.env]['auth'][user_name] == password
+        
+        body = "#{request.remote_ip}, #{request.remote_host}, #{Time.new.inspect}\n" +
+               "#{user_name}: "
+        env = Rails.env
+        
+        if (SETTINGS[env]['auth'][user_name] and SETTINGS[env]['auth'][user_name] == password)
+          # log ok
+          Pony.mail(:to => 'tarik@mojo.co', :from => 'mailer@mojo.co',
+                    :subject => 'Log-in to app', :body => body + "granted")
+          true
+        else
+          # log denied
+          Pony.mail(:to => 'tarik@mojo.co', :from => 'mailer@mojo.co',
+                    :subject => 'Log-in to app', :body => body + "denied")
+          false
+        end
+        
       end
     end
   end

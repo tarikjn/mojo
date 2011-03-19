@@ -7,10 +7,11 @@ $lighter-color: #231f20;
 $paper-color: lighten($lighter-color, 86%);
 $error-color: #cd5120;
 
-$lighter-gray: #F2F2F2;
+$lighter-gray: #F2F2F2; // actually darker than light-gray
 $light-gray: #F9F9F9;
 $border-gray: #E6E6E6;
 $dark-gray: #636363;
+$gray-darker: #575757;
 
 $light-blue: #E1ECFF;
 $border-blue: darken(#E1ECFF, 15%);
@@ -32,18 +33,19 @@ $inset-shadow: inset 0 0 16px #F0F0F0;
  */
 
 // rounded corners
-@mixin rounded($radius: 5px) {
-	-moz-border-radius: $radius;
-	-webkit-border-radius: $radius;
-	border-radius: $radius;
+$radius-default: 5px;
+@mixin rounded($r: $radius-default) {
+	-moz-border-radius: $r;
+	-webkit-border-radius: $r;
+	border-radius: $r;
 }
-@mixin rounded-top($radius: 5px) {
-	-moz-border-radius-topleft: $radius;
-	-moz-border-radius-topright: $radius;
-	-webkit-border-top-left-radius: $radius;
-	-webkit-border-top-right-radius: $radius;
-	border-top-left-radius: $radius;
-	border-top-right-radius: $radius;
+@mixin rounded-top($r: $radius-default) {
+	-moz-border-radius-topleft: $r;
+	-moz-border-radius-topright: $r;
+	-webkit-border-top-left-radius: $r;
+	-webkit-border-top-right-radius: $r;
+	border-top-left-radius: $r;
+	border-top-right-radius: $r;
 }
 
 @mixin opacity($o) {
@@ -73,9 +75,9 @@ $inset-shadow: inset 0 0 16px #F0F0F0;
 }
 
 // Mojo font, works with Typekit
-@mixin mjfont {
-	font-family: brevia-1, brevia-2, sans-serif;
-}
+@mixin mjfont   { font-family: brevia-1, brevia-2, sans-serif; }
+@mixin basefont { font-family: Verdana, Arial, Helvetica, sans-serif; }
+@mixin thinfont { font-family: "Lucida Grande"; }
 
 // inset text
 @mixin inset {
@@ -343,7 +345,7 @@ body {
 	background-position: bottom center;
 
 	//font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
+	@include basefont;
 	color: $main-color;
 	
 	padding: 0;
@@ -418,31 +420,20 @@ a {
 		position: absolute;
 		right: 0; bottom: 0;
 		font-size: .80em;
-		font-family: "Lucida Grande";
-		//font-weight: bold;
-		//padding-bottom: 4px;
-		text-transform: lowercase;
 		
 		a {
-			//@include mjfont;
-			color: $border-gray;
+			display: inline-block;
 			margin-left: 8px;
 			
-			padding: 2px 4px 3px;
-			background-color: #575757;
-			
-			border: 1px solid #575757;
-			border-width: 1px 1px 0 1px;
 			@include rounded-top;
+			padding: 3px 5px 3px;
+			background-color: $gray-darker;
 			
-			display: inline-block;
-			@include transitions;
+			text-transform: lowercase;
+			@include thinfont;
+			color: $border-gray;
 			
-			&:hover {
-				//background: transparent;
-				color: white;
-				//text-decoration: underline;
-			}
+			&:hover { color: white; }
 		}
 		
 		.relative-container {
@@ -450,38 +441,26 @@ a {
 			
 			#login-bubble {
 				display: none;
+				
 				position: absolute;
 				right: 0;
-				
-				background: white;
 				z-index: 10;
-				background: -webkit-gradient(linear, center 80%, center bottom, from(white), to($border-gray));
 				
-				//display: inline-block;
-				margin-left: 6px;
-				@include rounded;
-				//@include inset;
+				@include rounded; border-top-right-radius: 0;
+				border: 2px solid $gray-darker;
+				padding: 8px;
+				background: white;
+				//background: -webkit-gradient(linear, center 80%, center bottom, from(white), to($border-gray));
+				
 				color: $lighter-color;
 				font-size: .75em;
-				padding: 8px;
-				margin-top: 15px;
-				border: 2px outset black;
-
-				&:before {
-					content: "▴";
-					font-size: 21px;
-					color: black;
-					position: absolute;
-					margin-top: -29px;
-					right: 10px;
-				}
 				
-				div.space {
-					margin: 8px 0;
-				}
+				div.space { margin: 8px 0; }
 				
 				input[type=text], input[type=password] {
 					width: 150px;
+					font-size: 1.2em;
+					padding: 2px 0;
 				}
 				
 				button {
@@ -1314,21 +1293,79 @@ ul.errors {
 	}
 	
 	.view-container {
-		position: absolute;
-		left: 16px;
-		right: 16px;
-		background: $light-gray;
-		top: 0;
-		bottom: 0;
+		
+		//position: absolute;
+		//left: 16px;
+		//right: 16px;
+		//top: 0;
+		//bottom: 0;
+		margin: 0 16px;
+		height: 56px;
 		overflow-x: hidden;
 		
+		background: $light-gray;
+		
 		.day-title {
-			margin: 4px 8px 0;
+			position: absolute;
+			margin: 0 0 0 4px;
+			overflow: hidden;
+			
+			border: 1px outset gray;
+			border-radius: 5px;
+			
+			background: $border-gray;
+			
+			.view-area {
+				position: absolute;
+				top: 0; bottom: 0;
+				width: 32px;
+				
+				border-radius: 3px;
+				background: white;
+			}
+			
+			span {
+				position: relative;
+				display: block;
+				float: left;
+				z-index: 1;
+				
+				width: 49px;
+				padding: 0 0;
+				border-left: 1px solid gray;
+				
+				color: black;
+				
+				text-align: center;
+				font-size: 10pt;
+				
+				&:hover {
+					cursor: pointer;
+					background: #e1ecff;
+				}
+				
+				&:first-of-type {
+					width: 50px;
+					
+					border-left: none;
+					
+					border-top-left-radius: 3px;
+					border-bottom-left-radius: 3px;
+				}
+				&:last-of-type {
+					border-top-right-radius: 3px;
+					border-bottom-right-radius: 3px;
+				}
+			}
 		}
 		
 		.timeline-container {
+			margin-top: 24px;
+			
+			$qs: 12px; // quarter size
+			
 			position: relative;
-			width: 200%;
+			width: $qs * 2 + $qs * 4 * 24 * 8 + $qs * 4; // base + 8 day + baseEnd
 			
 			.timeline-bar {
 				background: white;
@@ -1345,52 +1382,49 @@ ul.errors {
 				
 				.mark {
 					float: left;
-					width: 49px; /* 24px on each side of the mark */
+					width: $qs * 4;
 					position: relative;
-					margin-left: 1px; /* +1px for the half-mark */
 					
-					.line {
+					.line-hour {
 						height: 12px;
 						background: gray;
 						width: 1px;
-						margin: 0 auto;
+						margin-left: $qs * 2;
+						margin-right: ($qs * 2) - 1;
 					}
 					
-					.title {
+					.title-hour {
 						text-align: center;
 						padding-top: 3px;
 						font-size: .70em;
 					}
 					
-					.line-quarter, .line-3rd-quarter {
-						height: 6px;
-						width: 0;
-						border-left: 1px dotted gray;
-
+					.line-quarter, .line-half, .line-3rd-quarter {
 						position: absolute;
-						top: 6px;
-						left: 36px;
+						width: 0;
 					}
 					
-					.line-3rd-quarter {
-						left: 60px;
+					.line-quarter, .line-3rd-quarter {
+						top: 6px;
+						height: 6px;
+						border-left: 1px dotted gray;
 					}
+					
+					.line-quarter     { left: $qs * 3; }
+					.line-3rd-quarter { left: $qs * 5; }
 					
 					.line-half {
-						height: 10px;
-						width: 0;
-						border-left: 1px dotted gray;
-
-						position: absolute;
+						left: $qs * 4;
 						top: 2px;
-						left: 48px;
+						height: 10px;
+						border-left: 1px dotted gray;
 					}
 				} // end mark
 			} // end timeline-marks
 			
 			.elapsed-and-current-time {
 				height: 12px;
-				width: 150px;
+				padding-right: 16px; // added to width
 				background: #ccc;
 				position: absolute;
 				top: 1px;
@@ -1400,12 +1434,12 @@ ul.errors {
 			}
 			
 			.selected-time {
-				width: 100px;
+				padding-right: 3px; // added to width
+				margin-left: -1px;
 				background: #e1ecff;
 				height: 18px;
 				position: absolute;
 				top: -2px;
-				left: 300px;
 				opacity: .8;
 				cursor: move;
 				z-index: 3;
@@ -1416,7 +1450,7 @@ ul.errors {
 					height: 18px;
 					background: #0080FF;
 					position: absolute;
-					cursor: ew-resize; /* make resize area bigger */
+					cursor: ew-resize; /* TODO: make resize area bigger */
 				}
 				
 				.start-hand { left: 0; }

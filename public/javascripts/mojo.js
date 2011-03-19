@@ -172,11 +172,15 @@ function TimeRangeInput(obj)
 		timeout: 500, // >= interval
 		interval: 50
 	};
+	this.qs = 12; // quarter size in px
+	this.base = 24;
 	
 	function initialize()
 	{
 		// remove use of jQuery
 		that.viewport = $(this).children(".view-container")[0];
+		that.range = $(this).find(".selected-time")[0];
+		that.viewer = $(this).find(".view-area")[0];
 		
 		// this contructs allows us to do assignements with buttons[0] and buttons[1] with a unique jQuery traverse
 		(function(buttons) {
@@ -198,10 +202,69 @@ function TimeRangeInput(obj)
 			
 		} ($(this).children("button")));
 		
+		// onscroll event
+		$(that.viewport).scroll(that.onScroll);
+		
+		// scroll to the initial selected range
+		that.viewport.scrollLeft += that.base + that.qs * 4 * 9;
+		//that.updateState();
+		
+		// init dragging for selected time
+		that.limiter = that.viewport;
+		var baseEnd = that.viewport.scrollWidth - 4 * that.qs;
+		
+		// TODO: set cursor when dragging
+		// TODO: add auto-scroll
+		// TODO: implement keyboard nav
+		
+		that.initDrag(that.range, {
+			limitRef: function() { return parseInt(that.dragged.style.left); },
+			limitLow: that.base,
+			limitHigh: function() { return baseEnd - parseInt(that.dragged.style.width); },
+			handler: function(m) {
+				that.dragged.style.left = parseInt(that.dragged.style.left) + m + "px";
+			}
+		});
+		that.initDrag($(that.range).find(".stop-hand")[0], {
+			limitRef: function() { return parseInt(that.dragged.parentElement.style.width); },
+			limitLow: 4 * that.qs,
+			limitHigh: function() { return baseEnd - parseInt(that.dragged.parentElement.style.left); },
+			handler: function(m) {
+				that.dragged.parentElement.style.width = parseInt(that.dragged.parentElement.style.width) + m + "px";
+			}
+		});
+		// TODO: implement double-limit: add width limit
+		that.initDrag($(that.range).find(".start-hand")[0], {
+			limitRef: function() { return parseInt(that.dragged.parentElement.style.left); },
+			limitLow: that.base,
+			limitHigh: function() { return baseEnd; },
+			handler: function(m) {
+				that.dragged.parentElement.style.left = parseInt(that.dragged.parentElement.style.left) + m + "px";
+				that.dragged.parentElement.style.width = parseInt(that.dragged.parentElement.style.width) - m + "px";
+			}
+		});
+		
 		// attach event listeners to both buttons
 		$([that.buttons.before.el, that.buttons.after.el]).bind('mousedown', that.mousedown).bind('mouseup', that.mouseup);
+		
+		$(".day-title .labels span").click(that.clickDay);
 	}
 	
+	this.clickDay = function()
+	{
+		that.viewport.scrollLeft = that.base + $(this).index() * that.qs * 4 * 24;
+	}
+	
+	// scroll support, TODO: namespace
+	this.onScroll = function()
+	{
+		that.updateState();
+		
+		// move view-area
+		// 732 width -> 32 px viewer
+		// from base to 24 * 4 * qs -> 1 day
+		that.viewer.style.left = ((that.viewport.scrollLeft - that.base) * that.viewer.offsetWidth / that.viewport.offsetWidth) + "px";
+	}
 	this.mousedown = function()
 	{
 		// no action if disabled
@@ -263,10 +326,14 @@ function TimeRangeInput(obj)
 		if ( b.isDisabled() )
 			that.stopTimer(b.timer);
 		
+		//that.updateState();
+	}
+	
+	this.updateState = function()
+	{
 		// check/update state for both buttons
 		for (button in that.buttons)
 			that.buttons[button].el.disabled = that.buttons[button].isDisabled();
-		
 	}
 	
 	this.stopTimer = function(timer)
@@ -276,6 +343,75 @@ function TimeRangeInput(obj)
 			clearInterval(timer);
 			timer = undefined;
 		}
+	}
+	
+	// drag support, may be namespaced
+	this.initDrag = function(el, spec)
+	{
+		// using standard limiter
+		
+		// assign spec
+		el.mj_drag_spec = spec;
+		
+		$(el).bind('mousedown', that.startDrag, false);
+	}
+	this.startDrag = function(e)
+	{
+		that.dragged = this;
+		
+		that.limiter.mj_drag_startPos = e.pageX; // we only need horizontal
+		
+		$(that.limiter).mouseup(that.endDrag)
+		               .mouseleave(that.endDrag)
+		               .mousemove(that.moveDrag); // dragging
+		
+		document.onselectstart = that.preventSelect;
+		
+		// stop bubbling
+		e.stopPropagation();
+	}
+	this.moveDrag = function(e)
+	{
+		var delta = e.pageX - this.mj_drag_startPos;
+		var increments = Math.round(Math.abs(delta / that.qs));
+		var direction = (delta < 0)? -1 : 1;
+		
+		if (increments > 0)
+		{
+			var move = direction * increments * that.qs;
+			
+			// use spec
+			var limitLow = that.dragged.mj_drag_spec.limitLow;
+			var limitHigh = that.dragged.mj_drag_spec.limitHigh();
+			var current = that.dragged.mj_drag_spec.limitRef();
+			
+			if (limitLow !== undefined && current + move < limitLow)
+				move = -(current - limitLow);
+			else if (limitHigh !== undefined && current + move > limitHigh)
+				move = limitHigh - current;
+			
+			// action
+			that.dragged.mj_drag_spec.handler(move);
+			
+			this.mj_drag_startPos += move;
+		}
+	}
+	this.preventSelect = function(e)
+	{
+		e.preventDefault();
+		return false;
+	}
+	this.endDrag = function(e)
+	{
+		document.onselectstart = undefined;
+		
+		$(this).unbind('mousemove')
+		       .unbind('mouseleave')
+		       .unbind('mouseup');
+		
+		this.mj_drag_startPos = undefined;
+		
+		that.dragged = undefined;
 	}
 	
 	// constructor
@@ -582,7 +718,7 @@ $(function() {
 	
 	// login bubble
 	$("#login-link").click(function() {
-		$("#login-bubble").toggle(250);
+		$("#login-bubble").slideToggle(250);
 		return ($("#login-bubble").length > 0)? false : true;
 	});
 	

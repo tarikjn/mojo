@@ -28,7 +28,7 @@ GEM
       activemodel (= 3.0.3)
       activesupport (= 3.0.3)
     activesupport (3.0.3)
-    arel (2.0.7)
+    arel (2.0.9)
     authlogic (2.1.6)
       activesupport
     builder (2.1.2)
@@ -39,7 +39,7 @@ GEM
     geokit-rails3 (0.1.2)
       geokit (~> 1.5.0)
       rails (~> 3.0.0)
-    httparty (0.7.3)
+    httparty (0.7.4)
       crack (= 0.1.8)
     i18n (0.5.0)
     mail (2.2.15)
@@ -49,7 +49,9 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.16)
     polyglot (0.3.1)
-    rack (1.2.1)
+    pony (1.1)
+      mail (> 2.0)
+    rack (1.2.2)
     rack-mount (0.6.13)
       rack (>= 1.0.0)
     rack-test (0.5.7)
@@ -78,7 +80,7 @@ GEM
       polyglot (>= 0.3.1)
     twiliolib (2.0.7)
       builder (>= 2.1.2)
-    tzinfo (0.3.24)
+    tzinfo (0.3.25)
 
 PLATFORMS
   ruby
@@ -87,6 +89,7 @@ DEPENDENCIES
   authlogic
   geokit-rails3
   httparty
+  pony
   rails (= 3.0.3)
   rails3-generators
   sqlite3-ruby

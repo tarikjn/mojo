@@ -12,9 +12,6 @@ class StepflowController < ApplicationController
     #@def_startdate = params[:obj][:start_time]
     #@def_enddate = params[:obj][:end_time]
     
-    @step = 0
-    @remaining = '2 more minutes'
-    
     # fill-in if coming back
     # + 
   end
@@ -38,6 +35,7 @@ class StepflowController < ApplicationController
     
     # set up friend's user object and send follow-up email
     # neeed follow-up to confirm date
+    # add friend to buddies
     
     # store in session before any redirect, don't if coming back from next step
     session[:user] = user
