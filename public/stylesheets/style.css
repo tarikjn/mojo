@@ -5,6 +5,12 @@
  * Mixins
  */
 /*
+ * Rails fix
+ */
+.field_with_errors {
+  display: inline-block; }
+
+/*
  * Drag and Drop (HTML5)
  */
 [draggable=true] {
@@ -104,7 +110,7 @@ a {
       padding: 3px 5px 3px;
       background-color: #575757;
       text-transform: lowercase;
-      font-family: "Lucida Grande";
+      font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
       color: #e6e6e6; }
       #head-content #auth-links a:hover {
         color: white; }
@@ -262,25 +268,30 @@ h2, h3 {
 /*
  * Errors styling
  */
-ul.errors {
-  margin: 0;
+.errors {
   display: inline-block;
-  background: #cd5120;
-  color: white;
-  font-size: .85em;
-  padding: 8px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  margin-bottom: 5px; }
-  ul.errors:after {
-    content: "▾";
-    font-size: 24px;
-    color: #cd5120;
-    position: absolute;
-    margin-top: -5px; }
-  ul.errors li {
-    list-style-type: none; }
+  position: relative; }
+  .errors ul {
+    margin: 0;
+    background: #cd5120;
+    color: white;
+    font-size: .85em;
+    padding: 8px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px; }
+    .errors ul:after {
+      position: absolute;
+      margin-top: -6px;
+      font-family: "Trebuchet MS";
+      content: "▾";
+      font-size: 24px;
+      color: #cd5120; }
+    .errors ul.right-align:after {
+      right: 8px; }
+    .errors ul li {
+      list-style-type: none; }
 
 /*
  * Special layouts
@@ -383,22 +394,24 @@ ul.errors {
   margin: 0;
   margin-left: 66px;
   padding: 0px;
-  font-family: "Lucida Grande"; }
+  font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif; }
 
 #mtaTwitter ul li {
   padding: 10px 10px;
   font-size: 10pt; }
 
 #mtaTwitter ul li.first {
-  font-size: 11pt;
+  font-size: 10pt;
   /* font-weight: bold; */ }
 
 #mtaTwitter ul li.even {
   background-color: #EDEEFD; }
 
 #mtaTwitter ul li.first span {
-  font-size: 10pt;
-  font-weight: normal; }
+  font-size: 8pt;
+  font-weight: normal;
+  display: block;
+  margin-top: 3pt; }
 
 #mtaTwitter ul li span {
   font-style: normal;
@@ -719,77 +732,67 @@ ul.errors {
 
 .stepflow-position {
   position: relative; }
-
-.stepflow-position button {
-  padding: 5px 10px;
-  font-size: 1.05em;
-  background: url(/images/buttons/button-next.png);
-  height: 35px;
-  width: 183px;
-  text-align: left;
-  border: none; }
-
-.stepflow-position button.previous {
-  background: url(/images/buttons/button-previous.png);
-  text-align: left;
-  padding-left: 20px; }
-
-.stepflow-position button:hover {
-  background-position: 0 35px; }
-
-.stepflow-position button:active {
-  position: relative;
-  top: 1px; }
-
-.stepflow-position button:disabled {
-  color: gray; }
-
-.stepflow-position .previous a {
-  font-size: .80em; }
-
-.stepflow-position .previous {
-  position: absolute;
-  top: 0;
-  left: 0; }
-
-.stepflow-position .next {
-  position: absolute;
-  top: 0;
-  right: 0; }
-
-.stepflow-position .list {
-  margin: 0 auto;
-  position: relative;
-  width: 210px; }
-
-.stepflow-position .list ol {
-  margin: 0;
-  padding: 0;
-  width: 210px; }
-
-.stepflow-position .list li {
-  float: left;
-  width: 70px;
-  list-style-type: none;
-  text-align: center;
-  font-size: .65em;
-  padding: 0; }
-
-.stepflow-position .list li:first-of-type {
-  text-align: right; }
-
-.stepflow-position .list li:last-of-type {
-  text-align: left; }
-
-.stepflow-position .list li .step-bullet {
-  font-size: 20px;
-  padding-bottom: 5px; }
-
-.stepflow-position .list li {
-  color: gray; }
-
-.stepflow-position .list li.current {
-  color: black; }
+  .stepflow-position .ajax-loading {
+    position: absolute;
+    top: 6px;
+    display: none; }
+  .stepflow-position .previous, .stepflow-position .next {
+    position: absolute;
+    top: 0; }
+  .stepflow-position .previous {
+    left: 0; }
+    .stepflow-position .previous a {
+      font-size: .80em; }
+    .stepflow-position .previous .ajax-loading {
+      left: -30px; }
+  .stepflow-position .next {
+    right: 0; }
+    .stepflow-position .next .ajax-loading {
+      right: -30px; }
+  .stepflow-position button {
+    padding: 5px 10px;
+    font-size: 1.05em;
+    background: url(/images/buttons/button-next.png);
+    height: 35px;
+    width: 183px;
+    text-align: left;
+    border: none; }
+    .stepflow-position button.previous {
+      background: url(/images/buttons/button-previous.png);
+      text-align: left;
+      padding-left: 20px; }
+    .stepflow-position button:hover {
+      background-position: 0 35px; }
+    .stepflow-position button:active {
+      position: relative;
+      top: 1px; }
+    .stepflow-position button:disabled {
+      color: gray; }
+  .stepflow-position .list {
+    margin: 0 auto;
+    position: relative;
+    width: 210px; }
+    .stepflow-position .list ol {
+      margin: 0;
+      padding: 0;
+      width: 210px; }
+    .stepflow-position .list li {
+      float: left;
+      width: 70px;
+      list-style-type: none;
+      text-align: center;
+      font-size: .65em;
+      padding: 0;
+      color: gray; }
+      .stepflow-position .list li:first-of-type {
+        text-align: right; }
+      .stepflow-position .list li:last-of-type {
+        text-align: left; }
+      .stepflow-position .list li.current {
+        color: black; }
+      .stepflow-position .list li .step-bullet {
+        font-size: 20px;
+        padding-bottom: 5px; }
 
 .stepflow-time-remaining {
   clear: both;
@@ -803,12 +806,6 @@ ul.errors {
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px; }
-
-.ajax-loading {
-  position: relative;
-  top: 6px;
-  right: -220px;
-  display: none; }
 
 .hybrid-input {
   margin-top: 10px; }
@@ -856,159 +853,119 @@ ul.errors {
 /*
  * time range input
  */
-.mj-timeline-input {
+.mj-timerange-input {
   position: relative;
-  height: 56px;
   margin-top: 15px; }
-  .mj-timeline-input button {
-    position: absolute;
-    height: 56px;
-    width: 16px;
-    top: 0;
-    font-size: 10px;
-    vertical-align: middle;
-    line-height: 50px;
-    padding: 3px;
-    text-align: center;
-    border: none; }
-    .mj-timeline-input button.slide-after {
-      right: 0;
-      background: url(/images/buttons/timeline-slide-next.png); }
-    .mj-timeline-input button.slide-before {
-      left: 0;
-      background: url(/images/buttons/timeline-slide-prev.png); }
-    .mj-timeline-input button:hover {
-      background-position: 0 56px; }
-    .mj-timeline-input button:disabled {
-      color: gray;
-      background-position: 0 0 !important; }
-    .mj-timeline-input button:not(:disabled):active {
-      top: 1px; }
-  .mj-timeline-input .view-container {
-    margin: 0 16px;
-    height: 56px;
-    overflow-x: hidden;
-    background: #f9f9f9; }
-    .mj-timeline-input .view-container .day-title {
-      position: absolute;
-      margin: 0 0 0 4px;
-      overflow: hidden;
-      border: 1px outset gray;
-      border-radius: 5px;
-      background: #e6e6e6; }
-      .mj-timeline-input .view-container .day-title .view-area {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 32px;
-        border-radius: 3px;
-        background: white; }
-      .mj-timeline-input .view-container .day-title span {
-        position: relative;
-        display: block;
-        float: left;
-        z-index: 1;
-        width: 49px;
-        padding: 0 0;
-        border-left: 1px solid gray;
-        color: black;
-        text-align: center;
-        font-size: 10pt; }
-        .mj-timeline-input .view-container .day-title span:hover {
-          cursor: pointer;
-          background: #e1ecff; }
-        .mj-timeline-input .view-container .day-title span:first-of-type {
-          width: 50px;
-          border-left: none;
-          border-top-left-radius: 3px;
-          border-bottom-left-radius: 3px; }
-        .mj-timeline-input .view-container .day-title span:last-of-type {
-          border-top-right-radius: 3px;
-          border-bottom-right-radius: 3px; }
-    .mj-timeline-input .view-container .timeline-container {
-      margin-top: 24px;
+  .mj-timerange-input .day-tabs label {
+    float: left;
+    padding: 8px 15px;
+    border: 2px solid #e6e6e6;
+    border-width: 2px 2px 0 0;
+    color: gray;
+    cursor: default; }
+    .mj-timerange-input .day-tabs label input {
+      display: none; }
+    .mj-timerange-input .day-tabs label:first-of-type {
+      border-left-width: 2px;
+      border-top-left-radius: 5px; }
+    .mj-timerange-input .day-tabs label:last-of-type {
+      border-top-right-radius: 5px; }
+    .mj-timerange-input .day-tabs label.active {
+      background: white;
+      border-color: gray;
+      color: black;
+      border-right-color: #e6e6e6; }
+  .mj-timerange-input .frame {
+    clear: both;
+    padding: 15px 10px 12px;
+    border: 2px solid gray;
+    border-top-width: 0;
+    -moz-border-radius: 0 5px 5px 5px;
+    -webkit-border-radius: 0 5px 5px 5px;
+    border-radius: 0 5px 5px 5px;
+    background: white; }
+    .mj-timerange-input .frame .activities {
       position: relative;
-      width: 9288px; }
-      .mj-timeline-input .view-container .timeline-container .timeline-bar {
-        background: white;
-        border: solid gray;
-        border-width: 1px 0 1px 0;
-        height: 12px;
-        margin: 0 8px; }
-      .mj-timeline-input .view-container .timeline-container .timeline-marks {
+      width: 722px;
+      height: 8px;
+      margin: 0 auto;
+      z-index: 2; }
+      .mj-timerange-input .frame .activities .activity {
+        position: absolute;
+        top: -8px;
+        color: gray; }
+        .mj-timerange-input .frame .activities .activity.scoped {
+          color: #0080FF; }
+    .mj-timerange-input .frame .timeline {
+      position: relative;
+      width: 722px;
+      height: 28px;
+      margin: 0 auto;
+      overflow-x: hidden;
+      overflow-y: hidden; }
+      .mj-timerange-input .frame .timeline .timeline-marks {
         position: absolute;
         top: 1px;
         z-index: 2; }
-        .mj-timeline-input .view-container .timeline-container .timeline-marks .mark {
+        .mj-timerange-input .frame .timeline .timeline-marks .mark {
           float: left;
-          width: 48px;
-          position: relative; }
-          .mj-timeline-input .view-container .timeline-container .timeline-marks .mark .line-hour {
+          width: 38px;
+          position: relative;
+          /*
+          // non-visible
+          .line-half {
+          	position: absolute;
+          	width: 0;
+          	left: $ds * 2;
+          	top: 2px;
+          	height: 10px;
+          	border-left: 1px dotted gray;
+          }
+          */ }
+          .mj-timerange-input .frame .timeline .timeline-marks .mark .line-hour {
             height: 12px;
             background: gray;
             width: 1px;
-            margin-left: 24px;
-            margin-right: 23px; }
-          .mj-timeline-input .view-container .timeline-container .timeline-marks .mark .title-hour {
+            margin-left: 19px;
+            margin-right: 18px; }
+          .mj-timerange-input .frame .timeline .timeline-marks .mark .title-hour {
+            margin-left: 1px;
             text-align: center;
             padding-top: 3px;
             font-size: .70em; }
-          .mj-timeline-input .view-container .timeline-container .timeline-marks .mark .line-quarter, .mj-timeline-input .view-container .timeline-container .timeline-marks .mark .line-half, .mj-timeline-input .view-container .timeline-container .timeline-marks .mark .line-3rd-quarter {
-            position: absolute;
-            width: 0; }
-          .mj-timeline-input .view-container .timeline-container .timeline-marks .mark .line-quarter, .mj-timeline-input .view-container .timeline-container .timeline-marks .mark .line-3rd-quarter {
-            top: 6px;
-            height: 6px;
-            border-left: 1px dotted gray; }
-          .mj-timeline-input .view-container .timeline-container .timeline-marks .mark .line-quarter {
-            left: 36px; }
-          .mj-timeline-input .view-container .timeline-container .timeline-marks .mark .line-3rd-quarter {
-            left: 60px; }
-          .mj-timeline-input .view-container .timeline-container .timeline-marks .mark .line-half {
-            left: 48px;
-            top: 2px;
-            height: 10px;
-            border-left: 1px dotted gray; }
-      .mj-timeline-input .view-container .timeline-container .elapsed-and-current-time {
-        height: 12px;
-        padding-right: 16px;
-        background: #ccc;
+          .mj-timerange-input .frame .timeline .timeline-marks .mark:not(:nth-child(3n + 1)) .line-hour {
+            background: #e6e6e6; }
+          .mj-timerange-input .frame .timeline .timeline-marks .mark:not(:nth-child(3n + 1)) .title-hour {
+            color: #AAAAAA;
+            font-size: .65em; }
+      .mj-timerange-input .frame .timeline .elapsed-and-current-time {
         position: absolute;
-        top: 1px;
-        left: 8px;
+        height: 6px;
+        top: 4px;
+        left: -210px;
         border-right: 2px solid red;
-        z-index: 1; }
-      .mj-timeline-input .view-container .timeline-container .selected-time {
+        z-index: 1;
+        background: #ccc; }
+      .mj-timerange-input .frame .timeline .selected-time {
         padding-right: 3px;
         margin-left: -1px;
         background: #e1ecff;
-        height: 18px;
+        height: 10px;
         position: absolute;
-        top: -2px;
+        top: 2px;
         opacity: .8;
         cursor: move;
         z-index: 3; }
-        .mj-timeline-input .view-container .timeline-container .selected-time .start-hand, .mj-timeline-input .view-container .timeline-container .selected-time .stop-hand {
+        .mj-timerange-input .frame .timeline .selected-time .start-hand, .mj-timerange-input .frame .timeline .selected-time .stop-hand {
           width: 3px;
-          height: 18px;
+          height: 10px;
           background: #0080FF;
           position: absolute;
-          cursor: ew-resize;
-          /* TODO: make resize area bigger */ }
-        .mj-timeline-input .view-container .timeline-container .selected-time .start-hand {
+          cursor: ew-resize; }
+        .mj-timerange-input .frame .timeline .selected-time .start-hand {
           left: 0; }
-        .mj-timeline-input .view-container .timeline-container .selected-time .stop-hand {
+        .mj-timerange-input .frame .timeline .selected-time .stop-hand {
           right: 0; }
-    .mj-timeline-input .view-container .activities {
-      position: absolute;
-      top: -18px;
-      z-index: 2;
-      left: 160px; }
-      .mj-timeline-input .view-container .activities .activity {
-        position: absolute;
-        color: gray; }
-        .mj-timeline-input .view-container .activities .activity.scoped {
-          color: #0080FF; }
 
 /*
  * standard radio

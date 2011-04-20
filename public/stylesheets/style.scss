@@ -77,7 +77,8 @@ $radius-default: 5px;
 // Mojo font, works with Typekit
 @mixin mjfont   { font-family: brevia-1, brevia-2, sans-serif; }
 @mixin basefont { font-family: Verdana, Arial, Helvetica, sans-serif; }
-@mixin thinfont { font-family: "Lucida Grande"; }
+@mixin thinfont { font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif; }
+@mixin font-trebuchet { font-family: "Trebuchet MS"; }
 
 // inset text
 @mixin inset {
@@ -303,6 +304,13 @@ color: #e9e9e9;
 }
 
 /*
+ * Rails fix
+ */
+.field_with_errors {
+	display: inline-block;
+}
+
+/*
  * Drag and Drop (HTML5)
  */
 [draggable=true] {
@@ -523,7 +531,7 @@ a {
 
 			width: 135px;
 			float: left;
-			font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+			@include thinfont;
 			font-size: .80em;
 
 			.title {
@@ -590,28 +598,43 @@ h2, h3 {
  * Errors styling
  */
 
-ul.errors {
-	margin: 0;
+// div.errors from application_helper.rb
+.errors {
 	display: inline-block;
-	background: $error-color;
-	color: white;
-	font-size: .85em;
-	padding: 8px;
-	@include rounded;
-	margin-bottom: 5px;
+	position: relative;
 	
-	&:after {
-		content: "▾";
-		font-size: 24px;
-		color: $error-color;
-		position: absolute;
-		margin-top: -5px;
-	}
-	
-	li {
-		list-style-type: none;
+	ul {
+		$padding: 8px;
+
+		margin: 0;
+		background: $error-color;
+		color: white;
+		font-size: .85em;
+		padding: $padding;
+		@include rounded;
+		margin-bottom: 5px;
+
+		&:after {
+			position: absolute;
+			margin-top: -6px;
+			@include font-trebuchet;
+			content: "▾";
+			font-size: 24px;
+			color: $error-color;
+		}
+
+		&.right-align {
+			&:after {
+				right: $padding;
+			}
+		}
+
+		li {
+			list-style-type: none;
+		}
 	}
 }
+
 
 /*
  * Special layouts
@@ -733,13 +756,13 @@ ul.errors {
     margin-left: 66px;
     padding: 0px;
     //font-family: Helvetica, sans-serif;
-	font-family: "Lucida Grande";
+	@include thinfont;
 	//@include mjfont
 }
 #mtaTwitter ul li { padding: 10px 10px; font-size: 10pt; }
-#mtaTwitter ul li.first { font-size: 11pt; /* font-weight: bold; */ }
+#mtaTwitter ul li.first { font-size: 10pt; /* font-weight: bold; */ }
 #mtaTwitter ul li.even { background-color: #EDEEFD; }
-#mtaTwitter ul li.first span { font-size: 10pt; font-weight: normal; }
+#mtaTwitter ul li.first span { font-size: 8pt; font-weight: normal; display: block; margin-top: 3pt; }
 #mtaTwitter ul li span { font-style: normal; font-family: Verdana, Arial, Helvetica, sans-serif; } // span is the time
 
 /* usage flow comic, homepage */
@@ -1106,77 +1129,104 @@ ul.errors {
 
 .stepflow-position {
 	position: relative;
-}
-.stepflow-position button {
-	padding: 5px 10px;
-	font-size: 1.05em;
-	background: url(/images/buttons/button-next.png);
-	height: 35px;
-	width: 183px;
-	text-align: left;
-	border: none;
-}
-.stepflow-position button.previous {
-	background: url(/images/buttons/button-previous.png);
-	text-align: left;
-	padding-left: 20px;
-}
-.stepflow-position button:hover {
-	background-position: 0 35px;
-}
-.stepflow-position button:active {
-	position:relative;
-	top: 1px;
-}
-.stepflow-position button:disabled {
-	color: gray;
-}
-.stepflow-position .previous a {
-	font-size: .80em;
-}
-.stepflow-position .previous {
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-.stepflow-position .next {
-	position: absolute;
-	top: 0;
-	right: 0;
-}
-.stepflow-position .list {
-	margin: 0 auto;
-	position: relative;
-	width: 210px;
-}
-.stepflow-position .list ol {
-	margin: 0; padding: 0;
-	width: 210px;
-}
-.stepflow-position .list li {
-	float: left;
-	width: 70px;
-	list-style-type: none;
 	
-	text-align: center;
-	font-size: .65em;
-	padding: 0;
-}
-.stepflow-position .list li:first-of-type {
-	text-align: right;
-}
-.stepflow-position .list li:last-of-type {
-	text-align: left;
-}
-.stepflow-position .list li .step-bullet {
-	font-size: 20px;
-	padding-bottom: 5px;
-}
-.stepflow-position .list li {
-	color: gray;
-}
-.stepflow-position .list li.current {
-	color: black;
+	.ajax-loading {
+		position: absolute;
+		top: 6px;
+		display: none;
+	}
+	
+	.previous, .next {
+		
+		position: absolute;
+		top: 0;
+	}
+	
+	.previous {
+		left: 0;
+		
+		// cancel link
+		a {
+			font-size: .80em;
+		}
+		
+		.ajax-loading {
+			left: -30px;
+		}
+	}
+	
+	.next {
+		right: 0;
+		
+		.ajax-loading {
+			right: -30px;
+		}
+	}
+	
+	button {
+		padding: 5px 10px;
+		font-size: 1.05em;
+		background: url(/images/buttons/button-next.png);
+		height: 35px;
+		width: 183px;
+		text-align: left;
+		border: none;
+		
+		&.previous {
+			background: url(/images/buttons/button-previous.png);
+			text-align: left;
+			padding-left: 20px;
+		}
+		
+		&:hover {
+			background-position: 0 35px;
+		}
+		&:active {
+			position:relative;
+			top: 1px;
+		}
+		&:disabled {
+			color: gray;
+		}
+	}
+	
+	// shows all steps with current step highlighted
+	.list {
+		margin: 0 auto;
+		position: relative;
+		width: 210px;
+		
+		ol {
+			margin: 0; padding: 0;
+			width: 210px;
+		}
+		li {
+			float: left;
+			width: 70px;
+			list-style-type: none;
+
+			text-align: center;
+			font-size: .65em;
+			padding: 0;
+			
+			color: gray;
+			
+			&:first-of-type {
+				text-align: right;
+			}
+			&:last-of-type {
+				text-align: left;
+			}
+			&.current {
+				color: black;
+			}
+			
+			.step-bullet {
+				font-size: 20px;
+				padding-bottom: 5px;
+			}
+		}
+	}
 }
 
 .stepflow-time-remaining {
@@ -1193,13 +1243,6 @@ ul.errors {
 		color: gray;
 		@include rounded(10px);
 	}
-}
-
-.ajax-loading {
-	position: relative;
-	top: 6px;
-	right: -220px;
-	display: none;
 }
 
 // TODO: remove styling to hybrid-input
@@ -1255,225 +1298,178 @@ ul.errors {
 /*
  * time range input
  */
-.mj-timeline-input {
+.mj-timerange-input {
 	position: relative;
-	height: 56px;
 	margin-top: 15px;
+
+	//background: $light-gray;
 	
-	button {
-		position: absolute;
-		height: 56px;
-		width: 16px;
-		top: 0;
-		font-size: 10px;
-		vertical-align: middle;
-		line-height: 50px;
-		padding: 3px;
-		text-align: center;
-		border: none;
+	.day-tabs {
 		
-		&.slide-after {
-			right: 0;
-			background: url(/images/buttons/timeline-slide-next.png);
-		}
-		&.slide-before {
-			left: 0;
-			background: url(/images/buttons/timeline-slide-prev.png);
-		}
-		&:hover {
-			background-position: 0 56px;
-		}
-		&:disabled {
+		label {
+			float: left;
+			padding: 8px 15px;
+			
+			border: 2px solid $border-gray;
+			border-width: 2px 2px 0 0;
+			
 			color: gray;
-			background-position: 0 0 !important;
-		}
-		&:not(:disabled):active {
-			top: 1px;
-		}
-	}
-	
-	.view-container {
-		
-		//position: absolute;
-		//left: 16px;
-		//right: 16px;
-		//top: 0;
-		//bottom: 0;
-		margin: 0 16px;
-		height: 56px;
-		overflow-x: hidden;
-		
-		background: $light-gray;
-		
-		.day-title {
-			position: absolute;
-			margin: 0 0 0 4px;
-			overflow: hidden;
+			cursor: default;
 			
-			border: 1px outset gray;
-			border-radius: 5px;
+			input { display: none; }
 			
-			background: $border-gray;
-			
-			.view-area {
-				position: absolute;
-				top: 0; bottom: 0;
-				width: 32px;
-				
-				border-radius: 3px;
-				background: white;
+			&:first-of-type {
+				border-left-width: 2px;
+				border-top-left-radius: 5px;
 			}
+			&:last-of-type { border-top-right-radius: 5px; }
 			
-			span {
-				position: relative;
-				display: block;
-				float: left;
-				z-index: 1;
-				
-				width: 49px;
-				padding: 0 0;
-				border-left: 1px solid gray;
-				
+			&.active {
+				background: white;
+				border-color: $radio-checked-border;
 				color: black;
 				
-				text-align: center;
-				font-size: 10pt;
+				border-right-color: $border-gray;
+			}
+		}
+	}
+		
+	.frame {
+		
+		clear: both;
+		
+		padding: 15px 10px 12px;
+		border: 2px solid $radio-checked-border;
+		border-top-width: 0;
+		@include rounded(0 5px 5px 5px);
+		
+		background: white;
+		
+		$ds: 19px; // half-hour size
+		
+		.activities {
+			
+			position: relative;
+			width: $ds + $ds * 2 * 18 + $ds; // base + 1 day + baseEnd
+			height: 8px;
+			margin: 0 auto;
+			z-index: 2;
+
+			.activity {
+				position: absolute;
+				top: -8px;
 				
-				&:hover {
-					cursor: pointer;
-					background: #e1ecff;
-				}
-				
-				&:first-of-type {
-					width: 50px;
-					
-					border-left: none;
-					
-					border-top-left-radius: 3px;
-					border-bottom-left-radius: 3px;
-				}
-				&:last-of-type {
-					border-top-right-radius: 3px;
-					border-bottom-right-radius: 3px;
-				}
+				color: gray;
+
+				&.scoped { color: #0080FF; }
 			}
 		}
 		
-		.timeline-container {
-			margin-top: 24px;
-			
-			$qs: 12px; // quarter size
+		.timeline {
+			$ds: 19px; // half-hour size
 			
 			position: relative;
-			width: $qs * 2 + $qs * 4 * 24 * 8 + $qs * 4; // base + 8 day + baseEnd
-			
-			.timeline-bar {
-				background: white;
-				border: solid gray;
-				border-width: 1px 0 1px 0;
-				height: 12px;
-				margin: 0 8px;
+			width: $ds + $ds * 2 * 18 + $ds; // base + 1 day + baseEnd
+			height: 28px;
+			margin: 0 auto;
+			//padding-top: 12px; // for activities
+			overflow-x: hidden;
+			overflow-y: hidden; // visible shows scrollbar for some reason...
+			 
+			&.show-activities {
+				//padding-top: 150px;
 			}
 			
 			.timeline-marks {
 				position: absolute;
 				top: 1px;
 				z-index: 2;
-				
+
 				.mark {
 					float: left;
-					width: $qs * 4;
+					width: $ds * 2;
 					position: relative;
-					
+
 					.line-hour {
 						height: 12px;
 						background: gray;
 						width: 1px;
-						margin-left: $qs * 2;
-						margin-right: ($qs * 2) - 1;
+						margin-left: $ds;
+						margin-right: $ds - 1;
 					}
-					
+
 					.title-hour {
+						margin-left: 1px;
 						text-align: center;
 						padding-top: 3px;
 						font-size: .70em;
 					}
-					
-					.line-quarter, .line-half, .line-3rd-quarter {
+
+					/*
+					// non-visible
+					.line-half {
 						position: absolute;
 						width: 0;
-					}
-					
-					.line-quarter, .line-3rd-quarter {
-						top: 6px;
-						height: 6px;
-						border-left: 1px dotted gray;
-					}
-					
-					.line-quarter     { left: $qs * 3; }
-					.line-3rd-quarter { left: $qs * 5; }
-					
-					.line-half {
-						left: $qs * 4;
+						left: $ds * 2;
 						top: 2px;
 						height: 10px;
 						border-left: 1px dotted gray;
 					}
+					*/
+					
+					// every non-3 hours are a lighter shade of gray
+					&:not(:nth-child(3n + 1)) {
+						.line-hour {
+							background: $border-gray;
+						}
+						.title-hour {
+							color: #AAAAAA;
+							font-size: .65em;
+						}
+					}
 				} // end mark
 			} // end timeline-marks
-			
+
 			.elapsed-and-current-time {
-				height: 12px;
-				padding-right: 16px; // added to width
-				background: #ccc;
 				position: absolute;
-				top: 1px;
-				left: 8px;
+				// width assigned on markup by back-end
+				height: 6px;
+				top: 1px + 3px;
+				left: -6 * 2 * $ds + $ds - 1px; // starts at 00:00 (hidden overflow), +$ds because frame starts at 5:30am, -1px to center red line
 				border-right: 2px solid red;
 				z-index: 1;
+				background: #ccc;
 			}
-			
+
 			.selected-time {
 				padding-right: 3px; // added to width
 				margin-left: -1px;
 				background: #e1ecff;
-				height: 18px;
+				height: 10px;
 				position: absolute;
-				top: -2px;
+				top: 2px;
 				opacity: .8;
 				cursor: move;
 				z-index: 3;
-				
+
 				.start-hand, .stop-hand {
-					
+
 					width: 3px;
-					height: 18px;
+					height: 10px;
 					background: #0080FF;
 					position: absolute;
-					cursor: ew-resize; /* TODO: make resize area bigger */
+					cursor: ew-resize;
+					
+					// making resize area bigger (easier to grab)
+					//padding: 0 2px;
 				}
-				
+
 				.start-hand { left: 0; }
 				.stop-hand { right: 0; }
 			}
-		} // end timeline-container
-		
-		.activities {
-			position: absolute;
-			top: -18px;
-			z-index: 2;
-			left: 160px;
-			
-			.activity {
-				position: absolute;
-				color: gray;
-				
-				&.scoped { color: #0080FF; }
-			}
-		}
-	} // end view-container
-} // end mj-timeline-input 
-
+		} // end timeline
+	} // end frame
+} // end mj-timeline-input
 
 /*
  * standard radio

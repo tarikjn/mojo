@@ -4,8 +4,8 @@ require File.expand_path('../application', __FILE__)
 # Initialize the rails application
 Mojo::Application.initialize!
 
-# Mail settings
 Mojo::Application.configure do
+  # Mail settings
   config.action_mailer.delivery_method = :smtp
   
   config.action_mailer.smtp_settings = {

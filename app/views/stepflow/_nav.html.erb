@@ -1,19 +1,16 @@
-<%
-	steps = ['Create or Join?', 'Activity Details', 'Profile Information', 'Finish :)']
-	# 'Create Activity' when in create mode
-%>
 <div class="stepflow-position">
 	
 	<div class="previous">
 		
 		<%
-			if @step == 0
+			if @stepflow.step == 0
 		%>
-		<a href="/">Cancel and <br />Return to Homepage</a>
+		<a href="<%= url_for :action => :cancel %>">Cancel and <br />Return to Homepage</a>
 		<%
 			else
 		%>
-			<button type="submit" class="previous" formaction="<%= @previous_action %>"><%= steps[@step - 1] %></button> 
+			<img class="ajax-loading" src="/images/ajax-loading.gif" alt="loading..." />
+			<button type="submit" class="previous" formaction="<%= url_for :action => :previous %>"><%= nav_captions[:steps][@stepflow.step - 1] %></button> 
 		<%
 			end
 		%>
@@ -25,7 +22,7 @@
 				
 				(0..2).each do |i|
 			%>
-			<li<% if i == @step %> class="current"<% end %>><div class="step-bullet"><% if i <= @step %>•<% else %>○<% end %></div><div class="label"><%= steps[i] %></div></li>
+			<li<% if i == @stepflow.step %> class="current"<% end %>><div class="step-bullet"><% if i <= @stepflow.step %>•<% else %>○<% end %></div><div class="label"><%= nav_captions[:steps][i] %></div></li>
 			<%
 				end
 			%>
@@ -33,11 +30,12 @@
 	</div>
 	
 	<div class="next">
-		<img class="ajax-loading" src="/images/ajax-loading.gif" alt="loading..." /> <button type="submit"><%= steps[@step + 1] %></button>
+		<button type="submit"><%= nav_captions[:steps][@stepflow.step + 1] %></button>
+		<img class="ajax-loading" src="/images/ajax-loading.gif" alt="loading..." />
 	</div>
 	
 </div>
 
 <div class="stepflow-time-remaining">
-	<span><%= @remaining %> to completion...</span>
+	<span><%= nav_captions[:remaining][ongoing_view] %> to completion...</span>
 </div>

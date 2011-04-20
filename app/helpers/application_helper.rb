@@ -1,27 +1,37 @@
 module ApplicationHelper
   
-  # /abs -> http://myx.com/abs
-  def path_to_url(path) # find something better
-    "http://#{self.request.host}:#{self.request.port}/#{path.sub(%r[^/],'')}"
-  end
-  
-  def mj_timerange(show_activities = false)
-    # TODO: move to helper
-    render :partial => "shared/mj_timeline", :locals => {:show_activities => show_activities}
+  # attribute must be a string, it is concatened with _start and _end
+  def mj_timerange(name, value = {:day => nil, :time_start => nil, :time_end => nil}, options = {:show_activities => false})
+
+  	# start of the timerange at 6:00am
+  	base_time = Date.today.to_time + 6.hours
+
+  	ds = 19		# half-hour size in px
+  	base = ds	# position of base_time
+
+  	# elapsed = quarters in the day * qs
+  	elapsed_time = Time.now - Date.today.to_time # replaced base_time by Date.today.to_time for hidden overflow
+  	elapsed = (elapsed_time > 0) ? ((elapsed_time / (60 * 30)) * ds).floor : nil
+
+  	# nice to have: show night/day even weather?, need latitude
+  	set = {:ds => ds, :base => base, :elapsed => elapsed}
+  	
+  	# object_name is ugly, there must be a better way to do that
+    render :partial => "shared/mj_timerange", :locals => {:name => name, :value => value, :options => options, :set => set}
   end
   
   def login_form
     render :partial => "user_sessions/form", :locals => { :session => UserSession.new } 
   end
   
-  def format_errors_for(obj, symbol, title)
+  def format_errors_for(obj, symbol, options = {:title => nil, :align => :left})
     o = ''
     if obj.errors[symbol].length > 0
-      o << '<ul class="errors">'
+      o << '<div class="errors"><ul' + ((options[:align] == :right)? ' class="right-align"' : '') + '>'
       obj.errors[symbol].each do |msg|
-		      o << "<li>#{title} #{msg}</li>"
+		      o << "<li>#{options[:title]} #{msg}</li>"
 		  end
-      o << '</ul>'
+      o << '</ul></div>'
     end
     raw o
   end
@@ -35,6 +45,15 @@ module ApplicationHelper
     green = (score < 0)? (255 + (score/5) * 255).to_i : 255;
     
     return "rgb(#{red}, #{green}, 0)"
+  end
+  
+  # make it more OO by moving to class for object type
+  def time_to_ds(str)
+    m = str.match(/(\d{2}):(\d{2})/)
+    hours = m[1].to_i
+    minutes = m[2].to_i
+    
+    2*hours + minutes/30
   end
   
 end

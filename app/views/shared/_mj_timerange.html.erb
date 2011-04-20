@@ -1,0 +1,71 @@
+<div class="hybrid-input">
+	<div class="mj-timerange-input">
+		<%= hidden_field_tag "#{name}[time_start]", value[:time_start] %>
+		<%= hidden_field_tag "#{name}[time_end]", value[:time_end] %>
+		<div class="day-tabs">
+		<%
+			0.upto 7 do |d|
+				day = Date.today + d.days
+		%>
+			<label<% if (day == value[:day].to_date) %> class="active"<% end %>><%= radio_button_tag "#{name}[day]", day.strftime("%F"), (day == value[:day].to_date) %><%= (d == 0)? "Today" : day.strftime("%a") %></label>
+		<%
+			end
+		%>
+		</div>
+		<div class="frame">
+			<%
+				if (options[:show_activities]) then
+			%>
+			<div class="activities">
+				<div class="activity" style="margin-left: 15px">◆</div>
+				<div class="activity" style="margin-left: 50px">◆</div>
+				<div class="activity" style="margin-left: 105px">◆</div>
+				<div class="activity scoped date-6" style="margin-left: 155px">◆</div>
+				<div class="activity scoped date-7" style="margin-left: 165px">◆</div>
+				<div class="activity scoped date-8" style="margin-left: 210px">◆</div>
+				<div class="activity" style="margin-left: 255px">◆</div>
+				<div class="activity" style="margin-left: 265px">◆</div>
+				<div class="activity" style="margin-left: 385px">◆</div>
+				<div class="activity" style="margin-left: 400px">◆</div>
+				<div class="activity" style="margin-left: 415px">◆</div>
+				<div class="activity" style="margin-left: 450px">◆</div>
+				<div class="activity" style="margin-left: 470px">◆</div>
+				<div class="activity" style="margin-left: 500px">◆</div>
+			</div>
+			<%
+				end
+			%>
+			<div class="timeline<% if options[:show_activities] %> show-activities"<% end %>">
+				<%
+					# time is one-dimensional we select day separately
+					t = Date.today + 6.hours
+				%>
+				<div class="timeline-marks">
+					<%
+						6.upto 24 do |h|
+					%>
+					<div class="mark">
+						<div class="line-hour"></div>
+						<div class="title-hour"><%= t.strftime("%l"+([6, 12, 24].include?(h)?"%p":"")).downcase %></div>
+						<%
+							if (h != 24)
+						%>
+						<div class="line-half"></div>
+						<%
+							end
+						%>
+					</div>	
+					<%
+							t += 1.hours
+						end
+					%>
+				</div>
+				<div class="elapsed-and-current-time" style="width: <%= set[:elapsed] %>px;<%= (value[:day].to_date != Date.today)? " display: none;" : "" %>"></div>
+				<div class="selected-time" tabindex="0" style="left: <%= set[:base] + set[:ds] * (time_to_ds(value[:time_start]) - 6 * 2) %>px; width: <%= set[:ds] * (time_to_ds(value[:time_end]) - time_to_ds(value[:time_start])) %>px;">
+					<div class="start-hand" tabindex="0"></div>
+					<div class="stop-hand" tabindex="0"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

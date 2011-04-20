@@ -1,7 +1,7 @@
 // setup of accept format for Rails' respond_to format.js
 jQuery.ajaxSetup({
     'beforeSend': function(xhr) {
-        xhr.setRequestHeader("Accept", "text/javascript")
+        xhr.setRequestHeader("Accept", "application/jsonrequest")
     }
 });
 
@@ -31,13 +31,34 @@ $.fn.fix_radios = function() {
     }
 
     // reset all the was_checked properties
-    $( "input[name=" + this.name + "]" ).each( function() {
+    $( 'input[name="' + this.name + '"]' ).each( function() {
       this.was_checked = this.checked;
     } );
   }
 
   // attach the handlers and return so chaining works
   return this.focus( focus ).change( change );
+}
+
+// Mojo's custom library
+var Lib = {
+	pad: function(number, length) {
+
+	    var str = '' + number;
+	    while (str.length < length) {
+	        str = '0' + str;
+	    }
+
+	    return str;
+
+	},
+	formatTime: function(hour)
+	{
+		var H = Math.floor(hour);
+		var M = (hour - H) * 60;
+		
+		return Lib.pad(H, 2) + ':' + Lib.pad(M, 2);
+	}
 }
 
 // Class managing selection of Subset form
@@ -52,12 +73,12 @@ var SubsetForm = {
 	
 	initialize: function(formItem) {
 		
-		SubsetForm.parent = formItem[0];
-		SubsetForm.arrow = formItem.find(".subset-form-arrow:eq(0)")[0];
-		SubsetForm.selected = formItem.find(".subset-form.active")[0];
+		SubsetForm.parent = formItem;
+		SubsetForm.arrow = $(formItem).find(".subset-form-arrow:eq(0)")[0];
+		SubsetForm.selected = $(formItem).find(".subset-form.active")[0];
 		
 		// set up variables and events for personas
-		formItem.find(".hybrid-input .mj-choice").find(".person.host").each(function(i) {
+		$(formItem).find(".hybrid-input .mj-choice").find(".person.host").each(function(i) {
 			
 			if (i == 0)
 				SubsetForm.selected_persona = this;
@@ -65,7 +86,7 @@ var SubsetForm = {
 			// find index
 			var index = $(this).index() - 1;
 			// set up variables for personas: link_to, arrow_pos
-			this.link_to = formItem.find(".subset-form").eq(index)[0];
+			this.link_to = $(formItem).find(".subset-form").eq(index)[0];
 			this.arrow_pos = SubsetForm.ap[i];
 			this.is_selected = (i == 0) ? true : false;
 			
@@ -79,7 +100,7 @@ var SubsetForm = {
 		});
 		
 		// set up change event listener on mj-merged
-		formItem.find(".hybrid-input .mj-choice").change(function() {
+		$(formItem).find(".hybrid-input .mj-choice").change(function() {
 			
 			// select first persona
 			SubsetForm.select($(this).find(".person.host:eq(0)")[0]);
@@ -167,54 +188,21 @@ function TimeRangeInput(obj)
 {
 	// defaults
 	that = this;
-	this.offset = 50; // px
-	this.timer = {
-		timeout: 500, // >= interval
-		interval: 50
-	};
-	this.qs = 12; // quarter size in px
-	this.base = 24;
+	this.ds = 19; // half-hour size in px
+	this.base = this.ds;
 	
 	function initialize()
 	{
 		// remove use of jQuery
-		that.viewport = $(this).children(".view-container")[0];
+		that.input = this;
+		that.timeline = $(this).find(".timeline")[0];
 		that.range = $(this).find(".selected-time")[0];
-		that.viewer = $(this).find(".view-area")[0];
-		
-		// this contructs allows us to do assignements with buttons[0] and buttons[1] with a unique jQuery traverse
-		(function(buttons) {
-			that.buttons = {
-				before: {
-					el: buttons[0],
-					isDisabled: function() { return !(that.viewport.scrollLeft > 0); },
-					offsetFactor: -1
-				},
-				after: {
-					el: buttons[1],
-					isDisabled: function() { return !((that.viewport.scrollLeft + that.viewport.offsetWidth) < that.viewport.scrollWidth); },
-					offsetFactor: 1
-				}
-			};
-			
-			buttons[0].mj_timerange_button = that.buttons.before;
-			buttons[1].mj_timerange_button = that.buttons.after;
-			
-		} ($(this).children("button")));
-		
-		// onscroll event
-		$(that.viewport).scroll(that.onScroll);
-		
-		// scroll to the initial selected range
-		that.viewport.scrollLeft += that.base + that.qs * 4 * 9;
-		//that.updateState();
 		
 		// init dragging for selected time
-		that.limiter = that.viewport;
-		var baseEnd = that.viewport.scrollWidth - 4 * that.qs;
+		that.limiter = $(this).find(".frame")[0];
+		var baseEnd = that.timeline.scrollWidth - that.ds;
 		
 		// TODO: set cursor when dragging
-		// TODO: add auto-scroll
 		// TODO: implement keyboard nav
 		
 		that.initDrag(that.range, {
@@ -227,7 +215,7 @@ function TimeRangeInput(obj)
 		});
 		that.initDrag($(that.range).find(".stop-hand")[0], {
 			limitRef: function() { return parseInt(that.dragged.parentElement.style.width); },
-			limitLow: 4 * that.qs,
+			limitLow: 2 * that.ds, // select a 1 hour range minimum
 			limitHigh: function() { return baseEnd - parseInt(that.dragged.parentElement.style.left); },
 			handler: function(m) {
 				that.dragged.parentElement.style.width = parseInt(that.dragged.parentElement.style.width) + m + "px";
@@ -244,105 +232,45 @@ function TimeRangeInput(obj)
 			}
 		});
 		
-		// attach event listeners to both buttons
-		$([that.buttons.before.el, that.buttons.after.el]).bind('mousedown', that.mousedown).bind('mouseup', that.mouseup);
-		
-		$(".day-title .labels span").click(that.clickDay);
+		$(".day-tabs label").click(that.selectDay);
 	}
 	
-	this.clickDay = function()
+	this.selectDay = function()
 	{
-		that.viewport.scrollLeft = that.base + $(this).index() * that.qs * 4 * 24;
-	}
-	
-	// scroll support, TODO: namespace
-	this.onScroll = function()
-	{
-		that.updateState();
-		
-		// move view-area
-		// 732 width -> 32 px viewer
-		// from base to 24 * 4 * qs -> 1 day
-		that.viewer.style.left = ((that.viewport.scrollLeft - that.base) * that.viewer.offsetWidth / that.viewport.offsetWidth) + "px";
-	}
-	this.mousedown = function()
-	{
-		// no action if disabled
-		if (this.disabled)
-			return;
-		
-		// scroll
-		that.scroll.call(this);
-		
-		// copy this so "this" doesn't get overwrriten by timeout scope
-		var me = this;
-		
-		// set timeout
-		if (!this.disabled) // state can change after scroll
-			this.mj_timerange_button.timeout = setTimeout(function() { that.timeout.call(me); }, that.timer.timeout - that.timer.interval);
-			// we remove the interval so it starts scrolling right after timeout
-		
-	}
-	
-	this.mouseup = function()
-	{
-		var b = this.mj_timerange_button;
-		
-		// stop any timers
-		if (b.timeout !== undefined)
-		{
-			clearTimeout(b.timeout);
-			b.timeout = undefined;
+		if (!$(this).hasClass("active")){
+			
+			var tabs = $(this.parentNode).children();
+			var timebar = $(that.timeline).find(".elapsed-and-current-time");
+			
+			// disable/enable elapsed time bar
+			if (tabs.index(this) == 0)
+				timebar.show();
+			else
+				timebar.hide();
+			
+			// de-activate former tab, activate *this
+			tabs.filter(".active").removeClass("active");
+			$(this).addClass("active");
 		}
-		else
-			that.stopTimer(b.timer);
 	}
 	
-	this.timeout = function()
+	this.updateTimeInputs = function()
 	{
-		var b = this.mj_timerange_button;
+		// start_time: 06:00 + 1h per each 2 * ds in left pos (-base)
+		// end_time: + 1h per each 2 * ds in width
 		
-		// the timeout is over
-		b.timeout = undefined;
+		var left = parseInt($(that.range).css("left"));
+		var width = parseInt($(that.range).css("width"));
 		
-		// copy this so "this" doesn't get overwrriten by interval scope
-		var me = this;
+		var start_time_input = $(that.input).children("input[name$=\"time_start]\"]");
+		var end_time_input = $(that.input).children("input[name$=\"time_end]\"]");
 		
-		// set interval instead
-		this.mj_timerange_button.timer = setInterval(function() { that.scroll.call(me); }, that.timer.interval);
-	}
-	
-	this.scroll = function()
-	{
-		var b = this.mj_timerange_button;
+		var start_hour = ((left - that.base) / (2 * that.ds)) + 6;
+		var end_hour = start_hour + (width / (2 * that.ds));
 		
-		// how much do we move the scrollbar
-		offset = that.offset * b.offsetFactor;
-
-		// this scrolls the viewport
-		that.viewport.scrollLeft += offset;
-		
-		// stop any mousedown timer if the current button is about to be disabled
-		if ( b.isDisabled() )
-			that.stopTimer(b.timer);
-		
-		//that.updateState();
-	}
-	
-	this.updateState = function()
-	{
-		// check/update state for both buttons
-		for (button in that.buttons)
-			that.buttons[button].el.disabled = that.buttons[button].isDisabled();
-	}
-	
-	this.stopTimer = function(timer)
-	{
-		if (timer !== undefined)
-		{
-			clearInterval(timer);
-			timer = undefined;
-		}
+		// set
+		start_time_input.val(Lib.formatTime(start_hour));
+		end_time_input.val(Lib.formatTime(end_hour));
 	}
 	
 	// drag support, may be namespaced
@@ -373,12 +301,12 @@ function TimeRangeInput(obj)
 	this.moveDrag = function(e)
 	{
 		var delta = e.pageX - this.mj_drag_startPos;
-		var increments = Math.round(Math.abs(delta / that.qs));
+		var increments = Math.round(Math.abs(delta / that.ds));
 		var direction = (delta < 0)? -1 : 1;
 		
 		if (increments > 0)
 		{
-			var move = direction * increments * that.qs;
+			var move = direction * increments * that.ds;
 			
 			// use spec
 			var limitLow = that.dragged.mj_drag_spec.limitLow;
@@ -412,6 +340,9 @@ function TimeRangeInput(obj)
 		this.mj_drag_startPos = undefined;
 		
 		that.dragged = undefined;
+		
+		// update inputs
+		that.updateTimeInputs();
 	}
 	
 	// constructor
@@ -469,7 +400,7 @@ var Flash = {
 		$(el).show();
 	},
 	getEl: function(date_id) {
-		return $(".mj-timeline-input .activities .activity.date-"+date_id)[0];
+		return $(".mj-timerange-input .activities .activity.date-"+date_id)[0];
 	}
 };
 
@@ -613,170 +544,254 @@ var DragAndDrop = {
 	}
 }
 
+var LiveInit = {
+	
+	navOnly: function(c) {
+		
+		// JS support for formaction on button elements (HTML5)
+		$(c).find("button[formaction]").each(function() {
+
+			if ($(this).attr("formaction") !== null && this.formaction === undefined)
+			{
+				// HTML5's button -> formaction is unsupported
+				$(this).click(function() {
+					var form = $(this).parents("form");
+					form.attr("action", $(this).attr("formaction"));
+					form.submit();
+					return false;
+				});
+			}
+		});
+	},
+	all: function(c) {
+		
+		// flash date pointers and markers
+		$(c).find(".mj-activity").mouseenter(function(){
+			var id = DateList.getId(this);
+			
+			Flash.set(id);
+			$('#map_canvas')[0].mj_map.animateMarker(id);
+		}).mouseleave(function(){
+			var id = DateList.getId(this);
+
+			// stop flashing
+			Flash.stop(id);
+			// stop bouncing
+			$('#map_canvas')[0].mj_map.stopAnimateMarker(id);
+		});
+
+		// afinity
+		$(c).find("canvas.afinity-chart").each(function(){
+			var r = this.width / 2; // radius
+			var a = parseInt($(this.parentNode.parentNode).find(".score .int").text()) / 100; // afinity
+
+			var red = Math.round(255 - ((a > .5)? 255 * (a - .5) * 2 : 0));
+			var green = Math.round((a > .5)? 255 : 255 * a * 2);
+
+			var ctx = this.getContext("2d");
+
+			// colored
+			ctx.beginPath();
+			ctx.arc(r, r, r, -.5*Math.PI, -.5*Math.PI + Math.PI*2*a, false);
+			ctx.lineTo(r, r);
+			ctx.closePath();
+			ctx.fillStyle = 'rgb('+red+', '+green+', 0)';
+			ctx.fill();
+
+			// remaining in gray
+			ctx.beginPath();
+			ctx.arc(r, r, r, -.5*Math.PI + Math.PI*2*a, -.5*Math.PI + Math.PI*2, false);
+			ctx.lineTo(r, r);
+			ctx.closePath();
+			ctx.fillStyle = 'rgba('+red+', '+green+', 0, .25)';
+			ctx.fill();
+		});
+		
+		// load Google Maps (code in mojo-geo.js)
+		$(c).find('#map_canvas').each(function() {
+			
+			if ($("label.mj-activity").length) // TODO: add scope!!
+			{
+				var points = {}; // move outside block?
+				
+				$("label.mj-activity").each(function() {
+					var lat = $(this).find(".point .lat").text();
+					var lng = $(this).find(".point .lng").text();
+					points[this.id] = [lat, lng];
+				});
+			}
+			
+			this.mj_map = new Map(this, points);
+		});
+
+		// mj-timerange-input
+		$(c).find(".mj-timerange-input").each(function() {
+			new TimeRangeInput(this);
+		});
+
+		// initialize SubsetForm
+		$(c).find("#form_item_who").each(function() {
+			SubsetForm.initialize($(this));
+			AutoselectPersona.initialize(this);
+		})
+
+		// apply "selected" class to label when switching radio
+		$(c).find(".mj-choice, .mj-merged-choices, .mj-operation-choices, .mj-micro-select").find("input[type=radio]").change(function() {
+			
+			var label = $(this).parents("label:eq(0)"); // parents + :eq(0): fix for fields_with_errors
+			var group = label.parents(".hybrid-input:eq(0)");
+
+			group.find(".selected").removeClass("selected");
+			label.addClass("selected");
+		});
+
+		// activate mj-check-roll
+		$(c).find("label.mj-check-roll").each(function() {
+
+			var dependant = $(this).parent().next();
+			dependant.hide();
+
+			$(this).change(function() {
+				dependant.toggle();
+			});
+
+			// TODO: autofill age/height + autoselect
+		});
+		
+		
+		/*
+		 * General fixes
+		 */
+
+		$(c).find("input[type=radio]").fix_radios();
+		
+		LiveInit.navOnly(c);
+	}
+}
+
 
 $(function() {
 	
 	// the code after this point is executed when the DOM finished loading
 	
-	// drag and drop
-	if ($(".participants-view").length) {
-		
-		DragAndDrop.init();
-	}
+	// inits in liveInit need to be called after ajax calls and subsequent DOM manipulations
+	LiveInit.all(document);
 	
-	// flash date pointers and markers
-	$(".mj-activity").mouseenter(function(){
-		var id = DateList.getId(this);
-		
-		Flash.set(id);
-		Geo.animateMarker(id);
-	}).mouseleave(function(){
-		var id = DateList.getId(this);
-		
-		// stop flashing
-		Flash.stop(id)
-		// stop bouncing
-		Geo.stopAnimateMarker(id);
-	});
-	
-	// afinity
-	$("canvas.afinity-chart").each(function(){
-		var r = this.width / 2; // radius
-		var a = parseInt($(this.parentNode.parentNode).find(".score .int").text()) / 100; // afinity
-		
-		var red = Math.round(255 - ((a > .5)? 255 * (a - .5) * 2 : 0));
-		var green = Math.round((a > .5)? 255 : 255 * a * 2);
-		
-		var ctx = this.getContext("2d");
-		
-		// colored
-		ctx.beginPath();
-		ctx.arc(r, r, r, -.5*Math.PI, -.5*Math.PI + Math.PI*2*a, false);
-		ctx.lineTo(r, r);
-		ctx.closePath();
-		ctx.fillStyle = 'rgb('+red+', '+green+', 0)';
-		ctx.fill();
-		
-		// remaining in gray
-		ctx.beginPath();
-		ctx.arc(r, r, r, -.5*Math.PI + Math.PI*2*a, -.5*Math.PI + Math.PI*2, false);
-		ctx.lineTo(r, r);
-		ctx.closePath();
-		ctx.fillStyle = 'rgba('+red+', '+green+', 0, .25)';
-		ctx.fill();
-	});
-	
-	// animating stepflow
+	// handling stepflow submit/animation
 	$(".stepflow-frame > form").submit(function() {
-		
+
 		// save reference
 		var form = this;
-		
+
 		// nav loading
 		$("#stepflow-nav button").attr('disabled', 'disabled');
-		$("#stepflow-nav .ajax-loading").show();
-		
+		$("#stepflow-nav ." + ((this.action.search(/\/stepflow$/) != -1)? 'next':'previous') + " .ajax-loading").show();
+
 		$.post(this.action, $(this).serialize(), function(r) {
+			
+			if (r.move != 'redirect')
+			{
+				// added ".find("stepflow-blocks").contents()" after small layout refactoring
+				var fields = $(r.block).find("#stepflow-blocks .form-inputs");
+				var nav = $(r.block).find("#stepflow-nav").contents();
+			}
 			
 			if (r.move == 'next')
 			{
-				var outgoing = $('#stepflow-blocks').children().first();
-				var timing = 1000;
-
-				var incoming = $(r.block).appendTo($('#stepflow-blocks')).css({opacity: 0});
+				var pos = {from: 0, to: -898}
+				var op = function(f, a) { return f.appendTo(a); }
+			}
+			else if (r.move == 'prev')
+			{
+				var pos = {from: -898, to: 0}
+				var op = function(f, a) { return f.prependTo(a); }
+			}
+			
+			if (['next', 'prev'].indexOf(r.move) != -1)
+			{
+				var outgoing = $("#stepflow-blocks .form-inputs");
+				var timing = 1000; //ms
+				
+				var incoming = op(fields, $('#stepflow-blocks')).css({opacity: 0});
+				$('#stepflow-blocks').css({left: pos.from}); // specific to prev
+				LiveInit.all(incoming[0]);
 				$('#stepflow-blocks').cleanWhitespace();
 
 				// nav loaded
-				var nav = $(r.nav);
 				nav.find("button").attr('disabled', 'disabled');
 				$("#stepflow-nav").html(nav);
-
-				// update form action
-				form.action = r.action;
+				LiveInit.navOnly($("#stepflow-nav")[0]);
+				
+				// update form action, (fix formaction change), specific to prev
+				form.action = '/stepflow';
 
 				// sliding animation
 				outgoing.animate({opacity: 0}, timing, 'swing');
 				incoming.animate({opacity: 1}, timing, 'swing');
-				$("#stepflow-blocks").animate({left: -898}, timing, 'swing', function() {
+				$("#stepflow-blocks").animate({left: pos.to}, timing, 'swing', function() {
 					// complete
 					outgoing.remove();
-					$('#stepflow-blocks').css({left: 0});
+					$('#stepflow-blocks').css({left: 0}); // specific to next
 					// nav activate
 					$("#stepflow-nav button").removeAttr('disabled');
 				});
 			}
-			else if (r.move = 'redirect')
+			else if (r.move == 'prev')
+			{
+				var outgoing = $("#stepflow-blocks .form-inputs");
+				var timing = 1000; //ms
+				
+				var incoming = fields.prependTo($('#stepflow-blocks')).css({opacity: 0});
+				$('#stepflow-blocks').css({left: -898});
+				LiveInit.all(incoming[0]);
+				$('#stepflow-blocks').cleanWhitespace();
+
+				// nav loaded
+				nav.find("button").attr('disabled', 'disabled');
+				$("#stepflow-nav").html(nav);
+				LiveInit.navOnly($("#stepflow-nav")[0]);
+				
+				// update form action, (fix formaction change)
+				form.action = '/stepflow';
+
+				// sliding animation
+				outgoing.animate({opacity: 0}, timing, 'swing');
+				incoming.animate({opacity: 1}, timing, 'swing');
+				$("#stepflow-blocks").animate({left: 0}, timing, 'swing', function() {
+					// complete
+					outgoing.remove();
+					// nav activate
+					$("#stepflow-nav button").removeAttr('disabled');
+				});
+			}
+			else if (r.move == 'error')
+			{
+				// replace block with new block (which includes errors)
+				$('#stepflow-blocks').children().first().replaceWith(fields);
+				LiveInit.all($('#stepflow-blocks')[0]);
+
+				$("#stepflow-nav .ajax-loading").hide();
+				$("#stepflow-nav button").removeAttr('disabled');
+			}
+			else if (r.move == 'redirect')
 			{
 				window.location = r.redirect_path;
 			}
-			
+
 		});
-		
+
 		return false;
 	});
 	
+	// drag and drop
+	if ($(".participants-view").length) {
+		DragAndDrop.init();
+	}
 	
 	// login bubble
 	$("#login-link").click(function() {
 		$("#login-bubble").slideToggle(250);
 		return ($("#login-bubble").length > 0)? false : true;
-	});
-	
-	// load Google Maps (code in mojo-geo.js)
-	if ($('#map_canvas').length)
-	{
-		if ($("label.mj-activity").length)
-		{
-			var points = {};
-			
-			$("label.mj-activity").each(function() {
-				var lat = $(this).find(".point .lat").text();
-				var lng = $(this).find(".point .lng").text();
-				points[this.id] = [lat, lng];
-			});
-			
-			Geo.setDatePoints(points);
-		}
-		
-		Geo.initialize();
-	}
-	
-	$("input[type=radio]").fix_radios();
-	
-	// mj-timeline-input
-	$(".mj-timeline-input").each(function() {
-		new TimeRangeInput(this);
-	});
-	
-	// initialize SubsetForm
-	var subsetFormItem = $("#form_item_who")[0];
-	if (subsetFormItem)
-	{
-		SubsetForm.initialize($(subsetFormItem));
-		AutoselectPersona.initialize(subsetFormItem);
-	}
-	
-	// apply "selected" class to label when switching radio
-	$(".mj-choice, .mj-merged-choices, .mj-operation-choices, .mj-micro-select").find("input[type=radio]").change(function() {
-		
-		var label = $(this).parent();
-		var group = label.parents(".hybrid-input:eq(0)");
-		
-		group.find(".selected").removeClass("selected");
-		label.addClass("selected");
-	});
-	
-	// activate mj-check-roll
-	$("label.mj-check-roll").each(function() {
-		
-		var dependant = $(this).parent().next();
-		dependant.hide();
-		
-		$(this).change(function() {
-			dependant.toggle();
-		});
-		
-		// TODO: autofill age/height + autoselect
 	});
 	
 	// homepage tab animations
@@ -810,21 +825,6 @@ $(function() {
 	// testimonials rolling
 	$("#testimonials .alternate-elements").each(function() {
 		AlternateElement.initialize(this);
-	});
-	
-	// JS support for formaction on button elements (HTML5)
-	$("button[formaction]").each(function() {
-		
-		if ($(this).attr("formaction") !== null && this.formaction === undefined)
-		{
-			// HTML5's button -> formaction is unsupported
-			$(this).click(function() {
-				var form = $(this).parents("form");
-				form.attr("action", $(this).attr("formaction"));
-				form.submit();
-				return false;
-			});
-		}
 	});
 	
 });

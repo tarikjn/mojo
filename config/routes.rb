@@ -15,14 +15,15 @@ Mojo::Application.routes.draw do
 
   # todo: refactor stepflow routes, at least namespace
   scope '/stepflow', :controller => :stepflow, :as => "stepflow" do
+    
+    # action go, next, previous, cancel
+    get "/" => :go
+    post "/" => :next
+    post "/previous"
+    get "/cancel"
+    
     #get "/finish"
     #get "/created"
-    get "/:action" # discover, join/create, profile/review, created/finish
-    post "/discover" => :discover_submit
-    post "/join" => :join_submit
-    post "/create" => :create_submit
-    post "/profile" => :profile_submit
-    post "/review" => :review_submit
   end
   
   # Twilio, TODO: use https and twilio-ruby verification

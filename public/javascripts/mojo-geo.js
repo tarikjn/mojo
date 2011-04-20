@@ -1,33 +1,38 @@
-var Geo = {
+// Static Class
+
+
+// Class
+function Map(obj, activity_points) {
 	
-	start: ['San Francisco', 37.77493, -122.41942, 11], // TODO: use fitBounds
-	startLatLng: undefined, // we need to wait forGoogleMapsAPI to load before using LatLng
-	geocoder: undefined,
-	map: undefined,
+	// defaults
+	var that = this;
+	that.gmap = undefined;
+	that.geocoder = new google.maps.Geocoder();
 	
-	cap_center: undefined,
-	date_points: {}, // id: [lat, lng]
-	date_markers: {}, // id: google.maps.Marker
-	outofrange_markers: [
-		[37.76017247811132, -122.44073878344726], // Castro
-		[37.769943111128704, -122.47524272021484] // GG Park
-	],
-	
-	setDatePoints: function(points) {
-		Geo.date_points = points;
-	},
-	
-	initialize: function() {
+	// params
+	that.p = {
 		
-	    this.geocoder = new google.maps.Geocoder();
+		start: ['San Francisco', 11, 37.77493, -122.41942], // TODO: use fitBounds
+
+		cap_center: Map.L([37.793812, -122.411384]),
+		date_points: (activity_points !== undefined)? activity_points : {}, // id: [lat, lng]
+		date_markers: {}, // id: google.maps.Marker
+		outofrange_markers: [
+			[37.76017247811132, -122.44073878344726], // Castro
+			[37.769943111128704, -122.47524272021484] // GG Park
+		]
+	};
 	
-	    var latlng = new google.maps.LatLng(37.796221,-122.419281);
+	/*
+	 * Private methods
+	 */
+	function initialize() {
 		
-		Geo.startLatLng = new google.maps.LatLng(Geo.start[1], Geo.start[2]);
+		var startLatLng = Map.L(that.p.start);
 	
-	    var myOptions = {
-			zoom: this.start[3],
-			center: Geo.startLatLng,
+	    var options = {
+			zoom: that.p.start[1],
+			center: startLatLng,
 			mapTypeControl: true,
 			mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
 			navigationControl: true,
@@ -35,32 +40,33 @@ var Geo = {
 			streetViewControl: false,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 	    }
-	    this.map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	    that.gmap = new google.maps.Map(this, options);
 		/*google.maps.event.addListener(this.map, 'click', function(event) {
 		    Geo.addMarker(event.latLng);
 		});*/
 		
-		if ($("#map_canvas").hasClass("with-range-selector"))
+		if ($(this).hasClass("with-range-selector"))
 		{
-			this.cap_center = Geo.L([37.793812, -122.411384]);
-			
-			Geo.map.setCenter(this.cap_center);
-			Geo.map.setZoom(12);
-			Geo.addRangeSelector(this.map);
-			Geo.addDateMarkers(this.map);
+			that.gmap.setCenter(that.p.cap_center);
+			that.gmap.setZoom(12);
+			that.addRangeSelector();
+			that.addDateMarkers();
 		}
 		else
 		{
-			this.addMarker(Geo.startLatLng, Geo.start[0]);
+			that.addMarker(startLatLng, that.p.start[0]);
 		}
-	},
+	}
 	
-	addRangeSelector: function(map_obj) {
+	/*
+	 * Privileged methods
+	 */
+	this.addRangeSelector = function() {
 		var circle = new google.maps.Circle({
-			center: Geo.cap_center,
+			center: that.p.cap_center,
 			fillColor: "#e1ecff",
 			fillOpacity: .5,
-			map: Geo.map,
+			map: that.gmap,
 			radius: 3000, // meters
 			strokeColor: "#0080ff",
 			strokeWeight: 2
@@ -72,57 +78,13 @@ var Geo = {
 	        new google.maps.Point(5, 5)
 	    );
 		var marker = new google.maps.Marker({
-	        position: Geo.cap_center,
-	        map: this.map,
+	        position: that.p.cap_center,
+	        map: that.gmap,
 	        icon: cross
 	    });
-	},
-
-	addDateMarkers: function(map_obj) {
-		
-		for (var i in Geo.date_points)
-		{
-			Geo.date_markers[i] = Geo.addMarker(Geo.L(Geo.date_points[i]), "", 'in_range');
-		}
-		for (var i in Geo.outofrange_markers)
-		{
-			Geo.addMarker(Geo.L(Geo.outofrange_markers[i]), "", 'out_of_range');
-		}
-	},
+	};
 	
-	animateMarker: function(date_id) {
-		var marker = Geo.date_markers['date-'+date_id];
-		
-		// start animation
-		marker.setAnimation(google.maps.Animation.BOUNCE);
-	},
-	
-	stopAnimateMarker: function(date_id) {
-		var marker = Geo.date_markers['date-'+date_id];
-		
-		// stop animation
-		marker.setAnimation(null);
-	},
-
-	codeAddress: function() {
-		var address = document.getElementById("address").value;
-		if (this.geocoder) {
-		  this.geocoder.geocode( { 'address': address}, function(results, status) {
-		    if (status == google.maps.GeocoderStatus.OK) {
-		      this.map.setCenter(results[0].geometry.location);
-		      var marker = new google.maps.Marker({
-		          map: this.map, 
-		          position: results[0].geometry.location
-		      });
-		    } else {
-		      alert("Geocode was not successful for the following reason: " + status);
-		    }
-		  });
-		}
-		
-	},
-	
-	addMarker: function(point, title, type) {
+	this.addMarker = function(point, title, type) {
 		
 		if (type === undefined) type = 'city';
 		types = {
@@ -145,18 +107,71 @@ var Geo = {
 	    );
 	    var marker = new google.maps.Marker({
 	        position: point,
-	        map: this.map,
+	        map: that.gmap,
 	        icon: image,
 	        shadow: shadow,
 			title: title
 	    });
 	
 		return marker;
-	},
+	};
 	
-	L: function(a) {
-		var s = a.length;
-		var p = new google.maps.LatLng(a[s-2], a[s-1]);
-		return (p);
-	}
+	this.addDateMarkers = function() {
+		
+		for (var i in that.p.date_points)
+		{
+			that.p.date_markers[i] = that.addMarker(Map.L(that.p.date_points[i]), "", 'in_range');
+		}
+		for (var i in that.p.outofrange_markers)
+		{
+			that.addMarker(Map.L(that.p.outofrange_markers[i]), "", 'out_of_range');
+		}
+	};
+	
+	this.animateMarker = function(date_id) {
+		var marker = that.p.date_markers['date-'+date_id];
+		
+		// start animation
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+	};
+	
+	this.stopAnimateMarker = function(date_id) {
+		var marker = that.p.date_markers['date-'+date_id];
+		
+		// stop animation
+		marker.setAnimation(null);
+	};
+	
+	// constructor
+	initialize.call(obj);
+	
+	return this;
+}
+
+// Static functions
+// adding to prototype not needed as we call using Map.*
+Map.L = function(a) {
+	var s = a.length;
+	var p = new google.maps.LatLng(a[s-2], a[s-1]);
+	return (p);
 };
+
+/*
+codeAddress: function(map) {
+	var address = document.getElementById("address").value;
+	if (map.geocoder) {
+	  map.geocoder.geocode( { 'address': address}, function(results, status) {
+	    if (status == google.maps.GeocoderStatus.OK) {
+	      map.gmap.setCenter(results[0].geometry.location);
+	      var marker = new google.maps.Marker({
+	          map: map.gmap, 
+	          position: results[0].geometry.location
+	      });
+	    } else {
+	      alert("Geocode was not successful for the following reason: " + status);
+	    }
+	  });
+	}
+	
+},
+*/

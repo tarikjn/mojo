@@ -1,0 +1,13 @@
+<div class="stepflow-frame">
+	<%= form_for @stepflow, :url => url_for do |f| %>
+
+		<div id="stepflow-blocks">
+			<%= render :partial => ongoing_view, :locals => {:f => f} %>
+		</div>
+	
+		<div id="stepflow-nav">
+			<%= render :partial => 'nav', :locals => {:f => f} %>
+		</div>
+
+	<% end %>
+</div>

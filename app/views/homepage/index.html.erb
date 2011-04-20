@@ -5,8 +5,8 @@
 			<div class="opaque-layer"></div>
 			<div class="content-layer">
 				<div class="title">Schedule your date:</div>
-				<%= form_tag stepflow_discover_path, :method => :get do %>
-					<select name="day">
+				<%= form_tag stepflow_path, :method => :get do %>
+					<select name="stepflow[timerange][day]">
 					<%
 						0.upto 7 do |d|
 							day = Date.today + d.days
@@ -16,10 +16,10 @@
 						end
 					%>
 					</select>
-					<select name="timeframe">
-						<option value="1-3pm">1-3 pm</option>
-						<option value="3-6pm">3-6 pm</option>
-						<option value="6-9pm" selected>6-9 pm</option>
+					<select name="stepflow[timerange][time_combined]">
+						<option value="12:00-15:00">12-3 pm</option>
+						<option value="15:00-18:00">3-6 pm</option>
+						<option value="18:00-21:00" selected>6-9 pm</option>
 					</select>
 					<div class="submit">
 						<button type="submit" class="mojo">Get excited</button>

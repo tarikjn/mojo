@@ -1,11 +1,8 @@
-<%
-	@step = 0
-	@remaining = '2 more minutes'
-%>
 <div class="form-inputs">
+	
 	<div class="form-item">
 		<div class="title">Timeframe</div>
-		<%= mj_timerange %>
+		<%= mj_timerange "stepflow[timerange]", @stepflow.timerange %>
 	</div>
 	<div class="form-item">
 		<div class="title">Where?</div><!-- replace with 'City', remove from other part -->
@@ -228,7 +225,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!--
 	<div class="form-item">
 		<div class="title">Your friend</div>
@@ -261,22 +258,30 @@
 		</div>
 	</div>
 	-->
-	
+
 	<div class="form-item">
+		<%= format_errors_for @stepflow, :operation, {:align => :right} %>
 		<div class="hybrid-input mj-operation-choices">
 			<!--<div class="info-choice">
 				<div class="info">
 					It's free!
 				</div>
 			</div>-->
-			<label><input type="radio" name="operation" value="create" /> <strong>Create</strong> an activity</label>
+			<%= label_tag nil,
+				(f.radio_button :operation, "create") + ' <strong>Create</strong> an activity'.html_safe,
+				:class => (@stepflow.operation == "create")? "selected" : nil
+			%>
 			or
 			<!--<div class="info-choice">
 				<div class="info">
 					<strong>5</strong> approximate matches.
 				</div>
 			</div>-->
-			<label><input type="radio" name="operation" value="join" /> <strong>Join</strong> an activity <span class="count">(3)</span></label>
+			<%= label_tag nil,
+				(f.radio_button :operation, "join") + ' <strong>Join</strong> an activity <span class="count">(3)</span>'.html_safe,
+				:class => (@stepflow.operation == "join")? "selected" : nil
+			%>
 		</div>
 	</div>
+
 </div>

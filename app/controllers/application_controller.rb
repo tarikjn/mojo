@@ -1,14 +1,30 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  helper_method :current_user_session, :current_user
+  helper_method :current_user_session, :current_user, :path_to_url
   
   # if Rails.env == 'staging' and params[:controller] == 'sms', require auth
   before_filter :restricted_access
   
   require 'pony'
 
-  private
+private
+
+  # http://stackoverflow.com/questions/339130/how-do-i-render-a-partial-of-a-different-format-in-rails
+  def with_format(format, &block)
+    old_formats = formats
+    begin
+      self.formats = [format]
+      return block.call
+    ensure
+      self.formats = old_formats
+    end
+  end
+
+  # /abs -> http://myx.com/abs
+  def path_to_url(path) # find something better
+    "http://#{self.request.host}:#{self.request.port}/#{path.sub(%r[^/],'')}"
+  end
 
   def restricted_access
     if (Rails.env == 'staging') then
