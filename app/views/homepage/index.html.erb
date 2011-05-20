@@ -6,7 +6,7 @@
 			<div class="content-layer">
 				<div class="title">Schedule your date:</div>
 				<%= form_tag stepflow_path, :method => :get do %>
-					<select name="stepflow[timerange][day]">
+					<select name="stepflow[timerange](1s)">
 					<%
 						0.upto 7 do |d|
 							day = Date.today + d.days
@@ -16,7 +16,7 @@
 						end
 					%>
 					</select>
-					<select name="stepflow[timerange][time_combined]">
+					<select name="stepflow[timerange](2s)">
 						<option value="12:00-15:00">12-3 pm</option>
 						<option value="15:00-18:00">3-6 pm</option>
 						<option value="18:00-21:00" selected>6-9 pm</option>
@@ -101,6 +101,6 @@
 			makkintosshu.twitterStatuses.tweetCount = 1;
 		</script>
 		<div id="mtaTwitter"></div>
-		<script type="text/javascript" src="http://www.twitter.com/statuses/user_timeline/mojoapp.json?skip_user=true&amp;callback=makkintosshu.twitterStatuses.twitterCallback"></script>
+		<script type="text/javascript" src="http://www.twitter.com/statuses/user_timeline/mojodate.json?skip_user=true&amp;callback=makkintosshu.twitterStatuses.twitterCallback"></script>
 	</div>
 </div>

@@ -29,11 +29,11 @@ class WaitlistEntriesController < ApplicationController
     # done => Done!, redirect to confirmation page
     respond_to do |format|
       format.html { redirect_to :action => :confirmation }
-      format.js {
+      format.json {
         render :json => {
           :message => 'done', # any of error, done
           :redirect_path => url_for(:action => :confirmation, :id => 0) # fix
-        }, :content_type => 'application/json'
+        }
       }
     end
   end
@@ -49,7 +49,7 @@ class WaitlistEntriesController < ApplicationController
     # removed => new_list
     respond_to do |format|
       format.html { redirect_to :action => :waitlist, :id => activity.id }
-      format.js {
+      format.json {
         
         # FIX REDUNDANCY
         # todo: test for non-existent activity/not allowed
@@ -59,10 +59,12 @@ class WaitlistEntriesController < ApplicationController
         @entry = WaitlistEntry.get_waitlist(@activity)
         @left_on_list = WaitlistEntry.count_left_on_list(@activity)
         
-        render :json => {
-          :message => 'removed', # any of error, removed
-          :new_list => render_to_string(:action => :waitlist, :id => activity.id, :layout => false)
-        }, :content_type => 'application/json'
+        with_format('html') do
+          render :json => {
+            :message => 'removed', # any of error, removed
+            :new_list => render_to_string(:action => :waitlist, :id => activity.id, :layout => false)
+          }
+        end
       }
     end
   end

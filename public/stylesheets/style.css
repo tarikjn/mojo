@@ -132,7 +132,7 @@ a {
         font-size: .75em; }
         #head-content #auth-links .relative-container #login-bubble div.space {
           margin: 8px 0; }
-        #head-content #auth-links .relative-container #login-bubble input[type=text], #head-content #auth-links .relative-container #login-bubble input[type=password] {
+        #head-content #auth-links .relative-container #login-bubble input[type=text], #head-content #auth-links .relative-container #login-bubble input[type=email], #head-content #auth-links .relative-container #login-bubble input[type=number], #head-content #auth-links .relative-container #login-bubble input[type=password] {
           width: 150px;
           font-size: 1.2em;
           padding: 2px 0; }
@@ -270,8 +270,15 @@ h2, h3 {
  */
 .errors {
   display: inline-block;
-  position: relative; }
+  position: relative;
+  line-height: normal; }
+  .errors.absolute {
+    display: block;
+    position: absolute;
+    top: -40px;
+    white-space: nowrap; }
   .errors ul {
+    position: relative;
     margin: 0;
     background: #cd5120;
     color: white;
@@ -723,9 +730,8 @@ h2, h3 {
   padding: 0;
   background: transparent; }
 
-.column-titles .form-item > .hybrid-input > input[type=text] {
+.column-titles .form-item > .hybrid-input > input[type=text], .column-titles .form-item > .hybrid-input > input[type=number], .column-titles .form-item > .hybrid-input > input[type=email] {
   width: 400px; }
-
 .column-titles .form-item > .hybrid-input > textarea {
   width: 400px;
   height: 100px; }
@@ -844,7 +850,7 @@ h2, h3 {
   display: block !important;
   margin: 0 0 10px !important; }
 
-.form-inputs input[type=text] {
+.form-inputs input[type=text], .form-inputs input[type=number], .form-inputs input[type=email] {
   font-size: 1.2em; }
 
 .follow-container {
@@ -1026,12 +1032,27 @@ label.mj-choice {
     color: black; }
     label.mj-choice.selected .person.guest .title {
       color: #cdcdcd; }
-    label.mj-choice.selected .person.host:hover {
-      background: #e1ecff;
+    label.mj-choice.selected .person.host {
       -moz-border-radius: 5px;
       -webkit-border-radius: 5px;
-      border-radius: 5px;
-      cursor: pointer; }
+      border-radius: 5px; }
+      label.mj-choice.selected .person.host:hover {
+        background: #e1ecff;
+        cursor: pointer; }
+      label.mj-choice.selected .person.host.errors-parent:not(.viewing) {
+        position: relative; }
+        label.mj-choice.selected .person.host.errors-parent:not(.viewing) .title:after {
+          font-size: 16px;
+          color: #cd5120;
+          position: absolute;
+          top: -2px;
+          left: 3px; }
+        label.mj-choice.selected .person.host.errors-parent:not(.viewing)[data-errors="1"] .title:after {
+          content: '➊'; }
+        label.mj-choice.selected .person.host.errors-parent:not(.viewing)[data-errors="2"] .title:after {
+          content: '➋'; }
+        label.mj-choice.selected .person.host.errors-parent:not(.viewing)[data-errors="3"] .title:after {
+          content: '➌'; }
 
 /*
  * merged radios
@@ -1146,9 +1167,15 @@ label.mj-choice {
 .gridded-line {
   position: relative;
   margin: 10px 0; }
+  .gridded-line.errors-parent {
+    margin-top: 50px; }
   .gridded-line.topsize-line {
     line-height: 35px;
     vertical-align: middle; }
+    .gridded-line.topsize-line.errors-parent {
+      margin-top: 43px; }
+      .gridded-line.topsize-line.errors-parent .errors {
+        top: -33px; }
   .gridded-line.equalize-line {
     height: 60px; }
   .gridded-line .col-1, .gridded-line .col-2, .gridded-line .col-3 {
@@ -1157,7 +1184,7 @@ label.mj-choice {
   .gridded-line .col-1 {
     left: 110px; }
   .gridded-line .col-2 {
-    left: 250px; }
+    left: 260px; }
   .gridded-line .col-3 {
     left: 450px; }
 
@@ -1171,6 +1198,9 @@ label.mj-choice {
 /*
  * text inputs
  */
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+  display: none; }
+
 input.age-text-input {
   width: 2em; }
 
@@ -1216,18 +1246,17 @@ select.mj-category-select {
   -webkit-appearance: none;
   border: solid 1px #555;
   padding: 15px 45px 15px 57px;
-  background: 10px center url(/images/icons/food-and-drinks_white.png) no-repeat, -webkit-gradient(linear, left top, left bottom, from(#888888), to(#575757)), 0 center url(/images/icons/food-and-drinks_white.png) no-repeat;
   color: #e9e9e9;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); }
-  select.mj-category-select[value=food-and-drinks] {
-    background-image: url(/images/icons/food-and-drinks_white.png); }
-  select.mj-category-select[value=entertainment] {
-    background-image: url(/images/icons/entertainment_white.png); }
-  select.mj-category-select[value=outdoor] {
-    background-image: url(/images/icons/outdoor_small.png); }
+  select.mj-category-select[data-value="food-and-drinks"] {
+    background: 10px center url(/images/icons/date_food-and-drinks_white.png) no-repeat, -webkit-gradient(linear, left top, left bottom, from(#888888), to(#575757)); }
+  select.mj-category-select[data-value="entertainment"] {
+    background: 10px center url(/images/icons/date_entertainment_white.png) no-repeat, -webkit-gradient(linear, left top, left bottom, from(#888888), to(#575757)); }
+  select.mj-category-select[data-value="outdoor"] {
+    background: 10px center url(/images/icons/date_outdoor_white.png) no-repeat, -webkit-gradient(linear, left top, left bottom, from(#888888), to(#575757)); }
 
 .afterr {
   color: white;
@@ -2046,3 +2075,58 @@ h2 {
   .userhome-container button.small {
     font-size: 11px;
     padding: .2em 1em .275em; }
+
+.featured {
+  display: none;
+  margin-bottom: 15px; }
+  .featured .roller {
+    height: 80px;
+    position: relative; }
+    .featured .roller .next, .featured .roller .prev {
+      position: absolute;
+      top: 0;
+      height: 50px;
+      -moz-border-radius: 8px;
+      -webkit-border-radius: 8px;
+      border-radius: 8px;
+      border: solid 1px #555;
+      width: 20px;
+      padding-top: 30px;
+      text-align: center;
+      background: -webkit-gradient(linear, left top, left bottom, from(#888888), to(#575757));
+      color: #e9e9e9;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); }
+    .featured .roller .prev {
+      left: 0; }
+    .featured .roller .next {
+      right: 0; }
+    .featured .roller .list {
+      margin: 0 20px; }
+      .featured .roller .list > div {
+        float: left;
+        height: 70px;
+        border: 1px dashed #e6e6e6;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        background: white;
+        margin-left: 5px;
+        padding: 5px; }
+        .featured .roller .list > div.title {
+          height: 45px;
+          color: gray;
+          font-size: 80%;
+          padding-top: 30px; }
+        .featured .roller .list > div.business {
+          padding-right: 80px;
+          width: 160px;
+          background: white url(/images/businesses/laboulange.jpg) no-repeat 170px 5px; }
+          .featured .roller .list > div.business .details {
+            font-size: 65%;
+            color: gray; }
+          .featured .roller .list > div.business .offer {
+            margin-top: 5px;
+            font-size: 75%; }

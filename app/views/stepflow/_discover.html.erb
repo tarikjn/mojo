@@ -1,3 +1,7 @@
+<%
+Logger.new(STDOUT).info(f.object_name)
+
+%>
 <div class="form-inputs">
 	
 	<div class="form-item">
@@ -27,27 +31,27 @@
 	<div class="form-item" id="form_item_who">
 		<div class="title">Who?</div>
 		<div class="hybrid-input">
-			<label class="mj-choice selected new">
-				<input type="radio" name="party_of" value="single" checked />
-				<div class="person neutral host">
+			<%= label_tag nil, :class => ["mj-choice", "new"] do %>
+				<%= f.radio_button :party_of, "single" %>
+				<%= content_tag :div, format_for_errors({:class => %w(person neutral host)}, @stepflow.host) do %>
 					<div class="img"></div>
 					<div class="title">You</div>
-				</div>
+				<% end %>
 				<div class="person neutral guest">
 					<div class="img"></div>
 					<div class="title">Guest</div>
 				</div>
-			</label>
-			<label class="mj-choice new">
-				<input type="radio" name="party_of" value="double" />
-				<div class="person neutral host">
+			<% end %>
+			<%= label_tag nil, :class => ["mj-choice", "new"] do %>
+				<%= f.radio_button :party_of, "double" %>
+				<%= content_tag :div, format_for_errors({:class => %w(person neutral host)}, @stepflow.host) do %>
 					<div class="img"></div>
 					<div class="title">You</div>
-				</div>
-				<div class="person neutral host">
+				<% end %>
+				<%= content_tag :div, format_for_errors({:class => %w(person neutral host)}, @stepflow.friend) do %>
 					<div class="img"></div>
 					<div class="title">Friend</div>
-				</div>
+				<% end %>
 				<div class="person neutral guest">
 					<div class="img"></div>
 					<div class="title">Guest</div>
@@ -56,24 +60,26 @@
 					<div class="img"></div>
 					<div class="title">Guest</div>
 				</div>
-			</label>
+			<% end %>
 		</div>
 		<div class="subset-form-arrow">▴</div>
 		<div class="subset-form active">
-			<div class="gridded-line equalize-line">
+			<%= f.fields_for :host do |s| %>
+			<%= content_tag :div, format_for_errors({:class => %w(gridded-line equalize-line)}, s.object, [:sex, :sex_preference]) do %>
 				<div class="col-0">
 					You are a:
 				</div>
 				<div class="col-1">
+					<%= format_errors_for s.object, :sex, :abs => true %>
 					<div class="mj-merged-choices hybrid-input">
 						<label>
-							<input type="radio" name="sex" value="male" />
+							<%= s.radio_button :sex, "male" %>
 							<div class="person">
 								<div class="img"><img src="/images/icons/guy.png" /></div>
 								<div class="title">Guy</div>
 							</div>
 						</label><label>
-							<input type="radio" name="sex" value="female" />
+							<%= s.radio_button :sex, "female" %>
 							<div class="person">
 								<div class="img"><img src="/images/icons/gal.png" /></div>
 								<div class="title">Gal</div>
@@ -85,21 +91,22 @@
 					Looking for:
 				</div>
 				<div class="col-3">
+					<%= format_errors_for s.object, :sex_preference, :abs => true %>
 					<div class="mj-merged-choices hybrid-input">
 						<label>
-							<input type="radio" name="sex_preference" value="female" />
+							<%= s.radio_button :sex_preference, "female" %>
 							<div class="person">
 								<div class="img"><img src="/images/icons/gal.png" /></div>
 								<div class="title">Gals</div>
 							</div>
 						</label><label>
-							<input type="radio" name="sex_preference" value="both" />
+							<%= s.radio_button :sex_preference, "both" %>
 							<div class="person">
 								<div class="img"><img src="/images/icons/person.png" /></div>
 								<div class="title">Both</div>
 							</div>
 						</label><label>
-							<input type="radio" name="sex_preference" value="male" />
+							<%= s.radio_button :sex_preference, "male" %>
 							<div class="person">
 								<div class="img"><img src="/images/icons/guy.png" /></div>
 								<div class="title">Guys</div>
@@ -107,30 +114,30 @@
 						</label>
 					</div>
 				</div>
-			</div>
+			<% end %>
 			<div class="gridded-line topsize-line">
 				<div class="col-0">
 					Your age:
 				</div>
 				<div class="col-1">
 					<label>
-						<input type="text" name="age" class="age-text-input" />
+						<%= s.number_field :age, {:class => "age-text-input", :size => 2} %>
 					</label>
 				</div>
 				<div class="col-2">
-					<label class="mj-check-roll">
-						<input type="checkbox" />
+					<label class="mj-check-roll" for="stepflow_host_attributes_filter_age">
+						<%= s.check_box :filter_age %>
 						Age matters to you?
 					</label>
 				</div>
 				<div class="col-3">
 					<label>
 						Min:
-						<input type="text" name="min_age" class="age-text-input" />
+						<%= s.number_field :min_age, {:class => "age-text-input", :size => 2} %>
 					</label> ⬌
 					<label>
 						Max:
-						<input type="text" name="max_age" class="age-text-input" />
+						<%= s.number_field :max_age, {:class => "age-text-input", :size => 2} %>
 					</label>
 				</div>
 			</div>
@@ -139,56 +146,48 @@
 					Your height:
 				</div>
 				<div class="col-1">
-					<div class="mj-height-input">
-						<label><input type="text" name="height_ft" class="ft-text-input" /> <span class="unit">ft</span></label>
-						<label><input type="text" name="height_in" class="in-text-input" /> <span class="unit">in</span></label>
-					</div>
+					<%= s.height_field :height %>
 				</div>
 				<div class="col-2">
-					<label class="mj-check-roll">
-						<input type="checkbox" />
+					<label class="mj-check-roll" for="stepflow_host_attributes_filter_height">
+						<%= s.check_box :filter_height %>
 						Height matters to you?
 					</label>
 				</div>
 				<div class="col-3">
-					Min:
-					<div class="mj-height-input">
-						<label><input type="text" name="min_height_ft" class="ft-text-input" /> <span class="unit">ft</span></label>
-						<label><input type="text" name="min_height_in" class="in-text-input" /> <span class="unit">in</span></label>
-					</div> ⬌
-					Max:
-					<div class="mj-height-input">
-						<label><input type="text" name="max_height_ft" class="ft-text-input" /> <span class="unit">ft</span></label>
-						<label><input type="text" name="max_height_in" class="in-text-input" /> <span class="unit">in</span></label>
-					</div>
+					Min: <%= s.height_field :min_height %> ⬌ Max: <%= s.height_field :max_height %>
 				</div>
 			</div>
+			<% end %>
 		</div>
 		<div class="subset-form friend">
-			<div class="gridded-line topsize-line">
+			<%= f.fields_for :friend do |s| %>
+			<%= content_tag :div, format_for_errors({:class => %w(gridded-line topsize-line)}, s.object, :email) do %>
 				<div class="col-0">
 					Your friend's Email:
 				</div>
 				<div class="col-1">
+					<%= format_errors_for s.object, :email, {:title => 'Email', :abs => true, :single => true} %>
 					<label>
-						<input type="text" name="friend_email" />
+						<%= s.email_field :email %>
 					</label>
 				</div>
-			</div>
-			<div class="gridded-line equalize-line">
+			<% end %>
+			<%= content_tag :div, format_for_errors({:class => %w(gridded-line equalize-line)}, s.object, [:sex, :sex_preference]) do %>
 				<div class="col-0">
 					Your friend is a:
 				</div>
 				<div class="col-1">
+					<%= format_errors_for s.object, :sex, :abs => true %>
 					<div class="mj-merged-choices hybrid-input">
 						<label>
-							<input type="radio" name="friend_sex" value="male" />
+							<%= s.radio_button :sex, "male" %>
 							<div class="person">
 								<div class="img"><img src="/images/icons/guy.png" /></div>
 								<div class="title">Guy</div>
 							</div>
 						</label><label>
-							<input type="radio" name="friend_sex" value="female" />
+							<%= s.radio_button :sex, "female" %>
 							<div class="person">
 								<div class="img"><img src="/images/icons/gal.png" /></div>
 								<div class="title">Gal</div>
@@ -200,21 +199,22 @@
 					Looking for:
 				</div>
 				<div class="col-3">
+					<%= format_errors_for s.object, :sex_preference, :abs => true %>
 					<div class="mj-merged-choices hybrid-input">
 						<label>
-							<input type="radio" name="friend_sex_preference" value="female" />
+							<%= s.radio_button :sex_preference, "female" %>
 							<div class="person">
 								<div class="img"><img src="/images/icons/gal.png" /></div>
 								<div class="title">Gals</div>
 							</div>
 						</label><label>
-							<input type="radio" name="friend_sex_preference" value="both" />
+							<%= s.radio_button :sex_preference, "both" %>
 							<div class="person">
 								<div class="img"><img src="/images/icons/person.png" /></div>
 								<div class="title">Both</div>
 							</div>
 						</label><label>
-							<input type="radio" name="friend_sex_preference" value="male" />
+							<%= s.radio_button :sex_preference, "male" %>
 							<div class="person">
 								<div class="img"><img src="/images/icons/guy.png" /></div>
 								<div class="title">Guys</div>
@@ -222,7 +222,8 @@
 						</label>
 					</div>
 				</div>
-			</div>
+			<% end %>
+			<% end %>
 		</div>
 	</div>
 
@@ -267,20 +268,14 @@
 					It's free!
 				</div>
 			</div>-->
-			<%= label_tag nil,
-				(f.radio_button :operation, "create") + ' <strong>Create</strong> an activity'.html_safe,
-				:class => (@stepflow.operation == "create")? "selected" : nil
-			%>
+			<label><%= f.radio_button :operation, "create" %> <strong>Create</strong> an activity</label>
 			or
 			<!--<div class="info-choice">
 				<div class="info">
 					<strong>5</strong> approximate matches.
 				</div>
 			</div>-->
-			<%= label_tag nil,
-				(f.radio_button :operation, "join") + ' <strong>Join</strong> an activity <span class="count">(3)</span>'.html_safe,
-				:class => (@stepflow.operation == "join")? "selected" : nil
-			%>
+			<label><%= f.radio_button :operation, "join" %> <strong>Join</strong> an activity <span class="count">(.)</span></label>
 		</div>
 	</div>
 

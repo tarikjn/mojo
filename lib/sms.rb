@@ -1,6 +1,6 @@
 #require 'twiliolib'
 
-# TODO: convert into module?
+# TODO: convert into module? (save logs etc)
 class Sms
   
   #include Twilio

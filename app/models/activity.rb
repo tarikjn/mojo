@@ -1,8 +1,11 @@
 class Activity < ActiveRecord::Base
+  include ActiveModelExtensions # Mojo's
+  
   belongs_to :creator_duo, :class_name => "Duo"
   belongs_to :invitee_duo, :class_name => "Duo"
   has_many :waitlist_entries
   
+  validates :title, :presence => true
   validates_inclusion_of :state, :in => %w(open closed canceled)
   validates_inclusion_of :activity_type, :in => %w(food_and_drinks entertainment outdoor)
   

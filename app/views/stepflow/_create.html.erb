@@ -1,14 +1,11 @@
 <div class="form-inputs column-titles">
 	
+	<%= f.fields_for :activity do |s| %>
 	<div class="form-item"> 
 		<div class="title">Category</div> 
 		<!-- TODO: fix to non-JS and arrows use, see: http://test.cita.illinois.edu/aria/radio/radio1.php --> 
-		<div class="hybrid-input mj-select-container"> 
-			<select name="type" class="mj-category-select">
-				<option value="food-and-drinks">Food and Drinks</option>
-				<option value="entertainment">Entertainment</option>
-				<option value="outdoor">Outdoor</option>
-			</select>
+		<div class="hybrid-input mj-select-container">
+			<%= s.select :activity_type, [["Food and Drinks", "food-and-drinks"], ["Entertainment", "entertainment"], ["Outdoor", "outdoor"]], {}, {:class => "mj-category-select"} %>
 			<div class="after">▾</div>
 		</div>
 
@@ -17,24 +14,43 @@
 	<div class="form-item"> 
 		<div class="title">Title</div> 
 		<div class="hybrid-input"> 
-			<input type="text" name="title" /> 
+			<%= s.text_field :title %>
 		</div> 
 	</div> 
 	<div class="form-item"> 
 		<div class="title">Description</div> 
-		<div class="hybrid-input"> 
-			<textarea name="description"></textarea> 
+		<div class="hybrid-input">
+			<%= s.text_area :description %>
 		</div> 
 	</div>
 	<div class="form-item"> 
 		<div class="title">Time</div> 
-		<div class="hybrid-input"> 
-			<%= datetime_select 'obj', 'time', :default => @def_starttime %>
+		<div class="hybrid-input">
+			<%= s.datetime_select :time %>
 		</div>
 	</div> 
 	<div class="form-item"> 
-		<div class="title">Location</div> 
-		<div class="hybrid-input mj-location-input address-view"> 
+		<div class="title">Location</div>
+		<div class="hybrid-input featured">
+			<div class="roller">
+				<div class="prev">◀</div>
+				<div class="list">
+					<div class="title">Feat.:</div>
+					<div class="business">
+						<div class="title">La Boulange</div>
+						<div class="details">Pacific Heights - Open until 7</div>
+						<div class="offer">Serving a special chocolate berry coffee.</div>
+					</div>
+					<div class="business" style="background-image: url(/images/businesses/tortillaheights.jpg)">
+						<div class="title">Tortilla Heights</div>
+						<div class="details">Pacific Heights - Open until 11</div>
+						<div class="offer">Welcomes Mojo members.</div>
+					</div>
+				</div>
+				<div class="next">▶</div>
+			</div>
+		</div>
+		<div class="hybrid-input mj-location-input address-view">
 			<div id="map_canvas"></div> 
 			<div class="map-side"> 
 				<div class="selected-subset">
@@ -55,5 +71,6 @@
 			</div> 
 		</div> 
 	</div>
+	<% end %>
 
 </div>

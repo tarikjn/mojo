@@ -2,7 +2,7 @@
 	
 	<div class="form-item">
 		<div class="title">Timeframe</div>
-		<%= mj_timerange(true) %>
+		<%= mj_timerange "stepflow[timerange]", @stepflow.timerange, :show_activities => true %>
 	</div>
 	<div class="form-item">
 		<div class="title">Area</div>
@@ -32,7 +32,7 @@
 		<div class="title">Matching Activities</div>
 		<div class="hybrid-input inset-view">
 			<%
-				@activities.each do |activity|
+				find_activities.each do |activity|
 			%>
 			<label class="mj-activity" id="date-<%= activity.id %>">
 				<div class="checkbox">
@@ -62,7 +62,7 @@
 						</div>
 						<div class="compatibility">
 							<div class="canvas"><canvas width="30" height="30" class="afinity-chart" /></div>
-							<div class="score"><span class="int"><%= (activity.creator.afinity_with(@current_user) * 100).round %></span><span class="percent">%</span></div>
+							<div class="score"><span class="int"><%= (activity.creator.afinity_with(current_user) * 100).round %></span><span class="percent">%</span></div>
 						</div>
 						<div class="ratings">
 							<div class="rating-ttr">Average time to respond: <em><%= activity.creator.time_to_respond %></em></div>

@@ -1,13 +1,13 @@
 <div class="hybrid-input">
 	<div class="mj-timerange-input">
-		<%= hidden_field_tag "#{name}[time_start]", value[:time_start] %>
-		<%= hidden_field_tag "#{name}[time_end]", value[:time_end] %>
+		<%= hidden_field_tag "#{name}(2s)", value[:time_start] %>
+		<%= hidden_field_tag "#{name}(3s)", value[:time_end] %>
 		<div class="day-tabs">
 		<%
 			0.upto 7 do |d|
 				day = Date.today + d.days
 		%>
-			<label<% if (day == value[:day].to_date) %> class="active"<% end %>><%= radio_button_tag "#{name}[day]", day.strftime("%F"), (day == value[:day].to_date) %><%= (d == 0)? "Today" : day.strftime("%a") %></label>
+			<label<% if (day == value[:day].to_date) %> class="active"<% end %>><%= radio_button_tag "#{name}(1s)", day.strftime("%F"), (day == value[:day].to_date) %><%= (d == 0)? "Today" : day.strftime("%a") %></label>
 		<%
 			end
 		%>

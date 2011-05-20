@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110202191312) do
+ActiveRecord::Schema.define(:version => 20110508235629) do
 
   create_table "activities", :force => true do |t|
     t.string   "activity_type"
@@ -52,6 +52,9 @@ ActiveRecord::Schema.define(:version => 20110202191312) do
     t.string   "crypted_password"
     t.string   "password_salt"
     t.string   "persistence_token"
+    t.boolean  "filter_age",        :default => false,      :null => false
+    t.boolean  "filter_height",     :default => false,      :null => false
+    t.string   "completeness",      :default => "complete", :null => false
   end
 
   create_table "users_buddies", :id => false, :force => true do |t|

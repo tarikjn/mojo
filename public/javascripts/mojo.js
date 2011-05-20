@@ -42,6 +42,7 @@ $.fn.fix_radios = function() {
 
 // Mojo's custom library
 var Lib = {
+	
 	pad: function(number, length) {
 
 	    var str = '' + number;
@@ -52,13 +53,28 @@ var Lib = {
 	    return str;
 
 	},
+	
 	formatTime: function(hour)
 	{
 		var H = Math.floor(hour);
 		var M = (hour - H) * 60;
 		
 		return Lib.pad(H, 2) + ':' + Lib.pad(M, 2);
+	},
+	
+	setDataValue: function() {
+		$(this).attr("data-value", this.value);
+	},
+	
+	applySelected: function() {
+		
+		var label = $(this).parents("label:eq(0)"); // parents + :eq(0): fix for fields_with_errors
+		var group = label.parents(".hybrid-input:eq(0)");
+
+		group.find(".selected").removeClass("selected");
+		label.addClass("selected");
 	}
+	
 }
 
 // Class managing selection of Subset form
@@ -78,17 +94,14 @@ var SubsetForm = {
 		SubsetForm.selected = $(formItem).find(".subset-form.active")[0];
 		
 		// set up variables and events for personas
-		$(formItem).find(".hybrid-input .mj-choice").find(".person.host").each(function(i) {
-			
-			if (i == 0)
-				SubsetForm.selected_persona = this;
+		$(formItem).find(".hybrid-input .mj-choice .person.host").each(function(i) {
 			
 			// find index
 			var index = $(this).index() - 1;
 			// set up variables for personas: link_to, arrow_pos
 			this.link_to = $(formItem).find(".subset-form").eq(index)[0];
 			this.arrow_pos = SubsetForm.ap[i];
-			this.is_selected = (i == 0) ? true : false;
+			this.is_selected = false;
 			
 			// set up click event listener on personas
 			// check is parent is selected
@@ -98,6 +111,22 @@ var SubsetForm = {
 					SubsetForm.select(this);
 			})
 		});
+		
+		
+		// init when returning to form (pre-filled or default)
+		$(formItem).find(".hybrid-input .mj-choice").each(function() {
+			
+			if ($(this).children("input")[0].checked)
+			{
+				var host = $(this).find(".person.host:eq(0)")[0];
+				SubsetForm.selected_persona = host;
+				host.is_selected = true;
+				$(host).addClass("viewing"); // refactor, DRY-up
+			}
+		});
+		
+		// set arrow position, TODO: move to CSS?=
+		SubsetForm.arrow.style.left = SubsetForm.selected_persona.arrow_pos + 'px';
 		
 		// set up change event listener on mj-merged
 		$(formItem).find(".hybrid-input .mj-choice").change(function() {
@@ -109,12 +138,14 @@ var SubsetForm = {
 	
 	select: function(persona) {
 		if (persona.is_selected)
-			return;
+			return; // already selected
 		
 		// toggle is_selected
 		SubsetForm.selected_persona.is_selected = false;
+		$(SubsetForm.selected_persona).removeClass("viewing");
 		SubsetForm.selected_persona = persona;
 		SubsetForm.selected_persona.is_selected = true;
+		$(SubsetForm.selected_persona).addClass("viewing");
 		
 		// move arrow
 		SubsetForm.arrow.style.left = persona.arrow_pos + 'px';
@@ -149,20 +180,26 @@ var AutoselectPersona = {
 			subsetForm = this;
 			
 			// find gender radios in this subset
-			$(this).find(".mj-merged-choices input[type=radio][name$=sex]").each(function() {
+			$(this).find(".mj-merged-choices input[type=radio][name$=\"sex]\"]").each(function() {
 				
-				this.mj_pref = $(subsetForm).find(".mj-merged-choices input[type=radio][name$=sex_preference]");
-				this.mj_hosts = $(formItem).find(".hybrid-input .mj-choice").find(".person.host:eq(" + i + ")");
+				this.mj_pref = $(subsetForm).find(".mj-merged-choices input[type=radio][name$=\"sex_preference]\"]");
+				this.mj_heads = $(formItem).find(".hybrid-input .mj-choice").find(".person.host:eq(" + i + ")");
 
 				$(this).change(AutoselectPersona.changeGender);
 			});
 			
 			// find gender preference radios in this subset
-			$(this).find(".mj-merged-choices input[type=radio][name$=sex_preference]").each(function() {
+			$(this).find(".mj-merged-choices input[type=radio][name$=\"sex_preference]\"]").each(function() {
 
-				this.mj_guests = $(formItem).find(".hybrid-input .mj-choice").find(".person.guest:eq(" + i + ")")
+				this.mj_heads = $(formItem).find(".hybrid-input .mj-choice").find(".person.guest:eq(" + i + ")")
 
 				$(this).change(AutoselectPersona.changeGenderPreference);
+			});
+			
+			// init when returning to form (gender pre-selected)
+			$(this).find(".mj-merged-choices input[type=radio][name*=sex]:checked").each(function() {
+				// we assume gender preference has to be selected if gender is pre-selected
+				this.mj_heads.addClass(this.value);
 			});
 		});
 	},
@@ -173,13 +210,13 @@ var AutoselectPersona = {
 		this.mj_pref.filter("[value="+AutoselectPersona.defaultPref[this.value]+"]").attr('checked', 'checked').change();
 		
 		// change gender of host persona on parent tab
-		this.mj_hosts.removeClass(AutoselectPersona.genderClasses).addClass(this.value);
+		this.mj_heads.removeClass(AutoselectPersona.genderClasses).addClass(this.value);
 	},
 	
 	changeGenderPreference: function() {
 		
 		// change gender of guest persona on parent tab
-		this.mj_guests.removeClass(AutoselectPersona.genderClasses).addClass(this.value);
+		this.mj_heads.removeClass(AutoselectPersona.genderClasses).addClass(this.value);
 	}
 };
 
@@ -262,8 +299,8 @@ function TimeRangeInput(obj)
 		var left = parseInt($(that.range).css("left"));
 		var width = parseInt($(that.range).css("width"));
 		
-		var start_time_input = $(that.input).children("input[name$=\"time_start]\"]");
-		var end_time_input = $(that.input).children("input[name$=\"time_end]\"]");
+		var start_time_input = $(that.input).children("input[name$=\"(2s)\"]");
+		var end_time_input = $(that.input).children("input[name$=\"(3s)\"]");
 		
 		var start_hour = ((left - that.base) / (2 * that.ds)) + 6;
 		var end_hour = start_hour + (width / (2 * that.ds));
@@ -631,31 +668,36 @@ var LiveInit = {
 
 		// initialize SubsetForm
 		$(c).find("#form_item_who").each(function() {
-			SubsetForm.initialize($(this));
+			SubsetForm.initialize(this);
 			AutoselectPersona.initialize(this);
 		})
 
 		// apply "selected" class to label when switching radio
-		$(c).find(".mj-choice, .mj-merged-choices, .mj-operation-choices, .mj-micro-select").find("input[type=radio]").change(function() {
-			
-			var label = $(this).parents("label:eq(0)"); // parents + :eq(0): fix for fields_with_errors
-			var group = label.parents(".hybrid-input:eq(0)");
-
-			group.find(".selected").removeClass("selected");
-			label.addClass("selected");
-		});
+		$(c).find(".mj-choice, .mj-merged-choices, .mj-operation-choices, .mj-micro-select").find("input[type=radio]")
+			.change(Lib.applySelected).filter(":checked").each(Lib.applySelected);
 
 		// activate mj-check-roll
 		$(c).find("label.mj-check-roll").each(function() {
-
+			
+			var checkbox = $(this).find("input[type=checkbox]")[0];
 			var dependant = $(this).parent().next();
-			dependant.hide();
+			
+			if (!checkbox.checked)
+				dependant.hide();
 
-			$(this).change(function() {
-				dependant.toggle();
+			$(checkbox).change(function() {
+				if (this.checked)
+				{
+					dependant.show();
+					dependant.find("input:eq(0)").focus();
+				}
+				else
+				{
+					dependant.hide();
+				}
 			});
 
-			// TODO: autofill age/height + autoselect
+			// TODO: autofill age/height?
 		});
 		
 		
@@ -665,6 +707,10 @@ var LiveInit = {
 
 		$(c).find("input[type=radio]").fix_radios();
 		
+		// set data-value on select for value-based styling
+		$("select").change(Lib.setDataValue).each(Lib.setDataValue);
+		
+		// init nav
 		LiveInit.navOnly(c);
 	}
 }
@@ -732,34 +778,6 @@ $(function() {
 					// complete
 					outgoing.remove();
 					$('#stepflow-blocks').css({left: 0}); // specific to next
-					// nav activate
-					$("#stepflow-nav button").removeAttr('disabled');
-				});
-			}
-			else if (r.move == 'prev')
-			{
-				var outgoing = $("#stepflow-blocks .form-inputs");
-				var timing = 1000; //ms
-				
-				var incoming = fields.prependTo($('#stepflow-blocks')).css({opacity: 0});
-				$('#stepflow-blocks').css({left: -898});
-				LiveInit.all(incoming[0]);
-				$('#stepflow-blocks').cleanWhitespace();
-
-				// nav loaded
-				nav.find("button").attr('disabled', 'disabled');
-				$("#stepflow-nav").html(nav);
-				LiveInit.navOnly($("#stepflow-nav")[0]);
-				
-				// update form action, (fix formaction change)
-				form.action = '/stepflow';
-
-				// sliding animation
-				outgoing.animate({opacity: 0}, timing, 'swing');
-				incoming.animate({opacity: 1}, timing, 'swing');
-				$("#stepflow-blocks").animate({left: 0}, timing, 'swing', function() {
-					// complete
-					outgoing.remove();
 					// nav activate
 					$("#stepflow-nav button").removeAttr('disabled');
 				});

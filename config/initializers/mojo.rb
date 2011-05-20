@@ -7,3 +7,6 @@ SETTINGS = YAML.load_file("#{Rails.root}/config/settings.yml")
 
 # include libs
 require 'sms'
+require 'form_helper'
+require 'validations'
+require 'model_extensions'

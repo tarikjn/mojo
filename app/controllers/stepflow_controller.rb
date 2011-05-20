@@ -6,7 +6,7 @@ class StepflowController < ApplicationController
   # previous (save, go to previous step)
   # cancel (delete session)
   
-  helper_method :ongoing_view
+  helper_method :ongoing_view, :find_activities
   
   def go # action for start and continue (noJS)
     if session[:stepflow] and !session[:stepflow].complete # reset if we finished before
@@ -17,13 +17,17 @@ class StepflowController < ApplicationController
       @stepflow = Stepflow.new(params[:stepflow])
       session[:stepflow] = @stepflow
     end
+    
+    logger.info current_user.inspect
   end
   
   def next
     @stepflow = session[:stepflow]
     @stepflow.update(params[:stepflow])
     
-    render_action @stepflow.move_next
+    m = @stepflow.move_next
+    Logger.new(STDOUT).info(@stepflow.activity.inspect)
+    render_action m
   end
   
   def previous
@@ -59,6 +63,14 @@ class StepflowController < ApplicationController
   end
   
 private
+  
+  # helper method
+  def find_activities
+    # look at params on @stepflow
+    
+    # return collection
+    Activity.find(6,7,8)
+  end
   
   # also a helper method
   def ongoing_view(step = @stepflow.step)

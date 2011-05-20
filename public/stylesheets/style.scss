@@ -465,7 +465,7 @@ a {
 				
 				div.space { margin: 8px 0; }
 				
-				input[type=text], input[type=password] {
+				input[type=text], input[type=email], input[type=number], input[type=password] {
 					width: 150px;
 					font-size: 1.2em;
 					padding: 2px 0;
@@ -602,8 +602,17 @@ h2, h3 {
 .errors {
 	display: inline-block;
 	position: relative;
+	line-height: normal;
+	
+	&.absolute {
+		display: block;
+		position: absolute;
+		top: -40px;
+		white-space: nowrap;
+	}
 	
 	ul {
+		position: relative;
 		$padding: 8px;
 
 		margin: 0;
@@ -1118,12 +1127,17 @@ h2, h3 {
 	background: transparent;
 }
 
-.column-titles .form-item > .hybrid-input > input[type=text] {
-	width: 400px;
-}
-.column-titles .form-item > .hybrid-input > textarea {
-	width: 400px;
-	height: 100px;
+.column-titles .form-item > .hybrid-input {
+	
+	> input {
+		&[type=text], &[type=number], &[type=email] { width: 400px;}
+	}
+	
+	> textarea {
+		width: 400px;
+		height: 100px;
+	}
+	
 }
 
 
@@ -1288,8 +1302,8 @@ h2, h3 {
 	display: block !important;
 	margin: 0 0 10px !important;
 }
-.form-inputs input[type=text] {
-	font-size: 1.2em;
+.form-inputs input {
+	&[type=text], &[type=number], &[type=email] { font-size: 1.2em; }
 }
 .follow-container {
 	display: inline-block;
@@ -1563,10 +1577,28 @@ label.mj-choice {
 			
 			&.guest .title { color: darken($border-gray, 10%); }
 			
-			&.host:hover {
-				background: $light-blue;
+			&.host {
 				@include rounded;
-				cursor: pointer;
+				&:hover {
+					background: $light-blue;
+					cursor: pointer;
+				}
+				&.errors-parent:not(.viewing) {
+					
+					position: relative;
+					
+					.title:after {
+						font-size: 16px;
+						color: $error-color;
+					    position: absolute;
+						top: -2px;
+						left: 3px;
+					}
+					
+					&[data-errors="1"] { .title:after { content: '➊'; } }
+					&[data-errors="2"] { .title:after { content: '➋'; } }
+					&[data-errors="3"] { .title:after { content: '➌'; } }
+				}
 			}
 		}
 	}
@@ -1697,9 +1729,22 @@ label.mj-choice {
 	position: relative;
 	margin: 10px 0;
 	
+	&.errors-parent {
+		margin-top: 10px + 40px;
+	}
+	
 	&.topsize-line {
 		line-height: 35px;
 		vertical-align: middle;
+		
+		// refactor: align left column absolute, right column fix size
+		&.errors-parent {
+			margin-top: 10px + 33px;
+			
+			.errors {
+				top: -33px;
+			}
+		}
 	}
 	
 	&.equalize-line {
@@ -1715,7 +1760,7 @@ label.mj-choice {
 	}
 	
 	.col-2 {
-		left: 250px;
+		left: 260px;
 	}
 	
 	.col-3 {
@@ -1733,8 +1778,13 @@ label.mj-choice {
 /*
  * text inputs
  */
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+    display: none;
+}
+
 input.age-text-input {
 	width: 2em;
+	//text-align: right;
 }
 
 label.mj-check-roll {
@@ -1783,6 +1833,12 @@ label.mj-check-roll {
 		padding-left: 8px;
 	}
 }
+
+@mixin styled-select($img) {
+	background: 10px center $img no-repeat,
+		        -webkit-gradient(linear, left top, left bottom, from(#888), to(#575757));
+}
+
 select.mj-category-select {
 	
 	font-size: 1.25em;
@@ -1790,18 +1846,15 @@ select.mj-category-select {
 	-webkit-appearance: none;
 	border: solid 1px #555;
 	padding: 15px (10px + 35px) 15px (10px + 32px + 15px);
-	background: 10px center url(/images/icons/food-and-drinks_white.png) no-repeat,
-		-webkit-gradient(linear, left top, left bottom, from(#888), to(#575757)),
-		0 center url(/images/icons/food-and-drinks_white.png) no-repeat;
 	color: #e9e9e9;
 	
 	text-shadow: 0 1px 1px rgba(0,0,0,.3);
 	//@include rounded;
 	@include boxshadow(0 1px 2px rgba(0,0,0,.2));
 	
-	&[value=food-and-drinks] { background-image: url(/images/icons/food-and-drinks_white.png); }
-	&[value=entertainment] { background-image: url(/images/icons/entertainment_white.png); }
-	&[value=outdoor] { background-image: url(/images/icons/outdoor_small.png); }
+	&[data-value="food-and-drinks"] { @include styled-select(url(/images/icons/date_food-and-drinks_white.png)); }
+	&[data-value="entertainment"]   { @include styled-select(url(/images/icons/date_entertainment_white.png)); }
+	&[data-value="outdoor"]         { @include styled-select(url(/images/icons/date_outdoor_white.png)); }
 }
 // still hacking drop down, remove afterr:
 .afterr {
@@ -2650,5 +2703,72 @@ h2 {
 	button {
 		@include wdw-button;
 	}
+}
+
+.featured {
+	
+	display: none; // still in dev
+	margin-bottom: 15px;
+	
+	.roller {
+		height: 80px;
+		position: relative;
+		
+		.next, .prev {
+			position: absolute; top: 0;
+			height: 50px;
+			@include rounded(8px);
+			border: solid 1px #555;
+			width: 20px;
+			padding-top: 30px;
+			text-align: center;
+			background: -webkit-gradient(linear, left top, left bottom, from(#888), to(#575757));
+			color: #e9e9e9;
+
+			text-shadow: 0 1px 1px rgba(0,0,0,.3);
+			//@include rounded;
+			@include boxshadow(0 1px 2px rgba(0,0,0,.2));
+		}
+		.prev { left: 0; }
+		.next { right: 0; }
+		
+		.list {
+			margin: 0 20px;
+			
+			> div {
+				float: left;
+				height: 70px;
+				border: 1px dashed $border-gray;
+				@include rounded;
+				background: white;
+				margin-left: 5px;
+				padding: 5px;
+				
+				
+				&.title {
+					height: 45px;
+					color: gray;
+					font-size: 80%;
+					padding-top: 30px;
+					//background: #FCFCFC;
+				}
+				
+				&.business {
+					padding-right: 80px;
+					width: 160px;
+					background: white url(/images/businesses/laboulange.jpg) no-repeat 170px 5px;
+					.details {
+						font-size: 65%;
+						color: gray;
+					}
+					.offer {
+						margin-top: 5px;
+						font-size: 75%;
+					}
+				}
+			}
+		}
+	}
+	
 }
 

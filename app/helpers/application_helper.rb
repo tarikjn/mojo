@@ -1,8 +1,19 @@
 module ApplicationHelper
   
+  # refactor as a form helper, use object sub-Class
   # attribute must be a string, it is concatened with _start and _end
-  def mj_timerange(name, value = {:day => nil, :time_start => nil, :time_end => nil}, options = {:show_activities => false})
+  def mj_timerange(name, value = nil, options = {:show_activities => false})
 
+    if value
+      value = {
+        :day => value.start.strftime("%F"),
+        :time_start => value.start.strftime("%H:%M"),
+        :time_end => value.end.strftime("%H:%M")
+      }
+    else
+      value = {:day => nil, :time_start => nil, :time_end => nil}
+    end
+    
   	# start of the timerange at 6:00am
   	base_time = Date.today.to_time + 6.hours
 
@@ -24,16 +35,60 @@ module ApplicationHelper
     render :partial => "user_sessions/form", :locals => { :session => UserSession.new } 
   end
   
-  def format_errors_for(obj, symbol, options = {:title => nil, :align => :left})
-    o = ''
-    if obj.errors[symbol].length > 0
-      o << '<div class="errors"><ul' + ((options[:align] == :right)? ' class="right-align"' : '') + '>'
-      obj.errors[symbol].each do |msg|
-		      o << "<li>#{options[:title]} #{msg}</li>"
-		  end
-      o << '</ul></div>'
+  def format_for_errors(options, obj, attributes = nil)
+    
+    if (attributes and !attributes.kind_of?(Array))
+      attributes = [attributes]
     end
-    raw o
+    
+    error_count = 0
+    
+    #Logger.new(STDOUT).info(obj.errors.inspect)
+    
+    if obj.errors.count > 0
+      
+      if !attributes
+        obj.errors.to_hash.each { |v| error_count += (v.length > 0)? 1 : 0 }
+      else
+        attributes.each { |a| error_count += (obj.errors[a].length > 0)? 1 : 0 }
+      end
+      
+      if error_count > 0
+        (options[:class] ||= []) << 'errors-parent'
+        options['data-errors'] = error_count
+      end
+      
+    end
+    options
+    
+  end
+  
+  # refactor as a form helper
+  def format_errors_for(obj, symbol, options = {})
+    # set options defaults
+    defaults = {
+      :title  => nil, # TOTO: read title from model attribute if nil
+      :align  => :left,
+      :abs    => false,
+      :single => false
+    }
+    options = defaults.merge(options)
+    
+    # TODO: pop errors out as they are printed to know if errrors are left?
+    if obj.errors[symbol].length > 0
+      
+      content_tag :div, :class => ( ['errors'] << ((options[:abs])? 'absolute' : nil) ) do
+        content_tag :ul, :class => (options[:align] == :right)? 'right-align' : nil do
+          
+          obj.errors[symbol].each do |msg|
+    		      concat content_tag :li, "#{options[:title]} #{msg}".html_safe
+    		      break if options[:single]
+    		  end
+    		  
+        end
+      end
+      
+    end
   end
   
   def color_for_picture_score(score)

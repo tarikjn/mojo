@@ -3,36 +3,97 @@
 class Stepflow
   include ActiveModel::Validations
   include ActiveModel::Conversion
+  #include ActiveModel::NestedAttributes
   extend ActiveModel::Naming
   
-  attr_accessor :step, :operation, :timerange, :complete
+  ASSOCIATED = [:host, :friend, :activity]
+  
+  attr_accessor :step, :operation, :timerange, :complete,
+                :party_of, :host, :friend,
+                :activity,
+                :disabled_validations
   
   #validates_presence_of
   validates_inclusion_of :operation, :in => %w( join create ), :message => "Please select <em>Create</em> or <em>Join</em>"
+  validates :party_of, :inclusion => { :in => %w( single double ) }
+  
+  # ported back to ActiveModel for this in validations.rb
+  validates_active_associated ASSOCIATED
   
   # add default user, date creation
   # add basic validation
   
   def defaults
     self.step      ||= 0 # can be 0, 1, 2, 3 (done)
-    self.timerange ||= {:day => Date.today.to_date, :time_start => "15:00", :time_end => "18:00"}
+    @timerange     ||= TimeRange.new(Date.today.strftime("%F"), "15:00", "18:00")
+    self.party_of  ||= 'single'
+    self.host      ||= User.new( :completeness => 'discovery' )
+    self.friend    ||= User.new( :completeness => 'invitation' ) # only validate if it's a single date
   end
   
-  def timerange=(hash)
-    if (hash.include?(:time_combined))
-      times = hash[:time_combined].split(/-/)
-      @timerange = {:day => hash[:day], :time_start => times[0], :time_end => times[1]}
-    else
-      @timerange = hash
+  def active_validations
+    validations = []
+    
+    case self.step
+    when 0
+      validations << :host
+      validations << :friend if self.party_of == 'double'
+    when 1
+      validations << :activity if self.operation == 'create'
+    when 2
+      validations << :host
     end
+    Logger.new(STDOUT).info("Active V.: " + validations.inspect)
+    validations
+  end
+  
+  def clear_associated_errors
+    inactives = ASSOCIATED - self.active_validations # only clear inactives
+    inactives.each do |a|
+      member = self.send(a)
+      member.clear_errors if member
+    end
+  end
+  
+  # refactor using rails standard function in ActiveRecord
+  def timerange=(arg)
+    @timerange = TimeRange.new(arg["(1s)"], arg["(2s)"], arg["(3s)"])
   end
   
   def update(attributes)
     self.attributes = attributes
   end
   
+  #class_eval
+  #if method_defined?(:#{association_name}_attributes=)
+  #remove_method(:#{association_name}_attributes=)
+  #end
+  #def #{association_name}_attributes=(attributes)
+  #  assign_nested_attributes_for_#{type}_association(:#{association_name}, attributes)
+  #end
+  
+  # set private with other methods?
+  # TODO: introduce allias of accepts_nested_attributes_for
+  def host_attributes=(attributes)
+    self.host.attributes = attributes
+  end
+  
+  def friend_attributes=(attributes)
+    self.friend.attributes = attributes
+  end
+  
+  def activity_attributes=(attributes)
+    self.activity.attributes = attributes
+  end
+  
   # move to next step
   def move_next
+    
+    # before validation, clear validation residues
+    self.clear_associated_errors
+    
+    Logger.new(STDOUT).info("Step: " + self.step.to_s)
+    Logger.new(STDOUT).info("Activity object before validation: " + self.activity.inspect)
     if self.valid?
       
       # init some new defaults in here
@@ -48,11 +109,14 @@ class Stepflow
 
             # respond ajax/json for map refresh
 
-            @activities = Activity.find_activities_for_user(current_user)
+            #@activities = Activity.find_activities_for_user(current_user)
+            
           when 'create'
 
             # not much to do
             #@user = session[:user]
+            self.activity ||= Activity.new( :time => self.timerange.start )
+            Logger.new(STDOUT).info(self.activity.inspect)
 
           end
           
@@ -163,7 +227,12 @@ class Stepflow
   end
   
   def attributes=(attributes)
+    # prettier way to do that?
+    return if attributes.nil?
+    
     attributes.each do |name, value|
+      Logger.new(STDOUT).info(name.inspect)
+      Logger.new(STDOUT).info(value.inspect)
       send("#{name}=", value)
     end
   end
@@ -172,4 +241,27 @@ class Stepflow
     false
   end
   
+end
+
+# TODO: move to Lib
+class TimeRange
+  attr_reader :start, :end
+  
+  # make class method
+  def parse_time(s)
+    e = s.split(/:/)
+    e[0].to_i.hours + e[1].to_i.minutes
+  end
+  
+  # # will receive 1s, 2s, 3s from Controller
+  def initialize(day, time_start_or_range, time_end = nil)
+    if (time_end.nil?) # receiving combined time range
+      time_start_or_range, time_end = time_start_or_range.split(/-/)
+    end
+    
+    date = Date.parse(day)
+    @start = date + self.parse_time(time_start_or_range)
+    @end = date + self.parse_time(time_end)
+  end
+
 end
