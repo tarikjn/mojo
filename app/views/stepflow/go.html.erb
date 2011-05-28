@@ -1,5 +1,5 @@
 <div class="stepflow-frame">
-	<%= form_for @stepflow, :url => url_for do |f| %>
+	<%= form_for @stepflow, :url => url_for, :html => { :multipart => true } do |f| %>
 
 		<div id="stepflow-blocks">
 			<%= render :partial => ongoing_view, :locals => {:f => f} %>
@@ -10,4 +10,5 @@
 		</div>
 
 	<% end %>
+	<iframe name="uploader" id="uploader" style="display: none;"></iframe>
 </div>

@@ -1,5 +1,7 @@
 Mojo::Application.routes.draw do
   
+  get "places/search"
+
   resources :user_sessions
   match 'login' => "user_sessions#new",      :as => :login
   match 'logout' => "user_sessions#destroy", :as => :logout
@@ -10,7 +12,9 @@ Mojo::Application.routes.draw do
     # match "(/index)" interferes with link_to_unless_current
     root :to => :index, :as => ""
     match "/dates"
-    match "/settings"
+    get "/settings"
+    # replace with put
+    post "/settings" => :update_settings
   end
 
   # todo: refactor stepflow routes, at least namespace
@@ -22,8 +26,9 @@ Mojo::Application.routes.draw do
     post "/previous"
     get "/cancel"
     
-    #get "/finish"
-    #get "/created"
+    # TODO: move to activity controller?
+    get "/created"
+    get "/joined"
   end
   
   # Twilio, TODO: use https and twilio-ruby verification
@@ -34,11 +39,16 @@ Mojo::Application.routes.draw do
   match "/entries/pass/:entry", :to => "waitlist_entries#pass", :constraints => {:entry => /\d+/}
   match "/entries/invite/:entry", :to => "waitlist_entries#invite", :constraints => {:entry => /\d+/}
   match "/entries/:id", :to => "waitlist_entries#waitlist", :constraints => {:id => /\d+/}
-  resources :waitlist_entries
-
-  resources :users
-
-  resources :activities
+  
+  get 'activities/new'
+  post 'activities' => "activities#create"
+  get 'activities/join'
+  get 'activities/:id' => "activities#confirmation"
+  
+  # todo: password protect
+  namespace "admin" do
+    resources :waitlist_entries, :users, :activities
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

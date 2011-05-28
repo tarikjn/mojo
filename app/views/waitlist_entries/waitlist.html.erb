@@ -7,6 +7,7 @@
 <%
 	end
 %>
+<% if @entry %>
 <div class="current" draggable="true" id="entry-<%= @entry.id %>">
 	<img src="/images/users/<%= @entry.user.id %>-48.jpg" class="drag-icon" alt="" />
 	<div class="host-info">
@@ -28,3 +29,6 @@
 		</div>
 	</div>
 </div>
+<% else %>
+<div>Bummer! No entrants yet...</div>
+<% end %>

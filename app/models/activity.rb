@@ -1,20 +1,19 @@
+# Activity is used instead of Date because date is a reserved ruby/rails keyword
 class Activity < ActiveRecord::Base
   include ActiveModelExtensions # Mojo's
   
   belongs_to :creator_duo, :class_name => "Duo"
   belongs_to :invitee_duo, :class_name => "Duo"
+  belongs_to :place
   has_many :waitlist_entries
   
   validates :title, :presence => true
-  validates_inclusion_of :state, :in => %w(open closed canceled)
-  validates_inclusion_of :activity_type, :in => %w(food_and_drinks entertainment outdoor)
+  validates :place, :presence => true
+  validates_inclusion_of :state, :in => %w(unactive open canceled closed)
+  validates_inclusion_of :category, :in => %w(food_and_drinks entertainment outdoor)
   
   # GeoKit
-  acts_as_mappable :default_units => :miles, 
-                   :default_formula => :sphere, 
-                   :distance_field_name => :distance,
-                   :lat_column_name => :lat,
-                   :lng_column_name => :lng
+  acts_as_mappable :through => :place
   
   # TODO: add shortcut of type activity.creator => activity.creator_duo.host
   def creator
@@ -28,6 +27,11 @@ class Activity < ActiveRecord::Base
   
   def hosts
     # return both creator and invitee
+  end
+  
+  def location=(location_id)
+    provider_id = location_id.match(/^[a-z]+-[a-z]+-(.+)$/)[1]
+    self.place = Place.where({:kind => 'business', :provider => 'yelp', :provider_id => provider_id}).first
   end
   
   def update_state
@@ -45,8 +49,10 @@ class Activity < ActiveRecord::Base
     # entrants have been invited, activity is confirmed/no longer accepts entries
     
     # send confirmations to co-hosts and participants
+    Notifier::invited_confirmation(self, self.creator_duo.participant)
     
     # set up SMS service?
+    self.start_sms # async
     
     # update state
     self.state = 'closed'
@@ -56,11 +62,13 @@ class Activity < ActiveRecord::Base
   end
   
   def get_people
-    User.find(1, 4)
+    people = [self.creator_duo.host, self.creator_duo.participant]
+    people += [self.creator_invitee.host, self.creator_invitee.participant] if self.invitee_duo
+    people
   end
   
   def location_district
-    # use yelp API
+    # use yelp API, TODO: replace with GeoPlanet? or put badge link to yelp...
     # need to cache results 100 limit right now
     cache = ActiveSupport::Cache::MemoryStore.new
     cache.fetch("date_#{self.id}_district") do
@@ -94,6 +102,10 @@ class Activity < ActiveRecord::Base
   def self.find_activities_for_user(user)
     if (user.id == 1)
       return self.find(6,7,8)
+    else
+      # TODO: eliminate your own activities or activities you already joined
+      # add filtering
+      self.find(:all, :conditions => ["time > ?", Time.now])
     end
     # Geokit radius:
     # Store.find(:all, :origin =>[37.792,-122.393], :within=>10)
@@ -101,6 +113,33 @@ class Activity < ActiveRecord::Base
   
   def self.find_active_activity_for(user)
     # implement
-    self.find(6)
+    # testing: first open activity
+    self.upcoming_activities_for(user).last
   end
+  
+  def self.open_activities_for(user)
+    # find Duos where the user is
+    duos = Duo.find(:all, :conditions => ["host_id = ? OR participant_id = ?", user.id, user.id])
+    # find the open activities where these duos are hosts
+    self.where(:creator_duo_id => duos, :state => 'open')
+  end
+  
+  def self.upcoming_activities_for(user)
+    # find Duos where the user is
+    duos = Duo.find(:all, :conditions => ["host_id = ? OR participant_id = ?", user.id, user.id])
+    # find the open activities where these duos are hosts
+    self.where(:creator_duo_id => duos, :state => 'closed') # ["time > ", Time.now]
+  end
+  
+  # perform is a special command sent by the scheduler, we use it to inform SMS service is now active for the date
+  def start_sms
+    msg = "Hi! Your date with %s is in 2 hours, you can now chat to sync any details etc., just respond to this number! Happy Dating :) Mojo."
+    
+    # sent msg to host
+    Sms.deliver(self.creator_duo.host.cellphone, msg % self.creator_duo.participant.first_name)
+    # sent msg to participant
+    Sms.deliver(self.creator_duo.participant.cellphone, msg % self.creator_duo.host.first_name)
+  end
+  # 5.minutes.from_now will be evaluated when in_the_future is called
+  handle_asynchronously :start_sms, :run_at => Proc.new { 30.seconds.from_now }
 end

@@ -644,6 +644,9 @@ h2, h3 {
 	}
 }
 
+.normalized {
+	input[type=text] { width: 192px; }
+}
 
 /*
  * Special layouts
@@ -1114,6 +1117,12 @@ h2, h3 {
 	}
 }
 
+.column-titles .form-item {
+	
+	.errors {
+		margin-left: 150px;
+	}
+}
 .column-titles .form-item > .title {
 	position: absolute;
 	text-align: right;
@@ -1852,7 +1861,7 @@ select.mj-category-select {
 	//@include rounded;
 	@include boxshadow(0 1px 2px rgba(0,0,0,.2));
 	
-	&[data-value="food-and-drinks"] { @include styled-select(url(/images/icons/date_food-and-drinks_white.png)); }
+	&[data-value="food_and_drinks"] { @include styled-select(url(/images/icons/date_food-and-drinks_white.png)); }
 	&[data-value="entertainment"]   { @include styled-select(url(/images/icons/date_entertainment_white.png)); }
 	&[data-value="outdoor"]         { @include styled-select(url(/images/icons/date_outdoor_white.png)); }
 }
@@ -1862,6 +1871,40 @@ select.mj-category-select {
 	position: absolute;
 	top: 50%;
 	right: 0;
+}
+
+.set-location {
+	display: inline-block;
+	padding: 5px 8px !important;
+	border: 1px solid $border-gray;
+	@include rounded;
+	
+	background: $light-gray;
+	
+	vertical-align: middle;
+	
+	.name, .city {
+		display: inline-block;
+		padding: 3px 5px;
+		@include rounded;
+		
+		background: white;
+	}
+	.name {
+		
+		@include thinfont;
+		font-weight: bold;
+	}
+	
+	.city {
+		
+		background: white;
+		font-size: .85em;
+	}
+	
+	.action {
+		font-size: .85em;
+	}
 }
 
 .mj-location-input {
@@ -1878,6 +1921,42 @@ select.mj-category-select {
 		}
 	}
 	
+	// temporarly taken outside .map-side
+	.selected-subset {
+		
+		padding: 5px 8px;
+		@include rounded;
+		background: $light-gray;
+		border: 1px solid $border-gray;
+
+		.title {
+			font-size: .85em;
+			margin-bottom: 5px;
+		}
+
+		.item {
+
+			.name { font-weight: bold; }
+			.state { font-size: .85em; }
+
+			min-height: 27px;
+			background: url(/images/markers/location-selected.png) no-repeat 5px center;
+			vertical-align: middle;
+			font-size: .85em;
+
+			background-color: white;
+			padding: 5px 5px 5px (24px + 5px);
+			@include rounded;
+		}
+		
+		margin-bottom: 10px;
+		
+		&.operating {
+			
+			background: white;
+		}
+	}
+	
 	.map-side {
 		position: absolute;
 		top: 0;
@@ -1885,40 +1964,7 @@ select.mj-category-select {
 		bottom: 0;
 		width: 245px;
 		
-		.selected-subset {
-			
-			padding: 5px 8px;
-			@include rounded;
-			background: $light-gray;
-			border: 1px solid $border-gray;
-
-			.title {
-				font-size: .85em;
-				margin-bottom: 5px;
-			}
-
-			.item {
-
-				.name { font-weight: bold; }
-				.state { font-size: .85em; }
-
-				min-height: 27px;
-				background: url(/images/markers/location-selected.png) no-repeat 5px center;
-				vertical-align: middle;
-				font-size: .85em;
-
-				background-color: white;
-				padding: 5px 5px 5px (24px + 5px);
-				@include rounded;
-			}
-			
-			margin-bottom: 10px;
-			
-			&.operating {
-				
-				background: white;
-			}
-		}
+		
 		
 		.search {
 			
@@ -1937,19 +1983,129 @@ select.mj-category-select {
 			}
 		}
 	}
+	
+	&.place-view {
+
+		#map_canvas {
+			height: 350px;
+			margin-left: 250px;
+			margin-right: 0;
+		}
+		
+		.search {
+			position: relative;
+			margin-bottom: 10px;
+			
+			.city {
+				margin-left: 65%;
+				//height: 25px;
+				
+				padding: 5px 8px;
+				@include rounded;
+				background: $light-gray;
+				border: 1px solid $border-gray;
+				
+				font-size: .85em;
+				
+				.title {
+					position: absolute;
+					top: 10px;
+				}
+				
+				.selection {
+					margin-left: 50px;
+					padding: 3px 5px;
+					
+					background: white;
+					@include rounded;
+					
+					@include thinfont;
+					font-weight: bold;
+				}
+			}
+			.input {
+				position: absolute;
+				top: 0;
+				//padding: 5px 8px;
+				
+				//@include rounded;
+				//background: $light-gray;
+				//border: 1px solid $border-gray;
+				
+				input {
+					@include rounded;
+					width: 365px;
+					padding: 4px 4px 4px 24px;
+					font-size: 18px;
+					
+					background: url(/images/icons/search.png) 6px center no-repeat white;
+					
+				}
+			}
+		}
+		
+		.map-and-results {
+			position: relative;
+			
+			.results {
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				width: 245px;
+				overflow-y: auto;
+				
+				background: white;
+
+				.result {
+					
+					label {
+						display: block;
+						position: relative;
+						padding: 3px 3px;
+						@include rounded;
+						background: white;
+						border: 2px solid white;
+						
+						&:hover {
+							background: #e1ecff;
+						}
+						&.selected {
+							border-color: gray;
+						}
+
+						.input {
+							position: absolute;
+
+							background-color: #ff3434;
+							@include rounded;
+						}
+						.place {
+							margin-left: 23px;
+							//min-height: 27px;
+
+							.title {
+								//font-size: 1.2em;
+							}
+							.address {
+								@include thinfont;
+								font-size: .75em;
+							}
+						}
+					}
+					
+				}
+			}
+		}
+	}
 }
 
-.mj-location-input.address-view {
-	
-	#map_canvas {
-		height: 350px;
-		margin-left: 250px;
-		margin-right: 0;
-	}
-	
-	.map-side {
-		right: auto;
-		left: 0;
+.input-with-tip {
+	.tip {
+		position: absolute;
+		top: 7px;
+		left: 27px;
+		color: gray;
 	}
 }
 
@@ -2770,5 +2926,56 @@ h2 {
 		}
 	}
 	
+}
+
+.date-confirmation {
+	margin: 50px 100px;
+	
+	p {
+		font-size: 1.25em;
+		
+		em {
+			font-style: normal;
+			font-size: 115%;
+		}
+	}
+	
+	.people {
+		> div {
+			display: inline-block;
+			margin-right: 25px;
+			font-size: 115%;
+			
+			img { height: 48px; width: 48px; vertical-align: middle; }
+		}
+	}
+	
+	.location {
+		margin: 25px 0;
+		//height: 400px;
+		position: relative;
+		
+		.map {
+			
+		}
+		
+		.place {
+			position: absolute;
+			margin-left: 425px;
+			top: 50px;
+			
+			.title {
+				font-size: 125%;
+				margin-bottom: 10px;
+			}
+		}
+	}
+	
+	.info {
+		margin-top: 25px;
+		padding: 10px;
+		@include rounded;
+		background: $info-color;
+	}
 }
 

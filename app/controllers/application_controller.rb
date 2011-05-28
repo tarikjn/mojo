@@ -21,8 +21,9 @@ private
     end
   end
 
+  # required for redirects and email urls
   # /abs -> http://myx.com/abs
-  def path_to_url(path) # find something better
+  def path_to_url(path) # find something better, full url needed for redirects per HTTP
     "http://#{self.request.host}:#{self.request.port}/#{path.sub(%r[^/],'')}"
   end
 

@@ -1,5 +1,12 @@
 module ApplicationHelper
   
+  # duplicated for mailer, find other way...
+  # required for redirects and email urls
+  # /abs -> http://myx.com/abs
+  def path_to_url(path) # find something better, full url needed for redirects per HTTP
+    "http://#{self.request.host}:#{self.request.port}/#{path.sub(%r[^/],'')}"
+  end
+  
   # refactor as a form helper, use object sub-Class
   # attribute must be a string, it is concatened with _start and _end
   def mj_timerange(name, value = nil, options = {:show_activities => false})

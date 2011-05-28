@@ -1,5 +1,9 @@
-<h1>New activity</h1>
+<h3>Create a date</h3>
+	<%= form_for @activity do |f| %>
+<div class="form-inputs column-titles">
+	
+		<%= render :partial => "create", :locals => { :s => f } %>
 
-<%= render 'form' %>
-
-<%= link_to 'Back', activities_path %>
+</div>
+		<button type="submit">Create</button>
+	<% end %>

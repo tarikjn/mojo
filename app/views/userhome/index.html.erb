@@ -3,7 +3,7 @@
 		<div class="title">Profile</div>
 		<div class="content">
 			<div class="picture">
-				<div class="pic96"><%= image_tag "/images/users/"+@user.id.to_s+"-96.jpg" %></div>
+				<div class="pic96"><%= image_tag @user.picture_url(:thumb) %></div>
 				<div class="title">(you)</div>
 			</div>
 			<div class="info">

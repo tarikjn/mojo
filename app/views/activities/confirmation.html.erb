@@ -1,0 +1,29 @@
+<div class="date-confirmation">
+	<h3>It's on!</h3>
+	<p>You have a date with <%= @activity.creator_duo.participant.first_name %>, <em><%= @activity.time.strftime("%A at %I:%M%P") %></em>.</p>
+	<div class="people">
+		<div>
+			<img src="<%= @activity.creator_duo.host.picture_url(:thumb) %>" />
+			<%= @activity.creator_duo.host.first_name %>
+		</div>
+		<div>
+			<img src="<%= @activity.creator_duo.participant.picture_url(:thumb) %>" />
+			<%= @activity.creator_duo.participant.first_name %>
+		</div>
+	</div>
+	<div class="location">
+		<div class="map">
+			
+			<img src="http://maps.google.com/maps/api/staticmap?center=San+Francisco,CA&amp;zoom=13&amp;size=400x400&amp;markers=<%= "#{@activity.place.lat},#{@activity.place.lng}" %>&amp;sensor=false" alt="map" />
+		</map>
+		<div class="place">
+			<div class="title"><%= @activity.place.name %></div>
+			<div class="address">
+				<%= @activity.place.address %><br />
+				<%= @activity.place.city %>, <%= @activity.place.state_code %>
+			</div>
+		</div>
+	</div>
+	<div class="info">You will both be able to chat by SMS 2 hours before the date so you can arrange last minute details :-)</div>
+	<p>Good luck!</p>
+</div>

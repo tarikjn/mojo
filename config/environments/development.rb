@@ -1,4 +1,8 @@
 Mojo::Application.configure do
+  
+  # Stepflow goes over 4K, TODO: implement something for prod
+  #config.action_controller.session_store :memory_store
+  
   # Settings specified here will take precedence over those in config/environment.rb
 
   # In the development environment your application's code is reloaded on
@@ -12,7 +16,7 @@ Mojo::Application.configure do
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
   config.action_view.debug_rjs             = true
-  config.action_controller.perform_caching = false
+  config.action_controller.perform_caching = true # enabled to not reach API limits in development
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
@@ -22,5 +26,9 @@ Mojo::Application.configure do
 
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
+  
+  # ImageMagick path for Paperclip
+  #Paperclip.options[:command_path] = "/opt/local/bin"
+
 end
 

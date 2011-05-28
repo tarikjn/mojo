@@ -1,0 +1,81 @@
+<div class="form-item"> 
+	<div class="title">Category</div> 
+	<!-- TODO: fix to non-JS and arrows use, see: http://test.cita.illinois.edu/aria/radio/radio1.php --> 
+	<div class="hybrid-input mj-select-container">
+		<%= s.select :category, [["Food and Drinks", "food_and_drinks"], ["Entertainment", "entertainment"], ["Outdoor", "outdoor"]], {}, {:class => "mj-category-select"} %>
+		<div class="after">▾</div>
+	</div>
+
+
+</div> 
+<div class="form-item">
+	<%= format_errors_for s.object, :title %>
+	<div class="title">Title</div>
+	<div class="hybrid-input">
+		<%= s.text_field :title %>
+	</div> 
+</div> 
+<div class="form-item"> 
+	<div class="title">Description</div> 
+	<div class="hybrid-input">
+		<%= s.text_area :description %>
+	</div> 
+</div>
+<div class="form-item"> 
+	<div class="title">Time</div> 
+	<div class="hybrid-input">
+		<%= s.datetime_select :time %>
+	</div>
+</div> 
+<div class="form-item">
+	<%= format_errors_for s.object, :place %>
+	<div class="title">Location</div>
+	<div class="hybrid-input featured">
+		<div class="roller">
+			<div class="prev">◀</div>
+			<div class="list">
+				<div class="title">Feat.:</div>
+				<div class="business">
+					<div class="title">La Boulange</div>
+					<div class="details">Pacific Heights - Open until 7</div>
+					<div class="offer">Serving a special chocolate berry coffee.</div>
+				</div>
+				<div class="business" style="background-image: url(/images/businesses/tortillaheights.jpg)">
+					<div class="title">Tortilla Heights</div>
+					<div class="details">Pacific Heights - Open until 11</div>
+					<div class="offer">Welcomes Mojo members.</div>
+				</div>
+			</div>
+			<div class="next">▶</div>
+		</div>
+	</div>
+	<% if s.object.place %>
+	<div class="hybrid-input set-location">
+		<span class="name"><%= s.object.place.name %></span>
+		<span class="city">San Francisco, CA</span>
+		<span class="action"><a href="#">change</a></span>
+	</div>
+	<% end %>
+	<div class="hybrid-input mj-location-input place-view"<% if s.object.place %> style="display: none"<% end %>>
+		<div class="search">
+			<div class="input">
+				<div class="input-with-tip">
+					<div class="tip">Search a biz, a place or an address</div>
+					<input type="text" value="" class="place-search" />
+				</div>
+			</div>
+			<div class="city">
+				<div class="title">
+					City:
+				</div>
+				<div class="selection">San Francisco, CA</div>
+			</div>
+		</div>
+		<div class="map-and-results">
+			<div id="map_canvas"></div> 
+			<div class="results input-holder">
+				
+			</div>
+		</div>
+	</div>
+</div>

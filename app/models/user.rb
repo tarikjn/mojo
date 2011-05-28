@@ -12,10 +12,23 @@ class User < ActiveRecord::Base
     config.require_password_confirmation = false
   end
   
+  # avatar/s3, TODO: switch to CarrierWave, Paperclip is retarded
+  #attr_accessible :avatar, :age, :filter_age, :filter_height, :first_name, :last_name, :email, :cellphone, :sex, :sex_preference, :dob, :min_age, :max_age, :height, :min_height, :max_height
+  #has_attached_file :avatar, :styles => { :thumb => "96x96#", :mini => "48x48#" },
+  #  :storage => :s3,
+  #  :s3_credentials => SETTINGS[Rails.env]['s3'],
+  #  :path => ":class/:attachment/:id/:style.:extension",
+  #  :bucket => SETTINGS[Rails.env]['bucket']
+  #attr_accessible :picture
+  mount_uploader :picture, PictureUploader
+  
   # discovery is never saved (no email)
   validates :completeness, :inclusion => { :in => %w(discovery invitation complete) }
   validates :email, :presence => true, :uniqueness => true, :email => true, :unless => :is_discovery
   validates :first_name, :presence => true, :if => :is_complete
+  # picture fails with marshaling
+  #validates :picture, :presence => true, :if => :is_complete
+  validates :cellphone, :presence => true, :if => :is_complete
   validates :sex, :inclusion => { :in => %w(male female), :message => "Please select" }
   validates :sex_preference, :inclusion => { :in => %w(female both male), :message => "Please select" }
   # height is in milimeters
@@ -27,9 +40,9 @@ class User < ActiveRecord::Base
   # overrides access to db height attribute
   composed_of :height, :class_name => 'Height', :mapping => %w(height height),
               :allow_nil => true, :converter => Proc.new { |hash| Height.create(hash) }
-  composed_of :min_height, :class_name => 'Height', :mapping => %w(height_min height)            ,
+  composed_of :min_height, :class_name => 'Height', :mapping => %w(height_min height),
                :allow_nil => true, :converter => Proc.new { |hash| Height.create(hash) }
-  composed_of :max_height, :class_name => 'Height', :mapping => %w(height_max height)                        ,
+  composed_of :max_height, :class_name => 'Height', :mapping => %w(height_max height),
               :allow_nil => true, :converter => Proc.new { |hash| Height.create(hash) }
   # any way to DRY up code above and below?
   def is_discovery
@@ -104,11 +117,13 @@ class User < ActiveRecord::Base
   def picture_score
     case self.id
     when 4
-      return 1.9
+      1.9
     when 9
-      return -0.5
+      -0.5
     when 10
-      return 0.2
+      0.2
+    else
+      0.5
     end
   end
   
@@ -117,13 +132,26 @@ class User < ActiveRecord::Base
     if user.id == 1
       case self.id
       when 4
-        return 0.82
+        0.82
       when 9
-        return 0.76
+        0.76
       when 10
-        return 0.55
+        0.55
+      else
+        0.5
       end
+    else
+      0.5
     end
+    
+  end
+  
+  def open_activities
+    Activity.open_activities_for(self)
+  end
+  
+  def upcoming_dates
+    Activity.upcoming_activities_for(self)
   end
   
 end

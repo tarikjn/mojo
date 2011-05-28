@@ -4,3 +4,4 @@ log/*.log
 tmp/**/*
 *.tmproj
 .sass-cache
+public/uploads

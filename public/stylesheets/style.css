@@ -300,6 +300,9 @@ h2, h3 {
     .errors ul li {
       list-style-type: none; }
 
+.normalized input[type=text] {
+  width: 192px; }
+
 /*
  * Special layouts
  */
@@ -718,6 +721,9 @@ h2, h3 {
       left: 0; }
     #anim .stepflow-frame > .gradient > .right {
       right: 0; }
+
+.column-titles .form-item .errors {
+  margin-left: 150px; }
 
 .column-titles .form-item > .title {
   position: absolute;
@@ -1251,7 +1257,7 @@ select.mj-category-select {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); }
-  select.mj-category-select[data-value="food-and-drinks"] {
+  select.mj-category-select[data-value="food_and_drinks"] {
     background: 10px center url(/images/icons/date_food-and-drinks_white.png) no-repeat, -webkit-gradient(linear, left top, left bottom, from(#888888), to(#575757)); }
   select.mj-category-select[data-value="entertainment"] {
     background: 10px center url(/images/icons/date_entertainment_white.png) no-repeat, -webkit-gradient(linear, left top, left bottom, from(#888888), to(#575757)); }
@@ -1264,6 +1270,31 @@ select.mj-category-select {
   top: 50%;
   right: 0; }
 
+.set-location {
+  display: inline-block;
+  padding: 5px 8px !important;
+  border: 1px solid #e6e6e6;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background: #f9f9f9;
+  vertical-align: middle; }
+  .set-location .name, .set-location .city {
+    display: inline-block;
+    padding: 3px 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background: white; }
+  .set-location .name {
+    font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+    font-weight: bold; }
+  .set-location .city {
+    background: white;
+    font-size: .85em; }
+  .set-location .action {
+    font-size: .85em; }
+
 .mj-location-input {
   position: relative;
   background: transparent;
@@ -1273,39 +1304,39 @@ select.mj-category-select {
     margin-right: 250px; }
     .mj-location-input #map_canvas.city-only {
       height: 250px; }
+  .mj-location-input .selected-subset {
+    padding: 5px 8px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background: #f9f9f9;
+    border: 1px solid #e6e6e6;
+    margin-bottom: 10px; }
+    .mj-location-input .selected-subset .title {
+      font-size: .85em;
+      margin-bottom: 5px; }
+    .mj-location-input .selected-subset .item {
+      min-height: 27px;
+      background: url(/images/markers/location-selected.png) no-repeat 5px center;
+      vertical-align: middle;
+      font-size: .85em;
+      background-color: white;
+      padding: 5px 5px 5px 29px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px; }
+      .mj-location-input .selected-subset .item .name {
+        font-weight: bold; }
+      .mj-location-input .selected-subset .item .state {
+        font-size: .85em; }
+    .mj-location-input .selected-subset.operating {
+      background: white; }
   .mj-location-input .map-side {
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     width: 245px; }
-    .mj-location-input .map-side .selected-subset {
-      padding: 5px 8px;
-      -moz-border-radius: 5px;
-      -webkit-border-radius: 5px;
-      border-radius: 5px;
-      background: #f9f9f9;
-      border: 1px solid #e6e6e6;
-      margin-bottom: 10px; }
-      .mj-location-input .map-side .selected-subset .title {
-        font-size: .85em;
-        margin-bottom: 5px; }
-      .mj-location-input .map-side .selected-subset .item {
-        min-height: 27px;
-        background: url(/images/markers/location-selected.png) no-repeat 5px center;
-        vertical-align: middle;
-        font-size: .85em;
-        background-color: white;
-        padding: 5px 5px 5px 29px;
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
-        border-radius: 5px; }
-        .mj-location-input .map-side .selected-subset .item .name {
-          font-weight: bold; }
-        .mj-location-input .map-side .selected-subset .item .state {
-          font-size: .85em; }
-      .mj-location-input .map-side .selected-subset.operating {
-        background: white; }
     .mj-location-input .map-side .search input {
       width: 206px;
       font-size: .75em;
@@ -1314,14 +1345,85 @@ select.mj-category-select {
       background: url(/images/icons/search.png) 4px center no-repeat white; }
       .mj-location-input .map-side .search input.tip {
         color: gray; }
+  .mj-location-input.place-view #map_canvas {
+    height: 350px;
+    margin-left: 250px;
+    margin-right: 0; }
+  .mj-location-input.place-view .search {
+    position: relative;
+    margin-bottom: 10px; }
+    .mj-location-input.place-view .search .city {
+      margin-left: 65%;
+      padding: 5px 8px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      background: #f9f9f9;
+      border: 1px solid #e6e6e6;
+      font-size: .85em; }
+      .mj-location-input.place-view .search .city .title {
+        position: absolute;
+        top: 10px; }
+      .mj-location-input.place-view .search .city .selection {
+        margin-left: 50px;
+        padding: 3px 5px;
+        background: white;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+        font-weight: bold; }
+    .mj-location-input.place-view .search .input {
+      position: absolute;
+      top: 0; }
+      .mj-location-input.place-view .search .input input {
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        width: 365px;
+        padding: 4px 4px 4px 24px;
+        font-size: 18px;
+        background: url(/images/icons/search.png) 6px center no-repeat white; }
+  .mj-location-input.place-view .map-and-results {
+    position: relative; }
+    .mj-location-input.place-view .map-and-results .results {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 245px;
+      overflow-y: auto;
+      background: white; }
+      .mj-location-input.place-view .map-and-results .results .result label {
+        display: block;
+        position: relative;
+        padding: 3px 3px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        background: white;
+        border: 2px solid white; }
+        .mj-location-input.place-view .map-and-results .results .result label:hover {
+          background: #e1ecff; }
+        .mj-location-input.place-view .map-and-results .results .result label.selected {
+          border-color: gray; }
+        .mj-location-input.place-view .map-and-results .results .result label .input {
+          position: absolute;
+          background-color: #ff3434;
+          -moz-border-radius: 5px;
+          -webkit-border-radius: 5px;
+          border-radius: 5px; }
+        .mj-location-input.place-view .map-and-results .results .result label .place {
+          margin-left: 23px; }
+          .mj-location-input.place-view .map-and-results .results .result label .place .address {
+            font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+            font-size: .75em; }
 
-.mj-location-input.address-view #map_canvas {
-  height: 350px;
-  margin-left: 250px;
-  margin-right: 0; }
-.mj-location-input.address-view .map-side {
-  right: auto;
-  left: 0; }
+.input-with-tip .tip {
+  position: absolute;
+  top: 7px;
+  left: 27px;
+  color: gray; }
 
 .hybrid-input .subinput {
   display: inline-block; }
@@ -2130,3 +2232,36 @@ h2 {
           .featured .roller .list > div.business .offer {
             margin-top: 5px;
             font-size: 75%; }
+
+.date-confirmation {
+  margin: 50px 100px; }
+  .date-confirmation p {
+    font-size: 1.25em; }
+    .date-confirmation p em {
+      font-style: normal;
+      font-size: 115%; }
+  .date-confirmation .people > div {
+    display: inline-block;
+    margin-right: 25px;
+    font-size: 115%; }
+    .date-confirmation .people > div img {
+      height: 48px;
+      width: 48px;
+      vertical-align: middle; }
+  .date-confirmation .location {
+    margin: 25px 0;
+    position: relative; }
+    .date-confirmation .location .place {
+      position: absolute;
+      margin-left: 425px;
+      top: 50px; }
+      .date-confirmation .location .place .title {
+        font-size: 125%;
+        margin-bottom: 10px; }
+  .date-confirmation .info {
+    margin-top: 25px;
+    padding: 10px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background: #fffdbf; }

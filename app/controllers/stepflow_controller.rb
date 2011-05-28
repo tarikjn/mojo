@@ -14,7 +14,7 @@ class StepflowController < ApplicationController
       @stepflow = session[:stepflow] # create new object from parameters instead to wipe out existing errors for noJS/GET reload...?
     else
       # this set up the ActiveModel object with defaults and the time from the homepage
-      @stepflow = Stepflow.new(params[:stepflow])
+      @stepflow = Stepflow.new(params[:stepflow].merge( (current_user)? { :host => current_user } : {} ))
       session[:stepflow] = @stepflow
     end
     
@@ -28,6 +28,7 @@ class StepflowController < ApplicationController
     m = @stepflow.move_next
     Logger.new(STDOUT).info(@stepflow.activity.inspect)
     render_action m
+    # TODO: when map error: redisplay searh q, results and even selected place?
   end
   
   def previous
@@ -55,7 +56,7 @@ class StepflowController < ApplicationController
   end
   
   def created
-    PhoneService.deliver("+16506449308", "This is Mojo Monkey!")
+    
   end
   
   def joined
@@ -69,7 +70,8 @@ private
     # look at params on @stepflow
     
     # return collection
-    Activity.find(6,7,8)
+    #Activity.find(6,7,8)
+    Activity.find_activities_for_user(@stepflow.host)
   end
   
   # also a helper method
@@ -81,7 +83,7 @@ private
     when 1 # step 2
       @stepflow.operation
     when 2 # step 3
-      (current_user)? :review : :profile
+      (current_user)? 'review' : 'profile'
     end
   end
   
@@ -108,6 +110,16 @@ private
             }
           end
         }
+        format.text {
+          with_format('html') do
+            render :json => {
+              # tells to the JS client how to render the response (next, prev, error)
+              :move => type,
+              # view with no layout (complete form with nav)
+              :block => render_to_string(:action => :go)
+            }
+          end
+        }
       end # /respond_to
       
     end # /if type
@@ -124,7 +136,14 @@ private
         render :json => {
           # tells to the JS client how to render the response (redirect)
           :move => 'redirect',
-          :redirect_path => path_to_url(:action => action)
+          :redirect_path => url_for(:action => action)
+        }
+      }
+      format.text {
+        render :json => {
+          # tells to the JS client how to render the response (redirect)
+          :move => 'redirect',
+          :redirect_path => url_for(:action => action)
         }
       }
     end # /respond_to

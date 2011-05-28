@@ -1,3 +1,62 @@
-<div>
-	Your settings here.
+<%= form_tag url_for(:action => :update_settings), { :method => :post, :multipart => true } do %>
+<!-- TODO: use common partial -->
+<div class="form-inputs column-titles">
+
+	<div class="form-inputs column-titles normalized"><!-- remove normalized: testing -->
+		<%= fields_for @user do |s| %>
+		<div class="form-item">
+			<%= format_errors_for s.object, :first_name %>
+			<div class="title">Name</div>
+			<div class="hybrid-input">
+				<div class="subinput">
+					<%= s.text_field :first_name %>
+					<div class="title">First</div>
+				</div>
+				<div class="subinput">
+					<%= s.text_field :last_name %>
+					<div class="title">Last</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-item">
+			<div class="title">Date of Birth</div>
+			<div class="hybrid-input">
+				<%= s.date_select :dob %>
+			</div>
+		</div>
+		<div class="form-item">
+			<%= format_errors_for s.object, :picture %>
+			<div class="title">Picture</div>
+			<div class="hybrid-input">
+				<%= s.file_field :picture %>
+				<%= s.hidden_field :picture_cache %>
+				<%= image_tag s.object.picture.url if s.object.picture? %>
+				<!--<br />
+				<div class="mj-picture-tool">
+					<img src="/images/tarik-profile.jpg" />
+					<div class="mask"></div>
+					<div class="selection" style="background-image: url(/images/tarik-profile.jpg)"></div/>
+				</div>
+				-->
+			</div>
+		</div>
+		<div class="form-item">
+			<%= format_errors_for s.object, :email %>
+			<div class="title">E-mail</div>
+			<div class="hybrid-input">
+				<%= s.text_field :email %>
+			</div>
+		</div>
+		<div class="form-item">
+			<%= format_errors_for s.object, :cellphone %>
+			<div class="title">Cell Phone</div>
+			<div class="hybrid-input">
+				<%= s.text_field :cellphone, :class => "mj-input-phone" %>
+			</div>
+		</div>
+		<% end %>
+	</div>
+
 </div>
+<button type="submit">Update</button>
+<% end %>

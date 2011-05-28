@@ -8,6 +8,7 @@ function Map(obj, activity_points) {
 	var that = this;
 	that.gmap = undefined;
 	that.geocoder = new google.maps.Geocoder();
+	that.markers = [];
 	
 	// params
 	that.p = {
@@ -52,7 +53,7 @@ function Map(obj, activity_points) {
 			that.addRangeSelector();
 			that.addDateMarkers();
 		}
-		else
+		else if ($(this).hasClass("city-only"))
 		{
 			that.addMarker(startLatLng, that.p.start[0]);
 		}
@@ -84,6 +85,12 @@ function Map(obj, activity_points) {
 	    });
 	};
 	
+	this.clearMarkers = function () {
+		for (i in that.markers) {
+			that.markers[i].setMap(null);
+		}
+	};
+	
 	this.addMarker = function(point, title, type) {
 		
 		if (type === undefined) type = 'city';
@@ -112,7 +119,9 @@ function Map(obj, activity_points) {
 	        shadow: shadow,
 			title: title
 	    });
-	
+		
+		that.markers.push(marker);
+		
 		return marker;
 	};
 	

@@ -10,7 +10,7 @@ class Stepflow
   
   attr_accessor :step, :operation, :timerange, :complete,
                 :party_of, :host, :friend,
-                :activity,
+                :activity, :activities, # activity to be created, or activities to be joined, how to validate activites?? -> custom validation
                 :disabled_validations
   
   #validates_presence_of
@@ -24,10 +24,12 @@ class Stepflow
   # add basic validation
   
   def defaults
+    default_pass = 'demo'
+    
     self.step      ||= 0 # can be 0, 1, 2, 3 (done)
     @timerange     ||= TimeRange.new(Date.today.strftime("%F"), "15:00", "18:00")
     self.party_of  ||= 'single'
-    self.host      ||= User.new( :completeness => 'discovery' )
+    self.host      ||= User.new( :completeness => 'discovery', :password => default_pass ) # can receive current_user from the controller
     self.friend    ||= User.new( :completeness => 'invitation' ) # only validate if it's a single date
   end
   
@@ -86,6 +88,12 @@ class Stepflow
     self.activity.attributes = attributes
   end
   
+  def activities=(array)
+    array.each do |a|
+      @activities << Activity.find(a)
+    end
+  end
+  
   # move to next step
   def move_next
     
@@ -110,6 +118,7 @@ class Stepflow
             # respond ajax/json for map refresh
 
             #@activities = Activity.find_activities_for_user(current_user)
+            @activities ||= []
             
           when 'create'
 
@@ -121,6 +130,9 @@ class Stepflow
           end
           
         when 1
+          
+          # switch to full validation for user, TODO: revert, refactor for existing usser...
+          self.host.completeness = 'complete' if self.host.completeness == 'discovery'
           
           # profile/review step
           # profile: # set up dob year based on age
@@ -142,13 +154,53 @@ class Stepflow
         'next'
       when 2
         # finish...
+        self.save_associated
         # do save etc. call separate action?
         self.complete = {'create' => 'created', 'join' => 'joined'}[self.operation]
-        'redirect'
+        'complete'
       end
     else
+      Logger.new(STDOUT).info("Stepflow Validation Errors: " + self.errors.full_messages.inspect)
       'error'
     end
+  end
+  
+  def save_associated
+    # everything is supposed to be valid...
+    
+    # implement somewhere else
+    #if friend ->
+    #  complete profile
+    #  confirm friendship (add other friends)
+    #  accept date
+    #-> post date
+    
+    #joining:
+    # waiting entry wait for same things...
+    
+    # assuming single date, new user.... TODO: implement all cases
+    
+    # save host
+    self.host.save
+    
+    # create Duo for host
+    duo = Duo.new(:host => self.host)
+    
+    case self.operation
+    when 'join'
+      self.activities.each do |a|
+        a.add_entrant(self.host)
+      end
+    
+    when 'create'
+      # set activity state, TODO: maybe do in the stepflow process?
+      self.activity.state = 'open'
+      # set activity duo
+      self.activity.creator_duo = duo
+      # save activity
+      self.activity.save
+    end
+    
   end
   
   # refactoring
@@ -181,7 +233,7 @@ class Stepflow
     
     # create temporary activity object
     activity = Activity.new({
-      :activity_type => params[:type],
+      :category => params[:type],
       :title => params[:title],
       :description => params[:description],
       :time => params[:obj][:time],

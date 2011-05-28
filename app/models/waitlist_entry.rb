@@ -22,7 +22,7 @@ class WaitlistEntry < ActiveRecord::Base
     case host
     when activity.creator
       duo = :creator_duo
-    when activity.guest
+    when false #activity.guest
       duo = :invitee_duo
     end
     

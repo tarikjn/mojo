@@ -14,10 +14,14 @@ defaults: &defaults
 
     # Outgoing Caller ID you have previously validated with Twilio
     CALLER_ID: (415) 236-3526
+  s3:
+    access_key_id: AKIAII5L2KWAARSQ2VHA
+    secret_access_key: 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
   
 
 development:
   <<: *defaults
+  bucket: dev-media.mojo.co
 
 test:
   <<: *defaults
@@ -28,6 +32,7 @@ staging:
     tarik: meetox
     jordan: bigtitsdoh
     ioventures: sorrywerlate!
+  bucket: dev-media.mojo.co #media.mojo.co
 
 production:
   <<: *defaults

@@ -1,13 +1,39 @@
+<a href="<%= activities_new_path %>">Create</a>
+<a href="<%= activities_join_path %>">Join</a>
 <h3>Past dates</h3>
 <div>
 	Rate | Report
 </div>
 <h3>Upcoming dates</h3>
+<div class="activities">
+<% @upcoming_dates.each do |a| %>
+	<div class="activity">
+		<div class="title"><%= a.title %></div>
+		<div class="action">
+			<%= link_to "View details", url_for({:id => a.id, :controller => "activities", :action => "confirmation"}) %>
+		</div>
+	</div>
+<% end %>
+</div>
 <div>
 	Cancel | Late
 </div>
 <h3>Open dates</h3>
 <div>
+	<div class="activities">
+	<% @open_activities.each do |a| %>
+		<div class="activity">
+			<div class="title"><%= a.title %></div>
+			<div class="action">
+				<% if a.waitlist_entries.size > 0 %>
+					<%= link_to "#{a.waitlist_entries.size} entrants waiting", url_for({:id => a.id, :controller => "waitlist_entries", :action => "waitlist"}) %>
+				<% else %>
+				Waiting for entrants...
+				<% end %>
+			</div>
+		</div>
+	<% end %>
+	</div>
 	Approve participants | *Waiting for your friend | Cancel
 </div>
 <h3>Dates invitations</h3>

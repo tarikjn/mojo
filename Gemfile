@@ -1,11 +1,14 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.5'
+gem 'rails', '3.0.7'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3-ruby', :require => 'sqlite3'
+
+# fixes issue with rake .9, see: http://stackoverflow.com/questions/6085610/rails-rake-problems-uninitialized-constant-rakedsl
+gem "rake", "0.8.7"
 
 # Use unicorn as the web server
 # gem 'unicorn'
@@ -42,5 +45,16 @@ gem "rails3-generators"
 # used to access Yelp API
 gem "httparty"
 
+# OAuth 1.0a needed to access Yelp API v2
+gem "signet"
+
 # simple email (temporary)
 gem "pony"
+
+# CarrierWave (avatar resizing and s3)
+gem 'carrierwave'
+gem 'mini_magick'	# wrapper to system's ImageMagick
+gem 'fog'			# used to access s3
+
+# for SMS notifications
+gem 'delayed_job'

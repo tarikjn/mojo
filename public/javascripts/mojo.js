@@ -69,10 +69,101 @@ var Lib = {
 	applySelected: function() {
 		
 		var label = $(this).parents("label:eq(0)"); // parents + :eq(0): fix for fields_with_errors
-		var group = label.parents(".hybrid-input:eq(0)");
+		var group = label.parents(".hybrid-input:eq(0), .input-holder:eq(0)").eq(0);
 
 		group.find(".selected").removeClass("selected");
 		label.addClass("selected");
+	},
+	
+	// iframe onload
+	stepflowUploaderHandler: function() {
+	
+		// fix jQ load/ready issue with iframe, iframe replaces "this"
+		var iframe = document.getElementById("uploader");
+		
+		var form = $(iframe).prev()[0];
+		console.log(iframe);
+		
+		var contents = $(iframe).contents().find("pre").text();
+		
+		console.log($(iframe).contents().find("pre").text());
+		// read iframe content and decode
+		var response = jQuery.parseJSON( contents );
+		
+		// remove iframe
+		//$(iframe).remove();
+		
+		// restore form original parameters
+		form.target = undefined;
+		form.action = form.action.replace(".json", "");
+		
+		// pass response to normal handler
+		Lib.stepflowResponseHandler(form, response);
+	},
+	
+	stepflowResponseHandler: function(form, r) {
+		
+		if (r.move != 'redirect')
+		{
+			// added ".find("stepflow-blocks").contents()" after small layout refactoring
+			var fields = $(r.block).find("#stepflow-blocks .form-inputs");
+			var nav = $(r.block).find("#stepflow-nav").contents();
+		}
+		
+		if (r.move == 'next')
+		{
+			var pos = {from: 0, to: -898}
+			var op = function(f, a) { return f.appendTo(a); }
+		}
+		else if (r.move == 'prev')
+		{
+			var pos = {from: -898, to: 0}
+			var op = function(f, a) { return f.prependTo(a); }
+		}
+		
+		if (['next', 'prev'].indexOf(r.move) != -1)
+		{
+			var outgoing = $("#stepflow-blocks .form-inputs");
+			var timing = 1000; //ms
+			
+			var incoming = op(fields, $('#stepflow-blocks')).css({opacity: 0});
+			$('#stepflow-blocks').css({left: pos.from}); // specific to prev
+			LiveInit.all(incoming[0]);
+			$('#stepflow-blocks').cleanWhitespace();
+
+			// nav loaded
+			nav.find("button").attr('disabled', 'disabled');
+			$("#stepflow-nav").html(nav);
+			LiveInit.navOnly($("#stepflow-nav")[0]);
+			
+			// update form action, (fix formaction change), specific to prev
+			form.action = '/stepflow';
+
+			// sliding animation
+			outgoing.animate({opacity: 0}, timing, 'swing');
+			incoming.animate({opacity: 1}, timing, 'swing');
+			$("#stepflow-blocks").animate({left: pos.to}, timing, 'swing', function() {
+				// complete
+				outgoing.remove();
+				$('#stepflow-blocks').css({left: 0}); // specific to next
+				// nav activate
+				$("#stepflow-nav button").removeAttr('disabled');
+			});
+		}
+		else if (r.move == 'error')
+		{
+			// replace block with new block (which includes errors)
+			$('#stepflow-blocks').children().first().replaceWith(fields);
+			LiveInit.all($('#stepflow-blocks')[0]);
+
+			$("#stepflow-nav .ajax-loading").hide();
+			$("#stepflow-nav button").removeAttr('disabled');
+		}
+		else if (r.move == 'redirect')
+		{
+			window.location = r.redirect_path;
+		}
+
 	}
 	
 }
@@ -600,6 +691,12 @@ var LiveInit = {
 			}
 		});
 	},
+	mapOnly: function(c) {
+		
+		// apply "selected" class to label when switching radio
+		$(c).find(".mj-choice, .mj-merged-choices, .mj-operation-choices, .mj-micro-select, .mj-place").find("input[type=radio]")
+			.change(Lib.applySelected).filter(":checked").each(Lib.applySelected);
+	},
 	all: function(c) {
 		
 		// flash date pointers and markers
@@ -672,10 +769,6 @@ var LiveInit = {
 			AutoselectPersona.initialize(this);
 		})
 
-		// apply "selected" class to label when switching radio
-		$(c).find(".mj-choice, .mj-merged-choices, .mj-operation-choices, .mj-micro-select").find("input[type=radio]")
-			.change(Lib.applySelected).filter(":checked").each(Lib.applySelected);
-
 		// activate mj-check-roll
 		$(c).find("label.mj-check-roll").each(function() {
 			
@@ -700,6 +793,83 @@ var LiveInit = {
 			// TODO: autofill age/height?
 		});
 		
+		$(".input-with-tip").each(function() {
+			var tip = $(this).children(".tip");
+			var input = $(this).children("input");
+			
+			tip.click(function() {
+				input.focus();
+			});
+			input.focus(function() {
+				tip.hide();
+			});
+			input.blur(function() {
+				if (this.value == "")
+					tip.show();
+			});
+		});
+		
+		$(".set-location .action a").click(function() {
+			
+			var set = $(this).parents(".set-location:eq(0)");
+			var change = set.next();
+			
+			set.hide();
+			change.show();
+			
+			return false; // bad
+		});
+		
+		$(".place-search").keypress(function(e) {
+		
+			// check if Enter was hit 
+			var code = (e.keyCode ? e.keyCode : e.which);
+			if (code == 13) { //Enter keycode
+				
+				var results = $(this).parents(".place-view").find(".results");
+				var map = $(this).parents(".place-view").find("#map_canvas")[0].mj_map; // Map object
+				
+				var query = this.value;
+				var bounds = map.gmap.getBounds().toUrlValue();
+				
+				$.ajax({
+					url: "/places/search",
+					data: {'bounds': bounds, 'q': query},
+					context: document.body,
+					success: function(r) {
+						
+						// print results TODO: replace name of input with desired form context
+						results.html(r.block);
+						
+						// clear previous makers
+						map.clearMarkers();
+						
+						// add new markers
+						for (var i = 0; r.markers[i]; i++)
+						{
+							// place marker on the map
+							map.addMarker(Map.L(r.markers[i]));
+						}
+						
+						// set results/markers association
+						results.children(".result").each(function(i) {
+							this.mj_marker = map.markers[i];
+						});
+						
+						// set markers animation event
+						results.children(".result").mouseenter(function(){
+							this.mj_marker.setAnimation(google.maps.Animation.BOUNCE);
+						}).mouseleave(function(){
+							this.mj_marker.setAnimation(null);
+						});
+						
+						LiveInit.mapOnly(results[0]);
+					}
+				});
+			
+				return false;
+			}
+		});
 		
 		/*
 		 * General fixes
@@ -709,6 +879,9 @@ var LiveInit = {
 		
 		// set data-value on select for value-based styling
 		$("select").change(Lib.setDataValue).each(Lib.setDataValue);
+		
+		// init map
+		LiveInit.mapOnly(c);
 		
 		// init nav
 		LiveInit.navOnly(c);
@@ -727,78 +900,39 @@ $(function() {
 	$(".stepflow-frame > form").submit(function() {
 
 		// save reference
-		var form = this;
+		//var form = this;
 
 		// nav loading
 		$("#stepflow-nav button").attr('disabled', 'disabled');
 		$("#stepflow-nav ." + ((this.action.search(/\/stepflow$/) != -1)? 'next':'previous') + " .ajax-loading").show();
-
-		$.post(this.action, $(this).serialize(), function(r) {
+		
+		// if uploading a file
+		if ($(this).find("input[type=file]").length > 0)
+		{
+			console.log("iframe?");
+			// create iframe
+			//var iframe = $(this).after('<iframe name="uploader" id="uploader" style="display: none;"></iframe>');
+			iframe = document.getElementById("uploader");
 			
-			if (r.move != 'redirect')
-			{
-				// added ".find("stepflow-blocks").contents()" after small layout refactoring
-				var fields = $(r.block).find("#stepflow-blocks .form-inputs");
-				var nav = $(r.block).find("#stepflow-nav").contents();
-			}
+			// set iframe onload
+			$(iframe).load(Lib.stepflowUploaderHandler);
 			
-			if (r.move == 'next')
-			{
-				var pos = {from: 0, to: -898}
-				var op = function(f, a) { return f.appendTo(a); }
-			}
-			else if (r.move == 'prev')
-			{
-				var pos = {from: -898, to: 0}
-				var op = function(f, a) { return f.prependTo(a); }
-			}
+			// set form target to iframe
+			this.target = "uploader";
 			
-			if (['next', 'prev'].indexOf(r.move) != -1)
-			{
-				var outgoing = $("#stepflow-blocks .form-inputs");
-				var timing = 1000; //ms
-				
-				var incoming = op(fields, $('#stepflow-blocks')).css({opacity: 0});
-				$('#stepflow-blocks').css({left: pos.from}); // specific to prev
-				LiveInit.all(incoming[0]);
-				$('#stepflow-blocks').cleanWhitespace();
-
-				// nav loaded
-				nav.find("button").attr('disabled', 'disabled');
-				$("#stepflow-nav").html(nav);
-				LiveInit.navOnly($("#stepflow-nav")[0]);
-				
-				// update form action, (fix formaction change), specific to prev
-				form.action = '/stepflow';
-
-				// sliding animation
-				outgoing.animate({opacity: 0}, timing, 'swing');
-				incoming.animate({opacity: 1}, timing, 'swing');
-				$("#stepflow-blocks").animate({left: pos.to}, timing, 'swing', function() {
-					// complete
-					outgoing.remove();
-					$('#stepflow-blocks').css({left: 0}); // specific to next
-					// nav activate
-					$("#stepflow-nav button").removeAttr('disabled');
-				});
-			}
-			else if (r.move == 'error')
-			{
-				// replace block with new block (which includes errors)
-				$('#stepflow-blocks').children().first().replaceWith(fields);
-				LiveInit.all($('#stepflow-blocks')[0]);
-
-				$("#stepflow-nav .ajax-loading").hide();
-				$("#stepflow-nav button").removeAttr('disabled');
-			}
-			else if (r.move == 'redirect')
-			{
-				window.location = r.redirect_path;
-			}
-
-		});
-
-		return false;
+			// set target to be JSON: TODO: MIME type possible?
+			this.action += ".json"
+			
+			// let form default event go on...
+		}
+		else
+		{
+			$.post(this.action, $(this).serialize(), function(r) {
+				Lib.stepflowResponseHandler(this, r);
+			});
+			
+			return false;
+		}
 	});
 	
 	// drag and drop
