@@ -1,4 +1,4 @@
-<div id="top-frame">
+<!--<div id="top-frame">
 	<h2 class="tagline">Happy and dating.</h2>
 	<div class="start-stepflow">
 		<div class="quick-start">
@@ -36,16 +36,39 @@
 			<div class="caption">...in 2 minutes</div>
 		</div>
 	</div>
-</div>
-<div id="usage-flow-comic">
-	<div class="step-panel">
-		<div class="caption"><div class="opaque-layer"></div><div class="text-layer">Your area</div></div>
+</div>-->
+<div id="landing">
+	<div class="illustration">
+		<div class="layer-0" data-slide="1500"></div>
+		<div class="layer-1"></div>
+		<div class="layer-2" data-slide="4500"></div>
+		<div class="layer-3"></div>
 	</div>
-	<div class="step-panel">
-		<div class="caption"><div class="opaque-layer"></div><div class="text-layer">Your time</div></div>
+	<div class="videos">
+		<div class="video">
+			<div class="thumb"><a href="http://www.youtube.com/watch?v=0hMqMcLWpwA" class="youtube-box"><img src="/images/videos/diddy.png" alt="" /><span class="over"></span></a></div>
+			<div class="title">Introduction</div>
+		</div>
 	</div>
-	<div class="step-panel">
-		<div class="caption"><div class="opaque-layer"></div><div class="text-layer">You just met someone.</div></div>
+	<div class="tagline">Stop <em>browsing</em>, start <em>dating</em>.</div>
+	<div class="call-to-action">
+		<div class="form">
+			<div class="message">Howdy! Get started:</div>
+			<div class="grouping">
+				<div class="user">
+					<img src="<%= current_user.picture_url(:mini) %>" />
+					<%= current_user.first_name %>
+				</div>
+				<div class="actions">
+					<div class="left">
+						<%= link_to  "Create", activities_new_path, :class => "mj-button mojo" %> <span>a date</span>
+					</div>
+					<div class="right">
+						<%= link_to "Join", activities_join_path, :class => "mj-button mojo" %> <span>a date</span>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 <div id="flow">
@@ -79,12 +102,12 @@
 		<div class="promo-block" style="display: none;">
 			<img src="/images/icons/gears.png" />
 			<div class="title">Genuine &amp; Personal</div>
-			<div class="text">Mojo establishes your profile using progressive personnality testing and feedback agregation. The more you use it, the more you meet people like you.</div>
+			<div class="text">Mojo establishes your profile using progressive personality testing and feedback aggregation. The more you use it, the more you meet people like you.</div>
 		</div>
 		<div class="promo-block" style="display: none;">
 			<img src="/images/icons/privacy.png" />
 			<div class="title">Less exposing</div>
-			<div class="text">Only those wanting to join your activities or hosting an activity you are trying to join can find you on Mojo.</div>
+			<div class="text">Only those wanting to join your dates or hosting a date you are trying to join can find you on Mojo.</div>
 		</div>
 		<div class="promo-block" style="display: none;">
 			<img src="/images/icons/key.png" />

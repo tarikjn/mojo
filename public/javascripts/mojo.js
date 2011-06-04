@@ -484,7 +484,7 @@ var AlternateElement = {
 	size: 4,
 	blocks: undefined,
 	animTime: 500,
-	rollTime: 5000,
+	rollTime: 7500,
 	
 	initialize: function(block) {
 		AlternateElement.blocks = $(block).children().toArray();
@@ -979,4 +979,43 @@ $(function() {
 		AlternateElement.initialize(this);
 	});
 	
+	// homepage graphic animation
+	$("#landing .illustration").find(".layer-0, .layer-2").each(Animate.leftToRight);
+	
+	$("a.youtube-box").click(function() {
+		
+		var matches = this.href.match(/\?v=(.+)$/);
+		var video_id = matches[1];
+		
+		$("body").append('<div id="black-screen"></div>');
+		$("body").append('<div id="video-box"><div class="close"></div></div>');
+		$("body #video-box").append('<iframe width="640" height="390" src="http://www.youtube.com/embed/'+video_id+'?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>');
+		
+		$("body #video-box > .close").click(killBox);
+		$("body #black-screen").click(killBox);
+		
+		// add ESC key
+		
+		return false;
+	});
+	
 });
+
+var killBox = function() {
+	$("#video-box, #black-screen").remove();
+}
+
+var Animate = {
+	leftToRight: function() {
+		
+		$(this).animate({
+			backgroundPosition: "("+$(this).attr("data-slide")+" 0)"
+		}, 180000, Animate.rightToLeft);
+	},
+	rightToLeft: function() {
+		
+		$(this).animate({
+			backgroundPosition: "(0 0)"
+		}, 180000, Animate.leftToRight);
+	}
+}
