@@ -8,7 +8,7 @@ class UserhomeController < ApplicationController
   end
 
   def dates
-    @open_activities = current_user.open_activities
+    @open_sorties = current_user.open_sorties
     @upcoming_dates = current_user.upcoming_dates
   end
   

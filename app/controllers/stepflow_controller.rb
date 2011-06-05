@@ -6,7 +6,7 @@ class StepflowController < ApplicationController
   # previous (save, go to previous step)
   # cancel (delete session)
   
-  helper_method :ongoing_view, :find_activities
+  helper_method :ongoing_view, :find_sorties
   
   def go # action for start and continue (noJS)
     if session[:stepflow] and !session[:stepflow].complete # reset if we finished before
@@ -26,7 +26,7 @@ class StepflowController < ApplicationController
     @stepflow.update(params[:stepflow])
     
     m = @stepflow.move_next
-    Logger.new(STDOUT).info(@stepflow.activity.inspect)
+    Logger.new(STDOUT).info(@stepflow.sortie.inspect)
     render_action m
     # TODO: when map error: redisplay searh q, results and even selected place?
   end
@@ -44,7 +44,7 @@ class StepflowController < ApplicationController
   end
   
   def discover_search
-    # this action is for getting number of activities matching for join
+    # this action is for getting number of sorties matching for join
     @params = params
     render "discover"
   end
@@ -66,12 +66,12 @@ class StepflowController < ApplicationController
 private
   
   # helper method
-  def find_activities
+  def find_sorties
     # look at params on @stepflow
     
     # return collection
-    #Activity.find(6,7,8)
-    Activity.find_activities_for_user(@stepflow.host)
+    #Sortie.find(6,7,8)
+    Sortie.find_sorties_for_user(@stepflow.host)
   end
   
   # also a helper method

@@ -10,20 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110527103039) do
-
-  create_table "activities", :force => true do |t|
-    t.string   "category"
-    t.string   "title"
-    t.text     "description"
-    t.datetime "time"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "state",          :default => "open"
-    t.integer  "creator_duo_id"
-    t.integer  "invitee_duo_id"
-    t.integer  "place_id"
-  end
+ActiveRecord::Schema.define(:version => 20110605085931) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -40,9 +27,18 @@ ActiveRecord::Schema.define(:version => 20110527103039) do
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
-  create_table "duos", :force => true do |t|
-    t.integer  "host_id"
-    t.integer  "participant_id"
+  create_table "entries", :force => true do |t|
+    t.integer  "party_id"
+    t.integer  "sortie_id"
+    t.string   "state",      :default => "waiting", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "friendships", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.boolean  "approved"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -75,9 +71,25 @@ ActiveRecord::Schema.define(:version => 20110527103039) do
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
+  create_table "sorties", :force => true do |t|
+    t.integer  "size",        :default => 2, :null => false
+    t.string   "state",                      :null => false
+    t.integer  "host_id",                    :null => false
+    t.integer  "guest_id"
+    t.string   "category"
+    t.datetime "time"
+    t.integer  "place_id"
+    t.string   "title"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "users", :force => true do |t|
     t.string   "first_name"
     t.string   "last_name"
+    t.boolean  "active",            :default => false, :null => false
+    t.boolean  "admin",             :default => false, :null => false
     t.string   "email"
     t.string   "cellphone"
     t.string   "sex"
@@ -93,23 +105,18 @@ ActiveRecord::Schema.define(:version => 20110527103039) do
     t.string   "crypted_password"
     t.string   "password_salt"
     t.string   "persistence_token"
-    t.boolean  "filter_age",        :default => false,      :null => false
-    t.boolean  "filter_height",     :default => false,      :null => false
-    t.string   "completeness",      :default => "complete", :null => false
+    t.boolean  "filter_age",        :default => false, :null => false
+    t.boolean  "filter_height",     :default => false, :null => false
     t.string   "picture"
+    t.string   "perishable_token"
   end
 
-  create_table "users_buddies", :id => false, :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "buddy_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+  add_index "users", ["email"], :name => "index_users_on_email"
+  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
-  create_table "waitlist_entries", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "activity_id"
-    t.string   "state",       :default => "waiting"
+  create_table "wings", :force => true do |t|
+    t.integer  "lead_id"
+    t.integer  "mate_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

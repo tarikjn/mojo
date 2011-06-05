@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Sortie type:</b>
+  <%= @sortie.sortie_type %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%= @sortie.title %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @sortie.description %>
+</p>
+
+<p>
+  <b>Time:</b>
+  <%= @sortie.time %>
+</p>
+
+
+<%= link_to 'Edit', edit_sortie_path(@sortie) %> |
+<%= link_to 'Back', sorties_path %>

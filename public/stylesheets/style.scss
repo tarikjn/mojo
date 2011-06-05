@@ -652,6 +652,20 @@ h2, h3 {
 	input[type=text] { width: 192px; }
 }
 
+.flash {
+	
+	color: $lighter-color;
+	font-size: .75em;
+	padding: 8px;
+	@include rounded(3px);
+	
+	&.notice {
+		background: $info-color;
+		border: 1px outset #FF0;
+		
+	}
+}
+
 /*
  * Special layouts
  */
@@ -1621,7 +1635,7 @@ h2, h3 {
 		
 		$ds: 19px; // half-hour size
 		
-		.activities {
+		.sorties {
 			
 			position: relative;
 			width: $ds + $ds * 2 * 18 + $ds; // base + 1 day + baseEnd
@@ -1629,7 +1643,7 @@ h2, h3 {
 			margin: 0 auto;
 			z-index: 2;
 
-			.activity {
+			.sortie {
 				position: absolute;
 				top: -8px;
 				
@@ -1646,11 +1660,11 @@ h2, h3 {
 			width: $ds + $ds * 2 * 18 + $ds; // base + 1 day + baseEnd
 			height: 28px;
 			margin: 0 auto;
-			//padding-top: 12px; // for activities
+			//padding-top: 12px; // for sorties
 			overflow-x: hidden;
 			overflow-y: hidden; // visible shows scrollbar for some reason...
 			 
-			&.show-activities {
+			&.show-sorties {
 				//padding-top: 150px;
 			}
 			
@@ -2428,7 +2442,7 @@ ul.location-list {
 	padding-left: 24px;
 }
 
-.mj-activity {
+.mj-sortie {
 	background: white;
 	border-radius: 5px;
 	padding: 8px;
@@ -2465,7 +2479,7 @@ ul.location-list {
 		margin-left: 20px;
 	}
 	
-	.activity-marker {
+	.sortie-marker {
 		position: absolute;
 		width: 24px; height: 24px;
 		padding: 4px;
@@ -2473,7 +2487,7 @@ ul.location-list {
 		background: #0080ff;
 		@include rounded;
 		margin-top: 3px;
-		//background-image: url(/images/icons/full-activity-marker.png);
+		//background-image: url(/images/icons/full-sortie-marker.png);
 	}
 	
 	.checkbox-container {
@@ -2482,7 +2496,7 @@ ul.location-list {
 		padding-top: 8px;
 	}
 	
-	.activity-info {
+	.sortie-info {
 		display: inline-block;
 		padding-left: 40px;
 		//background: url(/images/icons/food-and-drinks_small.png) no-repeat 0 center;
@@ -2583,7 +2597,7 @@ h2 {
 	margin-top: 20px;
 	position: relative;
 	
-	.activity-box {
+	.sortie-box {
 		position: absolute;
 		width: 300px;
 		

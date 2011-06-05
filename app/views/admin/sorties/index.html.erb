@@ -1,0 +1,29 @@
+<h1>Listing sorties</h1>
+
+<table>
+  <tr>
+    <th>Sortie type</th>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Time</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @sorties.each do |sortie| %>
+  <tr>
+    <td><%= sortie.category %></td>
+    <td><%= sortie.title %></td>
+    <td><%= sortie.description %></td>
+    <td><%= sortie.time %></td>
+    <td><%= link_to 'Show', sortie %></td>
+    <td><%= link_to 'Edit', edit_sortie_path(sortie) %></td>
+    <td><%= link_to 'Destroy', sortie, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Sortie', new_sortie_path %>

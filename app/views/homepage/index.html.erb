@@ -5,7 +5,7 @@
 			<div class="opaque-layer"></div>
 			<div class="content-layer">
 				<div class="title">Schedule your date:</div>
-				<%= form_tag stepflow_path, :method => :get do %>
+				<%#= form_tag stepflow_path, :method => :get do %>
 					<select name="stepflow[timerange](1s)">
 					<%
 						0.upto 7 do |d|
@@ -24,7 +24,7 @@
 					<div class="submit">
 						<button type="submit" class="mojo">Get excited</button>
 					</div>
-				<% end %>
+				<%# end %>
 			</div>
 		</div>
 		<div class="nav-info">
@@ -61,10 +61,10 @@
 				</div>
 				<div class="actions">
 					<div class="left">
-						<%= link_to  "Create", activities_new_path, :class => "mj-button mojo" %> <span>a date</span>
+						<%= link_to  "Create", sorties_new_path, :class => "mj-button mojo" %> <span>a date</span>
 					</div>
 					<div class="right">
-						<%= link_to "Join", activities_join_path, :class => "mj-button mojo" %> <span>a date</span>
+						<%= link_to "Join", sorties_join_path, :class => "mj-button mojo" %> <span>a date</span>
 					</div>
 				</div>
 			</div>

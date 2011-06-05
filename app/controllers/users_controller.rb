@@ -1,5 +1,16 @@
-class Admin::UsersController < ApplicationController
+class UsersController < ApplicationController
   # GET /users/1/edit
+  
+  before_filter :require_user, :except => [:signup, :create]
+  before_filter :require_no_user, :only => [:signup, :create]
+  
+  def signup
+    #
+  end
+  
+  def create
+  end
+  
   def edit
     @user = User.find(params[:id])
   end
@@ -19,4 +30,16 @@ class Admin::UsersController < ApplicationController
       end
     end
   end
+  
+  # account
+  
+  # picture (profile)
+  
+  # filters
+  
+  # access
+  
+  # (notifications)
+  
+  # (payment)
 end

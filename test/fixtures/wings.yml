@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  lead_id: 1
+  mate_id: 1
+
+two:
+  lead_id: 1
+  mate_id: 1

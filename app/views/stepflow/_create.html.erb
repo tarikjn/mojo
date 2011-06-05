@@ -1,7 +1,7 @@
 <div class="form-inputs column-titles">
 	
-	<%= f.fields_for :activity do |s| %>
-		<%= render :partial => "activities/create", :locals => { :s => s } %>
+	<%= f.fields_for :sortie do |s| %>
+		<%= render :partial => "sorties/create", :locals => { :s => s } %>
 	<% end %>
 
 </div>

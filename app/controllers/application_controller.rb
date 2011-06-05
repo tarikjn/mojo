@@ -70,7 +70,8 @@ private
     return @current_user if defined?(@current_user)
     @current_user = current_user_session && current_user_session.user
   end
-
+  
+  # requires active user
   def require_user
     logger.debug "ApplicationController::require_user"
     unless current_user
@@ -80,16 +81,30 @@ private
       return false
     end
   end
-
-  #def require_no_user
-  #  logger.debug "ApplicationController::require_no_user"
-  #  if current_user
-  #    store_location
-  #    flash[:notice] = "You must be logged out to access this page"
-  #    redirect_to account_url
-  #    return false
-  #  end
-  #end
+  
+  # only active users who are admin
+  def require_admin
+    logger.debug "ApplicationController::require_admin"
+    if require_access
+      unless current_user.admin?
+        #store_location
+        flash[:notice] = "You are not authorized to access this page"
+        redirect_to userhome_url
+        return false
+      end
+    end
+  end
+  
+  # helpful for invite link/signup pages
+  def require_no_user
+    logger.debug "ApplicationController::require_no_user"
+    if current_user
+      store_location
+      flash[:notice] = "You must be logged out to access this page"
+      redirect_to userhome_url #account_url
+      return false
+    end
+  end
 
   def store_location
     session[:return_to] = request.fullpath

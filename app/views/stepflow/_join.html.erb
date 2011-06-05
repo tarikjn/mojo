@@ -2,7 +2,7 @@
 	
 	<div class="form-item">
 		<div class="title">Timeframe</div>
-		<%= mj_timerange "stepflow[timerange]", @stepflow.timerange, :show_activities => true %>
+		<%= mj_timerange "stepflow[timerange]", @stepflow.timerange, :show_sorties => true %>
 	</div>
 	<div class="form-item">
 		<div class="title">Area</div>
@@ -29,44 +29,44 @@
 	</div>
 
 	<div class="form-item">
-		<div class="title">Matching Activities</div>
+		<div class="title">Matching Sorties</div>
 		<div class="hybrid-input inset-view">
 			<%
-				find_activities.each do |activity|
+				find_sorties.each do |sortie|
 			%>
-			<label class="mj-activity" id="date-<%= activity.id %>">
+			<label class="mj-sortie" id="date-<%= sortie.id %>">
 				<div class="checkbox">
-					<input type="checkbox" name="stepflow[activities][]" value="<%= activity.id %>" />
+					<input type="checkbox" name="stepflow[sorties][]" value="<%= sortie.id %>" />
 				</div>
 				<div class="point">
-					<div class="lat"><%= activity.place.lat %></div>
-					<div class="lng"><%= activity.place.lng %></div>
+					<div class="lat"><%= sortie.place.lat %></div>
+					<div class="lng"><%= sortie.place.lng %></div>
 				</div>
 				<div class="header">
-					<img src="/images/icons/date-<%= activity.category %>-micro.png" alt="" class="activity-marker" />
-					<div class="activity-info">
-						<div class="title"><%= activity.title %></div>
-						<div class="time-and-area"><%= activity.time.strftime("%l:%M%p").downcase %>, <%= activity.place.neighborhoods %></div>
+					<img src="/images/icons/date-<%= sortie.category %>-micro.png" alt="" class="sortie-marker" />
+					<div class="sortie-info">
+						<div class="title"><%= sortie.title %></div>
+						<div class="time-and-area"><%= sortie.time.strftime("%l:%M%p").downcase %>, <%= sortie.place.neighborhoods %></div>
 					</div>
 				</div>
 				<div class="host-info">
-					<div class="picture" style="background-image: url(<%= activity.creator.picture_url(:mini) if activity.creator.picture? %>)">
-						<div class="picture-feedback" style="background: <%= color_for_picture_score(activity.creator.picture_score) %>">
-							<%= sprintf("%+g", activity.creator.picture_score) %>
+					<div class="picture" style="background-image: url(<%= sortie.creator.picture_url(:mini) if sortie.creator.picture? %>)">
+						<div class="picture-feedback" style="background: <%= color_for_picture_score(sortie.creator.picture_score) %>">
+							<%= sprintf("%+g", sortie.creator.picture_score) %>
 						</div>
 					</div>
 					<div class="info">
 						<div class="title">
-							<div class="name"><%= activity.creator.first_name %></div>
+							<div class="name"><%= sortie.creator.first_name %></div>
 							<div class="rating">★★★☆</div>
 						</div>
 						<div class="compatibility">
 							<div class="canvas"><canvas width="30" height="30" class="afinity-chart" /></div>
-							<div class="score"><span class="int"><%= (activity.creator.afinity_with(@stepflow.host) * 100).round %></span><span class="percent">%</span></div>
+							<div class="score"><span class="int"><%= (sortie.creator.afinity_with(@stepflow.host) * 100).round %></span><span class="percent">%</span></div>
 						</div>
 						<div class="ratings">
-							<div class="rating-ttr">Average time to respond: <em><%= activity.creator.time_to_respond %></em></div>
-							<div class="rating-ttr">Punctuality: <em><%= activity.creator.punctuality %></em></div>
+							<div class="rating-ttr">Average time to respond: <em><%= sortie.creator.time_to_respond %></em></div>
+							<div class="rating-ttr">Punctuality: <em><%= sortie.creator.punctuality %></em></div>
 						</div>
 					</div>
 				</div>

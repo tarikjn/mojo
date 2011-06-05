@@ -1,5 +1,9 @@
 require 'signet/oauth_1/client'
 class PlacesController < ApplicationController
+  
+  # disabled for stepflow
+  #before_filter :require_access
+  
   def search
     
     cache = ActiveSupport::Cache::FileStore.new('tmp/cache')

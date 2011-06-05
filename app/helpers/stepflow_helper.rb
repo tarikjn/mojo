@@ -4,7 +4,7 @@ module StepflowHelper
   @@nav_captions = {
     :steps => [
       'Create or Join?',
-      'Activity Details', # 'Create Activity' when in create mode?
+      'Sortie Details', # 'Create Sortie' when in create mode?
       'Profile Information',
       'Finish :)'
     ],

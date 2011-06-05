@@ -1,13 +1,23 @@
 Mojo::Application.routes.draw do
   
+  resources :password_resets
+
+  # TODO: pretty up URL/namespace it into account
   get "places/search"
 
+  # TODO: pretty up these urls (like subscribers)
   resources :user_sessions
   match 'login' => "user_sessions#new",      :as => :login
   match 'logout' => "user_sessions#destroy", :as => :logout
 
   # route bellow uses userhome_path(:action) as helper
   # match "/userhome(/:action)", :controller => :userhome, :as => "userhome"
+  
+  scope '/account', :controller => :users, :as => "account" do
+    get "/signup"
+    post "/signup" => :create
+  end
+  
   scope '/userhome', :controller => :userhome, :as => "userhome" do
     # match "(/index)" interferes with link_to_unless_current
     root :to => :index, :as => ""
@@ -18,36 +28,37 @@ Mojo::Application.routes.draw do
   end
 
   # todo: refactor stepflow routes, at least namespace
-  scope '/stepflow', :controller => :stepflow, :as => "stepflow" do
+  # stepflow is disabled: refactor for open-beta with state machine
+  #scope '/stepflow', :controller => :stepflow, :as => "stepflow" do
     
     # action go, next, previous, cancel
-    get "/" => :go
-    post "/" => :next
-    post "/previous"
-    get "/cancel"
+    #get "/" => :go
+    #post "/" => :next
+    #post "/previous"
+    #get "/cancel"
     
-    # TODO: move to activity controller?
-    get "/created"
-    get "/joined"
-  end
+    # TODO: move to sortie controller?
+    #get "/created"
+    #get "/joined"
+  #end
   
   # Twilio, TODO: use https and twilio-ruby verification
   match "/sms" => "sms#receive"
 
   # todo: namespace it
-  match "/entries/:id/confirmation", :to => "waitlist_entries#confirmation", :constraints => {:id => /\d+/}
-  match "/entries/pass/:entry", :to => "waitlist_entries#pass", :constraints => {:entry => /\d+/}
-  match "/entries/invite/:entry", :to => "waitlist_entries#invite", :constraints => {:entry => /\d+/}
-  match "/entries/:id", :to => "waitlist_entries#waitlist", :constraints => {:id => /\d+/}
+  match "/entries/:id/confirmation", :to => "entries#confirmation", :constraints => {:id => /\d+/}
+  match "/entries/pass/:entry", :to => "entries#pass", :constraints => {:entry => /\d+/}
+  match "/entries/invite/:entry", :to => "entries#invite", :constraints => {:entry => /\d+/}
+  match "/entries/:id", :to => "entries#waitlist", :constraints => {:id => /\d+/}
   
-  get 'activities/new'
-  post 'activities' => "activities#create"
-  get 'activities/join'
-  get 'activities/:id' => "activities#confirmation"
+  get 'sorties/new'
+  post 'sorties' => "sorties#create"
+  get 'sorties/join'
+  get 'sorties/:id' => "sorties#confirmation"
   
   # todo: password protect
   namespace "admin" do
-    resources :waitlist_entries, :users, :activities
+    resources :entries, :users, :sorties
   end
 
   # The priority is based upon order of creation:

@@ -1,14 +1,14 @@
 <% content_for :body do %>
 <div class="remaining-time">5 hours left</div>
 <div class="participants-view">
-	<div class="activity-box">
-		<div class="title"><%= @activity.title %></div>
+	<div class="sortie-box">
+		<div class="title"><%= @sortie.title %></div>
 		<div class="content">
 			<div class="user host">
-				<div class="picture" style="background-image: url(/images/users/<%= @activity.creator.id %>-48.jpg)">
+				<div class="picture" style="background-image: url(/images/users/<%= @sortie.creator.id %>-48.jpg)">
 				</div>
 				<div class="title">
-					<div class="name"><%= @activity.creator.first_name %></div>
+					<div class="name"><%= @sortie.creator.first_name %></div>
 					<div class="rating">★★★☆</div>
 				</div>
 			</div>

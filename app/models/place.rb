@@ -1,6 +1,6 @@
 class Place < ActiveRecord::Base
   
-  has_many :activities
+  has_many :sorties
   
   # GeoKit
   acts_as_mappable :default_units => :miles, 

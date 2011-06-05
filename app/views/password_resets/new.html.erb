@@ -1,0 +1,12 @@
+<div class="password-reset-page">
+	<%= flash_messages %>
+	<h2>Forgot Password</h2>
+	<p>Fill out the form below and instructions to reset your password will be emailed to you:</p>
+	<% form_tag password_resets_path do %>
+		<div class="labeled-input">
+		    <div><%= text_field_tag :email, :size => nil %></div>
+			<%= label_tag :email, 'Email' %>
+		</div>
+		<div class="submit"><button type="submit" class="mojo small">Reset my password</button></div>
+	<% end %>
+</div>

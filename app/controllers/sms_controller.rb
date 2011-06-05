@@ -12,8 +12,8 @@ class SmsController < ApplicationController
     sender = User.find_by_cellphone(caller_id)
     
     # find the people on his date
-    activity = Activity.find_active_activity_for(sender)
-    recipients = (activity.get_people)
+    sortie = Sortie.find_active_sortie_for(sender)
+    recipients = (sortie.get_people)
     recipients.delete(sender)
     
     # format response

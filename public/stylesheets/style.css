@@ -353,6 +353,17 @@ h2, h3 {
 .normalized input[type=text] {
   width: 192px; }
 
+.flash {
+  color: #231f20;
+  font-size: .75em;
+  padding: 8px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px; }
+  .flash.notice {
+    background: #fffdbf;
+    border: 1px outset #FF0; }
+
 /*
  * Special layouts
  */
@@ -1129,17 +1140,17 @@ h2, h3 {
     -webkit-border-radius: 0 5px 5px 5px;
     border-radius: 0 5px 5px 5px;
     background: white; }
-    .mj-timerange-input .frame .activities {
+    .mj-timerange-input .frame .sorties {
       position: relative;
       width: 722px;
       height: 8px;
       margin: 0 auto;
       z-index: 2; }
-      .mj-timerange-input .frame .activities .activity {
+      .mj-timerange-input .frame .sorties .sortie {
         position: absolute;
         top: -8px;
         color: gray; }
-        .mj-timerange-input .frame .activities .activity.scoped {
+        .mj-timerange-input .frame .sorties .sortie.scoped {
           color: #0080FF; }
     .mj-timerange-input .frame .timeline {
       position: relative;
@@ -1719,7 +1730,7 @@ ul.location-list {
   font-size: .85em;
   padding-left: 24px; }
 
-.mj-activity {
+.mj-sortie {
   background: white;
   border-radius: 5px;
   padding: 8px;
@@ -1727,9 +1738,9 @@ ul.location-list {
   border: 1px outset #f2f2f2;
   display: block;
   position: relative; }
-  .mj-activity:hover {
+  .mj-sortie:hover {
     background: #e1ecff; }
-  .mj-activity .checkbox {
+  .mj-sortie .checkbox {
     position: absolute;
     top: 0;
     left: 0;
@@ -1737,13 +1748,13 @@ ul.location-list {
     border-top-left-radius: 5px;
     border: 1px inset #e6e6e6;
     border-width: 0 1px 1px 0; }
-  .mj-activity .point {
+  .mj-sortie .point {
     display: none; }
-  .mj-activity .header {
+  .mj-sortie .header {
     position: absolute;
     margin-top: 10px;
     margin-left: 20px; }
-  .mj-activity .activity-marker {
+  .mj-sortie .sortie-marker {
     position: absolute;
     width: 24px;
     height: 24px;
@@ -1753,18 +1764,18 @@ ul.location-list {
     -webkit-border-radius: 5px;
     border-radius: 5px;
     margin-top: 3px; }
-  .mj-activity .checkbox-container {
+  .mj-sortie .checkbox-container {
     display: inline-block;
     vertical-align: top;
     padding-top: 8px; }
-  .mj-activity .activity-info {
+  .mj-sortie .sortie-info {
     display: inline-block;
     padding-left: 40px; }
-    .mj-activity .activity-info .title {
+    .mj-sortie .sortie-info .title {
       font-size: 1.15em; }
-    .mj-activity .activity-info .time-and-area {
+    .mj-sortie .sortie-info .time-and-area {
       font-size: .75em; }
-  .mj-activity .host-info {
+  .mj-sortie .host-info {
     display: inline-block; }
 
 .host-info {
@@ -1821,10 +1832,10 @@ h2 {
 .participants-view {
   margin-top: 20px;
   position: relative; }
-  .participants-view .activity-box {
+  .participants-view .sortie-box {
     position: absolute;
     width: 300px; }
-    .participants-view .activity-box > .title {
+    .participants-view .sortie-box > .title {
       -moz-border-radius: 15px;
       -webkit-border-radius: 15px;
       border-radius: 15px;
@@ -1837,38 +1848,38 @@ h2 {
       margin-bottom: -15px;
       z-index: 10;
       position: relative; }
-    .participants-view .activity-box > .content {
+    .participants-view .sortie-box > .content {
       -moz-border-radius: 5px;
       -webkit-border-radius: 5px;
       border-radius: 5px;
       background: white;
       padding: 25px 15px 10px;
       border: 1px dotted black; }
-      .participants-view .activity-box > .content > div {
+      .participants-view .sortie-box > .content > div {
         margin-top: 10px; }
-        .participants-view .activity-box > .content > div:first-of-type {
+        .participants-view .sortie-box > .content > div:first-of-type {
           margin-top: 0; }
-    .participants-view .activity-box .user {
+    .participants-view .sortie-box .user {
       -moz-border-radius: 5px;
       -webkit-border-radius: 5px;
       border-radius: 5px;
       background: #F9F9F9;
       padding: 8px 10px;
       border: 2px solid gray; }
-      .participants-view .activity-box .user > .picture {
+      .participants-view .sortie-box .user > .picture {
         display: inline-block;
         vertical-align: middle;
         width: 48px;
         height: 48px; }
-      .participants-view .activity-box .user > .title {
+      .participants-view .sortie-box .user > .title {
         display: inline-block;
         vertical-align: middle;
         margin-left: 5px; }
-        .participants-view .activity-box .user > .title .name {
+        .participants-view .sortie-box .user > .title .name {
           font-size: 1.25em; }
-        .participants-view .activity-box .user > .title .rating {
+        .participants-view .sortie-box .user > .title .rating {
           font-size: .85em; }
-    .participants-view .activity-box .spot {
+    .participants-view .sortie-box .spot {
       -moz-border-radius: 5px;
       -webkit-border-radius: 5px;
       border-radius: 5px;

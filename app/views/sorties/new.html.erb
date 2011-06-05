@@ -1,0 +1,9 @@
+<h3>Create a date</h3>
+	<%= form_for @sortie do |f| %>
+<div class="form-inputs column-titles">
+	
+		<%= render :partial => "create", :locals => { :s => f } %>
+
+</div>
+		<button type="submit">Create</button>
+	<% end %>

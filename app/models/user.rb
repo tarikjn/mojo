@@ -1,15 +1,22 @@
 class User < ActiveRecord::Base
   include ActiveModelExtensions # Mojo's
   
-  has_many :activities, :through => :waitlist_entries, :as => :joined_dates
+  # not so secure but practical
+  before_create :generate_autoauth_token
+  
+  has_many :entries, :as => :party
+  has_many :entered_sorties, :through => :entries, :source => :sortie, :as => :party
+  
+  #has_many :hosted_single_sorties, :source => :sortie, :as => :host
+  #has_many :invited_single_sorties, :source => :sortie, :as => :guest
   
   # AuthLogic
   acts_as_authentic do |config|
     config.validate_email_field = false
     config.ignore_blank_passwords = true # not working?
     # hack
-    config.validate_password_field = false
-    config.require_password_confirmation = false
+    #config.validate_password_field = false
+    #config.require_password_confirmation = false
   end
   
   # avatar/s3, TODO: switch to CarrierWave, Paperclip is retarded
@@ -23,19 +30,15 @@ class User < ActiveRecord::Base
   mount_uploader :picture, PictureUploader
   
   # discovery is never saved (no email)
-  validates :completeness, :inclusion => { :in => %w(discovery invitation complete) }
-  validates :email, :presence => true, :uniqueness => true, :email => true, :unless => :is_discovery
-  validates :first_name, :presence => true, :if => :is_complete
+  validates :completeness, :inclusion => { :in => %w(discovery invite complete) }
+  validates :email, :presence => true, :uniqueness => true, :email => true
+  validates :first_name, :presence => true, :if => :active?
   # picture fails with marshaling
   #validates :picture, :presence => true, :if => :is_complete
-  validates :cellphone, :presence => true, :if => :is_complete
+  validates :cellphone, :presence => true, :if => :active?
   validates :sex, :inclusion => { :in => %w(male female), :message => "Please select" }
   validates :sex_preference, :inclusion => { :in => %w(female both male), :message => "Please select" }
   # height is in milimeters
-  
-  has_and_belongs_to_many :buddies, :class_name => "User", :join_table => "users_buddies",
-    :foreign_key => "user_id",
-    :association_foreign_key => "buddy_id"
   
   # overrides access to db height attribute
   composed_of :height, :class_name => 'Height', :mapping => %w(height height),
@@ -44,17 +47,32 @@ class User < ActiveRecord::Base
                :allow_nil => true, :converter => Proc.new { |hash| Height.create(hash) }
   composed_of :max_height, :class_name => 'Height', :mapping => %w(height_max height),
               :allow_nil => true, :converter => Proc.new { |hash| Height.create(hash) }
-  # any way to DRY up code above and below?
-  def is_discovery
-    (self.completeness == 'discovery')
+  
+  # friendship TODO: add :dependant => :destroy?         
+  has_many :friendships
+  has_many :inverse_friendships, :class_name => "Friendship", :foreign_key => "friend_id"
+  has_many :direct_friends, :through => :friendships, :conditions => "approved = true", :source => :friend
+  has_many :inverse_friends, :through => :inverse_friendships, :conditions => "approved = true", :source => :user
+
+  has_many :pending_friends, :through => :friendships, :conditions => "approved = false", :foreign_key => "user_id", :source => :user
+  has_many :requested_friendships, :class_name => "Friendship", :foreign_key => "friend_id", :conditions => "approved = false"
+
+  def friends
+    direct_friends | inverse_friends
   end
   
-  def is_invitation
-    (self.completeness == 'invitation')
+  # Authlogic checks this
+  def active?
+    active
   end
   
-  def is_complete
-    (self.completeness == 'complete')
+  def admin?
+    admin
+  end
+  
+  def deliver_password_reset_instructions!  
+    reset_perishable_token!  
+    Notifier.deliver_password_reset_instructions(self, edit_password_reset_url(self.perishable_token))  
   end
   
   # TODO: find a way to remove these, the converter should make it unecessary
@@ -146,12 +164,12 @@ class User < ActiveRecord::Base
     
   end
   
-  def open_activities
-    Activity.open_activities_for(self)
+  def open_sorties
+    Sortie.open_sorties_for(self)
   end
   
   def upcoming_dates
-    Activity.upcoming_activities_for(self)
+    Sortie.upcoming_sorties_for(self)
   end
   
 end

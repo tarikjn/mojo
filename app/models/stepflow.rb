@@ -6,11 +6,11 @@ class Stepflow
   #include ActiveModel::NestedAttributes
   extend ActiveModel::Naming
   
-  ASSOCIATED = [:host, :friend, :activity]
+  ASSOCIATED = [:host, :friend, :sortie]
   
   attr_accessor :step, :operation, :timerange, :complete,
                 :party_of, :host, :friend,
-                :activity, :activities, # activity to be created, or activities to be joined, how to validate activites?? -> custom validation
+                :sortie, :sorties, # sortie to be created, or sorties to be joined, how to validate activites?? -> custom validation
                 :disabled_validations
   
   #validates_presence_of
@@ -30,7 +30,7 @@ class Stepflow
     @timerange     ||= TimeRange.new(Date.today.strftime("%F"), "15:00", "18:00")
     self.party_of  ||= 'single'
     self.host      ||= User.new( :completeness => 'discovery', :password => default_pass ) # can receive current_user from the controller
-    self.friend    ||= User.new( :completeness => 'invitation' ) # only validate if it's a single date
+    self.friend    ||= User.new( :completeness => 'invite' ) # only validate if it's a single date
   end
   
   def active_validations
@@ -41,7 +41,7 @@ class Stepflow
       validations << :host
       validations << :friend if self.party_of == 'double'
     when 1
-      validations << :activity if self.operation == 'create'
+      validations << :sortie if self.operation == 'create'
     when 2
       validations << :host
     end
@@ -84,13 +84,13 @@ class Stepflow
     self.friend.attributes = attributes
   end
   
-  def activity_attributes=(attributes)
-    self.activity.attributes = attributes
+  def sortie_attributes=(attributes)
+    self.sortie.attributes = attributes
   end
   
-  def activities=(array)
+  def sorties=(array)
     array.each do |a|
-      @activities << Activity.find(a)
+      @sorties << Sortie.find(a)
     end
   end
   
@@ -101,7 +101,7 @@ class Stepflow
     self.clear_associated_errors
     
     Logger.new(STDOUT).info("Step: " + self.step.to_s)
-    Logger.new(STDOUT).info("Activity object before validation: " + self.activity.inspect)
+    Logger.new(STDOUT).info("Sortie object before validation: " + self.sortie.inspect)
     if self.valid?
       
       # init some new defaults in here
@@ -113,19 +113,19 @@ class Stepflow
           
           case self.operation
           when 'join'
-            # create activity result object on selected geo
+            # create sortie result object on selected geo
 
             # respond ajax/json for map refresh
 
-            #@activities = Activity.find_activities_for_user(current_user)
-            @activities ||= []
+            #@sorties = Sortie.find_sorties_for_user(current_user)
+            @sorties ||= []
             
           when 'create'
 
             # not much to do
             #@user = session[:user]
-            self.activity ||= Activity.new( :time => self.timerange.start )
-            Logger.new(STDOUT).info(self.activity.inspect)
+            self.sortie ||= Sortie.new( :time => self.timerange.start )
+            Logger.new(STDOUT).info(self.sortie.inspect)
 
           end
           
@@ -188,17 +188,17 @@ class Stepflow
     
     case self.operation
     when 'join'
-      self.activities.each do |a|
+      self.sorties.each do |a|
         a.add_entrant(self.host)
       end
     
     when 'create'
-      # set activity state, TODO: maybe do in the stepflow process?
-      self.activity.state = 'open'
-      # set activity duo
-      self.activity.creator_duo = duo
-      # save activity
-      self.activity.save
+      # set sortie state, TODO: maybe do in the stepflow process?
+      self.sortie.state = 'open'
+      # set sortie duo
+      self.sortie.creator_duo = duo
+      # save sortie
+      self.sortie.save
     end
     
   end
@@ -231,8 +231,8 @@ class Stepflow
   end
   def create_submit
     
-    # create temporary activity object
-    activity = Activity.new({
+    # create temporary sortie object
+    sortie = Sortie.new({
       :category => params[:type],
       :title => params[:title],
       :description => params[:description],
@@ -240,14 +240,14 @@ class Stepflow
       :state => 'unactive'
     })
     
-    session[:activity] = activity
+    session[:sortie] = sortie
     
   end
   def review_submit
     
     # add user to waitlists => move to model
     selected_dates = session[:selected_dates]
-    selected_dates.each{ |d| Activity.find(d).add_entrant(current_user) }
+    selected_dates.each{ |d| Sortie.find(d).add_entrant(current_user) }
   end
   def profile_submit
     
