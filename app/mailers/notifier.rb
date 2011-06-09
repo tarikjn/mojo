@@ -2,8 +2,15 @@ class Notifier < ActionMailer::Base
   #include ApplicationController
   #helper :path_to_url
   
-  default :from => "mailer@mojo.co"
+  #include Delayed::Mailer
+  
+  default :from => "mailer@mojo.co", :reply_to => "support@mojo.co"
 
+  def welcome(user)
+    @user = user
+    mail :to => user.email
+  end
+  
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
   #
@@ -39,8 +46,19 @@ class Notifier < ActionMailer::Base
     "http://staging.mojo.co"
   end
   
-  def password_reset_instructions(user, reset_url)  
-    subject       "Password Reset Instructions"
-    recipients    user.email
-    body          :edit_password_reset_url => reset_url
+  def password_reset_instructions(user)
+    @edit_password_reset_url = edit_password_reset_url(user.perishable_token)
+    mail :to => user.email
+  end
+  
+  def invitation(invitation, signup_url)
+    #subject    "Invitation"
+    #recipients invitation.recipient_email
+    #body       :invitation => invitation, :signup_url => signup_url
+    @invitation = invitation
+    @signup_url = signup_url
+    
+    mail :to => invitation.recipient_email
+    invitation.update_attribute(:sent_at, Time.now)
+  end
 end

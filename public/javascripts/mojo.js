@@ -265,8 +265,10 @@ var AutoselectPersona = {
 	initialize: function(formItem) {
 		
 		AutoselectPersona.formItem = formItem;
+		var iterator = $(formItem).find(".subset-form");
+		if (iterator.length == 0) iterator = $(formItem);
 		
-		$(formItem).find(".subset-form").each(function(i) {
+		iterator.each(function(i) {
 			
 			subsetForm = this;
 			
@@ -283,8 +285,9 @@ var AutoselectPersona = {
 			$(this).find(".mj-merged-choices input[type=radio][name$=\"sex_preference]\"]").each(function() {
 
 				this.mj_heads = $(formItem).find(".hybrid-input .mj-choice").find(".person.guest:eq(" + i + ")")
-
-				$(this).change(AutoselectPersona.changeGenderPreference);
+				
+				if (this.mj_heads.length > 0)
+					$(this).change(AutoselectPersona.changeGenderPreference);
 			});
 			
 			// init when returning to form (gender pre-selected)
@@ -301,7 +304,8 @@ var AutoselectPersona = {
 		this.mj_pref.filter("[value="+AutoselectPersona.defaultPref[this.value]+"]").attr('checked', 'checked').change();
 		
 		// change gender of host persona on parent tab
-		this.mj_heads.removeClass(AutoselectPersona.genderClasses).addClass(this.value);
+		if (this.mj_heads.length > 0)
+			this.mj_heads.removeClass(AutoselectPersona.genderClasses).addClass(this.value);
 	},
 	
 	changeGenderPreference: function() {
@@ -942,9 +946,23 @@ $(function() {
 	
 	// login bubble
 	$("#login-link").click(function() {
-		$("#login-bubble").slideToggle(250);
+		// TODO: hide when clicking outside
+		var box = $("#login-bubble");
+		if (box.length > 0)
+		{
+			$(this).toggleClass("active");
+			box.toggle();
+			if (box.is(":visible")) $("#login-bubble").find("input:visible").first().focus();
+		}
+		
+		// simply go to the link if the box is not there
 		return ($("#login-bubble").length > 0)? false : true;
 	});
+	
+	// signup form, TODO: integrate better with stepflow/discovery
+	$(".signup-page form").each(function() {
+		AutoselectPersona.initialize(this);
+	})
 	
 	// homepage tab animations
 	$(".tab-widget .tab-button div").hover(function() {

@@ -1,0 +1,12 @@
+<div class="small-form invitation">
+	<%= flash_messages %>
+	<div class="box">
+		<h2>Please enter your invite code</h2>
+		<%= form_for @invitation, :url => invitation_enter_path do |f| %>
+			<%= format_errors_for @invitation, :token, {:title => 'invite code'} %>
+			<div class="line">
+				<%= f.text_field :token, :size => nil %> <button type="submit" class="mj-button mojo">Go</button>
+			</div>
+		<% end %>
+	</div>
+</div>

@@ -7,14 +7,14 @@ class PasswordResetsController < ApplicationController
 
   def create
     # TODO (invitations): check if user is active
-    @user = User.find_by_email(params[:email])
-    if @user
-      @user.deliver_password_reset_instructions!
+    user = User.find_by_email(params[:email])
+    if user
+      user.deliver_password_reset_instructions!
       flash[:notice] = "Instructions to reset your password have been emailed to you. " +
       "Please check your email."
       redirect_to new_user_session_url #root_url
     else
-      flash[:notice] = "No user was found with that email address" # change to error
+      @single_error = "No user was found with that email" # change to errors object
       render :action => :new
     end
   end
@@ -23,9 +23,9 @@ class PasswordResetsController < ApplicationController
   end
 
   def update
-    @user.password = params[:user][:password]
-    @user.password_confirmation = params[:user][:password_confirmation]
-    if @user.save
+    #@user.password = params[:user][:password]
+    #@user.password_confirmation = params[:user][:password_confirmation]
+    if @user.update_attributes(params[:user])
       flash[:notice] = "Password successfully updated"
       redirect_to userhome_url #account_url
     else

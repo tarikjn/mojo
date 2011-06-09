@@ -6,4 +6,12 @@ class Wing < ActiveRecord::Base
   has_one :entry, :as => :party, :dependent => :destroy
   # or
   has_one :sortie, :as => :party, :dependent => :destroy
+  
+  def self.with(user)
+    self.find(:all, :conditions => ["lead_id = ? OR mate_id = ?", user.id, user.id])
+  end
+  
+  def self.ids_with(user)
+    self.with(user).map {|x| x.id}
+  end
 end

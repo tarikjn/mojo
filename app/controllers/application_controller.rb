@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user, :path_to_url
   
   # if Rails.env == 'staging' and params[:controller] == 'sms', require auth
-  before_filter :restricted_access
+  #before_filter :restricted_access
   
   require 'pony'
 
@@ -80,19 +80,22 @@ private
       redirect_to new_user_session_url
       return false
     end
+    true
   end
   
   # only active users who are admin
   def require_admin
     logger.debug "ApplicationController::require_admin"
-    if require_access
+    if require_user
       unless current_user.admin?
         #store_location
         flash[:notice] = "You are not authorized to access this page"
         redirect_to userhome_url
         return false
       end
+      true
     end
+    false
   end
   
   # helpful for invite link/signup pages
@@ -103,6 +106,20 @@ private
       flash[:notice] = "You must be logged out to access this page"
       redirect_to userhome_url #account_url
       return false
+    end
+    true
+  end
+  
+  # for private beta signup page
+  def require_invite
+    logger.debug "ApplicationController::require_invite"
+    if require_no_user
+      unless Invitation.verify?(params[:invitation_token])
+        #store_location
+        flash[:notice] = "You need a valid invite code to access this page"
+        redirect_to invitation_enter_url
+        return false
+      end
     end
   end
 

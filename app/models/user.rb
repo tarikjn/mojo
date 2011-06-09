@@ -1,8 +1,12 @@
 class User < ActiveRecord::Base
   include ActiveModelExtensions # Mojo's
   
+  #attr_accessible :first_name, :last_name, :email, :invitation_token, :dob, :picture, :cellphone
+  
   # not so secure but practical
-  before_create :generate_autoauth_token
+  before_validation :generate_password! # has some issue: password is reprinted and not mailed on failed validation
+  before_create :set_invitations_left
+  attr_accessor :generated_password
   
   has_many :entries, :as => :party
   has_many :entered_sorties, :through => :entries, :source => :sortie, :as => :party
@@ -13,7 +17,7 @@ class User < ActiveRecord::Base
   # AuthLogic
   acts_as_authentic do |config|
     config.validate_email_field = false
-    config.ignore_blank_passwords = true # not working?
+    config.ignore_blank_passwords = false
     # hack
     #config.validate_password_field = false
     #config.require_password_confirmation = false
@@ -29,12 +33,14 @@ class User < ActiveRecord::Base
   #attr_accessible :picture
   mount_uploader :picture, PictureUploader
   
-  # discovery is never saved (no email)
-  validates :completeness, :inclusion => { :in => %w(discovery invite complete) }
+  # add state machine for stepflow/discovery state (object not saved)
+  validates :state, :inclusion => { :in => %w(invitation active blocked) }
+  validates :level, :inclusion => { :in => %w(user admin) }
   validates :email, :presence => true, :uniqueness => true, :email => true
   validates :first_name, :presence => true, :if => :active?
-  # picture fails with marshaling
-  #validates :picture, :presence => true, :if => :is_complete
+  validate :validate_age
+  # picture fails with marshaling (stepflow issue)
+  validates :picture, :presence => true, :if => :active?
   validates :cellphone, :presence => true, :if => :active?
   validates :sex, :inclusion => { :in => %w(male female), :message => "Please select" }
   validates :sex_preference, :inclusion => { :in => %w(female both male), :message => "Please select" }
@@ -51,28 +57,50 @@ class User < ActiveRecord::Base
   # friendship TODO: add :dependant => :destroy?         
   has_many :friendships
   has_many :inverse_friendships, :class_name => "Friendship", :foreign_key => "friend_id"
-  has_many :direct_friends, :through => :friendships, :conditions => "approved = true", :source => :friend
-  has_many :inverse_friends, :through => :inverse_friendships, :conditions => "approved = true", :source => :user
+  has_many :direct_friends, :through => :friendships, :conditions => ["approved = ?", true], :source => :friend
+  has_many :inverse_friends, :through => :inverse_friendships, :conditions => ["approved = ?", true], :source => :user
 
-  has_many :pending_friends, :through => :friendships, :conditions => "approved = false", :foreign_key => "user_id", :source => :user
-  has_many :requested_friendships, :class_name => "Friendship", :foreign_key => "friend_id", :conditions => "approved = false"
+  has_many :pending_friends, :through => :friendships, :conditions => ["approved = ?", false], :foreign_key => "user_id", :source => :user
+  has_many :requested_friendships, :class_name => "Friendship", :foreign_key => "friend_id", :conditions => ["approved = ?", false]
+  
+  # invitations
+  validates :invitation_id, :presence => {:message => 'is required'}, :uniqueness => true
+  # todo if an invitation user exists, load that user/update...
+  has_many :sent_invitations, :class_name => 'Invitation', :foreign_key => 'sender_id'
+  belongs_to :invitation
+  
+  # scopes
+  scope :registered, :conditions => [ 'state != "invitation"' ]
 
   def friends
     direct_friends | inverse_friends
   end
   
+  # TODO: secure active and admin attributes with attr_accessible?
   # Authlogic checks this
   def active?
-    active
+    state == 'active'
   end
   
   def admin?
-    admin
+    level == 'admin'
   end
   
-  def deliver_password_reset_instructions!  
-    reset_perishable_token!  
-    Notifier.deliver_password_reset_instructions(self, edit_password_reset_url(self.perishable_token))  
+  def invitation_token
+    invitation.token if invitation
+  end
+
+  def invitation_token=(token)
+    self.invitation = Invitation.find_by_token(token)
+  end
+  
+  def deliver_password_reset_instructions!
+    reset_perishable_token!
+    Notifier.deliver_password_reset_instructions(self)
+  end
+  
+  def validate_age
+    errors.add :dob, 'you need to be at least 18' if 18.years.ago < self.dob
   end
   
   # TODO: find a way to remove these, the converter should make it unecessary
@@ -170,6 +198,23 @@ class User < ActiveRecord::Base
   
   def upcoming_dates
     Sortie.upcoming_sorties_for(self)
+  end
+  
+  def clear_password!
+    self.password, self.password_confirmation = nil, nil
+  end
+
+private
+
+  def set_invitations_left
+    self.invitations_left = 10
+  end
+  
+  def generate_password!
+    if !self.password
+      @generated_password = HTTParty.get("http://www.dinopass.com/password/simple").response.body
+      self.password, self.password_confirmation = @generated_password, @generated_password
+    end
   end
   
 end

@@ -4,7 +4,6 @@ class UserhomeController < ApplicationController
   
   def index
     @user = current_user
-    @buddies = current_user.buddies
   end
 
   def dates

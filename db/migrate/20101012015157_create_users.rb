@@ -3,8 +3,8 @@ class CreateUsers < ActiveRecord::Migration
     create_table :users do |t|
       t.string :first_name
       t.string :last_name
-      t.boolean :active, :default => false, :null => false
-      t.boolean :admin, :default => false, :null => false
+      t.string :state, :default => 'active', :null => false
+      t.string :level, :default => 'user', :null => false
       t.string :email
       t.string :cellphone
       t.string :sex

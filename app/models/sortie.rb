@@ -20,7 +20,7 @@ class Sortie < ActiveRecord::Base
   # TODO: add shortcut of type sortie.creator => sortie.creator_duo.host
   def creator
     # do as a has_one :through?
-    self.creator_duo.host
+    (self.host.is_a? User)? self.host : self.host.lead
   end
   
   def invitee
@@ -101,6 +101,21 @@ class Sortie < ActiveRecord::Base
     Notifier.new_entrant(self, self.creator).deliver
   end
   
+  # perform is a special command sent by the scheduler, we use it to inform SMS service is now active for the date
+  def start_sms
+    msg = "Hi! Your date with %s is in 2 hours, you can now chat to sync any details etc., just respond to this number! Happy Dating :) Mojo."
+    
+    # sent msg to host
+    Sms.deliver(self.creator_duo.host.cellphone, msg % self.creator_duo.participant.first_name)
+    # sent msg to participant
+    Sms.deliver(self.creator_duo.participant.cellphone, msg % self.creator_duo.host.first_name)
+  end
+  # 5.minutes.from_now will be evaluated when in_the_future is called
+  handle_asynchronously :start_sms, :run_at => Proc.new { 30.seconds.from_now }
+  
+  #####
+  # Static methods
+  ##
   def self.find_sorties_for_user(user)
     if (user.id == 1)
       return self.find(6,7,8)
@@ -120,28 +135,18 @@ class Sortie < ActiveRecord::Base
   end
   
   def self.open_sorties_for(user)
-    # find Duos where the user is
-    duos = Duo.find(:all, :conditions => ["host_id = ? OR participant_id = ?", user.id, user.id])
-    # find the open sorties where these duos are hosts
-    self.where(:creator_duo_id => duos, :state => 'open')
+    # find the open sorties where these wings are hosts or the user host himself (single dates)
+    self.where(:host_id => Wing.ids_with(user), :size => 4, :state => 'open') + self.where(:host_id => user, :size => 2, :state => 'open')
   end
   
   def self.upcoming_sorties_for(user)
-    # find Duos where the user is
-    duos = Duo.find(:all, :conditions => ["host_id = ? OR participant_id = ?", user.id, user.id])
-    # find the open sorties where these duos are hosts
-    self.where(:creator_duo_id => duos, :state => 'closed') # ["time > ", Time.now]
+    # find the closed upcoming sorties where the user is in
+    self.where(:host_id => Wing.ids_with(user), :size => 4, :state => 'closed') + self.where(:host_id => user, :size => 2, :state => 'closed')
+    # ["time > ", Time.now]
   end
   
-  # perform is a special command sent by the scheduler, we use it to inform SMS service is now active for the date
-  def start_sms
-    msg = "Hi! Your date with %s is in 2 hours, you can now chat to sync any details etc., just respond to this number! Happy Dating :) Mojo."
-    
-    # sent msg to host
-    Sms.deliver(self.creator_duo.host.cellphone, msg % self.creator_duo.participant.first_name)
-    # sent msg to participant
-    Sms.deliver(self.creator_duo.participant.cellphone, msg % self.creator_duo.host.first_name)
+  def self.with(user)
+    self.where(:size => 2).where("host_id = :user OR guest_id = :user", { :user => user.id }) + 
+    self.where(:size => 4).where("host_id = :wings OR guest_id = :wings", { :wings => Wing.ids_with(user) })
   end
-  # 5.minutes.from_now will be evaluated when in_the_future is called
-  handle_asynchronously :start_sms, :run_at => Proc.new { 30.seconds.from_now }
 end

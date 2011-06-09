@@ -2,13 +2,25 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   
   before_filter :require_user, :except => [:signup, :create]
-  before_filter :require_no_user, :only => [:signup, :create]
+  before_filter :require_invite, :only => [:signup, :create]
   
   def signup
-    #
+    # TODO find user(state=invitation) using email (friend/date invite was done)
+    @user = User.new(:invitation_token => params[:invitation_token])
+    @user.email = @user.invitation.recipient_email if @user.invitation
   end
   
   def create
+    @user = User.new(params[:user])
+    
+    if @user.save
+      flash[:notice] = "Welcome!"
+      Notifier.welcome(@user).deliver
+      redirect_to root_url
+    else
+      @user.clear_password! if @user.generated_password
+      render :action => :signup
+    end
   end
   
   def edit

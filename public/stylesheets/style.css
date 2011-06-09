@@ -171,21 +171,26 @@ a {
         position: absolute;
         right: 0;
         z-index: 10;
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
-        border-radius: 5px;
-        border-top-right-radius: 0;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5px;
         border: 2px solid #575757;
         padding: 8px;
-        background: white;
-        color: #231f20;
+        background: rgba(0, 0, 0, 0.65);
+        color: white;
         font-size: .75em; }
         #head-content #auth-links .relative-container #login-bubble div.space {
           margin: 8px 0; }
         #head-content #auth-links .relative-container #login-bubble input[type=text], #head-content #auth-links .relative-container #login-bubble input[type=email], #head-content #auth-links .relative-container #login-bubble input[type=number], #head-content #auth-links .relative-container #login-bubble input[type=password] {
           width: 150px;
           font-size: 1.2em;
-          padding: 2px 0; }
+          padding: 3px 4px;
+          border: none;
+          outline-color: white;
+          background: rgba(255, 255, 255, 0.5); }
+          #head-content #auth-links .relative-container #login-bubble input[type=text]:focus, #head-content #auth-links .relative-container #login-bubble input[type=email]:focus, #head-content #auth-links .relative-container #login-bubble input[type=number]:focus, #head-content #auth-links .relative-container #login-bubble input[type=password]:focus {
+            background: white; }
+        #head-content #auth-links .relative-container #login-bubble button[type=submit] {
+          border: none !important; }
         #head-content #auth-links .relative-container #login-bubble button {
           display: inline-block;
           outline: none;
@@ -367,6 +372,35 @@ h2, h3 {
 /*
  * Special layouts
  */
+.small-form {
+  margin: 120px auto;
+  width: 400px; }
+  .small-form .box {
+    margin-top: 15px;
+    padding: 15px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: #f9f9f9; }
+  .small-form form input {
+    font-size: 1.15em;
+    padding: 2px 4px;
+    width: 180px; }
+  .small-form form .line {
+    text-align: center; }
+    .small-form form .line input, .small-form form .line button {
+      vertical-align: bottom; }
+  .small-form.invitation form, .small-form.password-reset form {
+    text-align: left;
+    display: inline-block; }
+  .small-form.invitation {
+    text-align: center; }
+    .small-form.invitation h2 {
+      margin: 0 0 15px;
+      font-size: 1.35em; }
+  .small-form.password-reset .box {
+    text-align: center; }
+
 .login-page {
   margin: 120px auto;
   width: 400px; }
@@ -378,7 +412,7 @@ h2, h3 {
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
-    background: #f2f2f2; }
+    background: #f9f9f9; }
     .login-page .box form {
       position: relative; }
       .login-page .box form label {
@@ -400,29 +434,101 @@ h2, h3 {
           -moz-border-radius: 5px;
           -webkit-border-radius: 5px;
           border-radius: 5px; }
-      .login-page .box form .submit {
-        position: absolute;
-        bottom: 0;
-        right: 0; }
-        .login-page .box form .submit button {
-          padding: 5px 10px;
-          font-size: 1.05em;
-          background: url(/images/buttons/button-submit.png);
-          height: 35px;
-          width: 115px;
-          text-align: center;
-          border: none; }
-          .login-page .box form .submit button:hover {
-            background-position: 0 35px; }
-          .login-page .box form .submit button:active {
-            position: relative;
-            top: 1px; }
-          .login-page .box form .submit button:disabled {
-            color: gray; }
+  .login-page:not(.password-reseting) form .submit {
+    position: absolute;
+    bottom: 0;
+    right: 0; }
+    .login-page:not(.password-reseting) form .submit button {
+      padding: 5px 10px;
+      font-size: 1.05em;
+      background: url(/images/buttons/button-submit.png);
+      height: 35px;
+      width: 115px;
+      text-align: center;
+      border: none; }
+      .login-page:not(.password-reseting) form .submit button:hover {
+        background-position: 0 35px; }
+      .login-page:not(.password-reseting) form .submit button:active {
+        position: relative;
+        top: 1px; }
+      .login-page:not(.password-reseting) form .submit button:disabled {
+        color: gray; }
+  .login-page.password-reseting form .submit {
+    text-align: right; }
   .login-page .recover {
     font-size: .8em;
     margin-top: 10px;
     text-align: right; }
+
+.signup-page {
+  margin: 50px 125px; }
+  .signup-page form {
+    margin-top: 20px;
+    padding: 25px;
+    background: rgba(25, 25, 25, 0.025);
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px; }
+    .signup-page form .form-item {
+      padding: 10px 15px;
+      position: relative; }
+      .signup-page form .form-item .subinput input {
+        width: 200px; }
+      .signup-page form .form-item.optional > .title {
+        color: #636363; }
+        .signup-page form .form-item.optional > .title .info {
+          display: block;
+          color: gray;
+          font-size: .65em; }
+      .signup-page form .form-item .hybrid-input.password {
+        position: relative; }
+        .signup-page form .form-item .hybrid-input.password .msg-info {
+          position: absolute;
+          right: -10px;
+          width: 195px;
+          margin-top: 0; }
+          .signup-page form .form-item .hybrid-input.password .msg-info:before {
+            content: "◂";
+            font-size: 32px;
+            color: #FF0;
+            position: absolute;
+            margin-left: -21px;
+            margin-top: -14px; }
+      .signup-page form .form-item input[type=email] {
+        width: 300px !important; }
+      .signup-page form .form-item input[type=password] {
+        width: 200px; }
+      .signup-page form .form-item.with-filter {
+        position: relative; }
+        .signup-page form .form-item.with-filter .filter {
+          text-align: right; }
+          .signup-page form .form-item.with-filter .filter .select {
+            text-align: left;
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            color: #636363;
+            width: 192px; }
+            .signup-page form .form-item.with-filter .filter .select.height {
+              top: 13px; }
+          .signup-page form .form-item.with-filter .filter .range {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: .85em; }
+            .signup-page form .form-item.with-filter .filter .range.height {
+              margin-right: 5px; }
+            .signup-page form .form-item.with-filter .filter .range.age {
+              margin-right: 20px; }
+      .signup-page form .form-item .mj-merged-choices {
+        display: block; }
+        .signup-page form .form-item .mj-merged-choices label {
+          background: white;
+          padding: 2px 3px; }
+          .signup-page form .form-item .mj-merged-choices label.selected {
+            background: rgba(225, 236, 255, 0.5); }
+    .signup-page form .submit {
+      margin-top: 10px;
+      text-align: right; }
 
 /*
  * Mockup elements
@@ -1100,7 +1206,7 @@ h2, h3 {
   display: block !important;
   margin: 0 0 10px !important; }
 
-.form-inputs input[type=text], .form-inputs input[type=number], .form-inputs input[type=email] {
+.form-inputs input[type=text], .form-inputs input[type=number], .form-inputs input[type=email], .form-inputs input[type=password] {
   font-size: 1.2em; }
 
 .follow-container {

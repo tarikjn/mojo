@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110605085931) do
+ActiveRecord::Schema.define(:version => 20110606003007) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -39,6 +39,15 @@ ActiveRecord::Schema.define(:version => 20110605085931) do
     t.integer  "user_id"
     t.integer  "friend_id"
     t.boolean  "approved"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "invitations", :force => true do |t|
+    t.integer  "sender_id"
+    t.string   "recipient_email"
+    t.string   "token",           :null => false
+    t.datetime "sent_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -88,8 +97,8 @@ ActiveRecord::Schema.define(:version => 20110605085931) do
   create_table "users", :force => true do |t|
     t.string   "first_name"
     t.string   "last_name"
-    t.boolean  "active",            :default => false, :null => false
-    t.boolean  "admin",             :default => false, :null => false
+    t.string   "state",             :default => "active", :null => false
+    t.string   "level",             :default => "user",   :null => false
     t.string   "email"
     t.string   "cellphone"
     t.string   "sex"
@@ -105,10 +114,12 @@ ActiveRecord::Schema.define(:version => 20110605085931) do
     t.string   "crypted_password"
     t.string   "password_salt"
     t.string   "persistence_token"
-    t.boolean  "filter_age",        :default => false, :null => false
-    t.boolean  "filter_height",     :default => false, :null => false
+    t.boolean  "filter_age",        :default => false,    :null => false
+    t.boolean  "filter_height",     :default => false,    :null => false
     t.string   "picture"
     t.string   "perishable_token"
+    t.integer  "invitation_id"
+    t.integer  "invitations_left"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

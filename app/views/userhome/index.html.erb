@@ -32,10 +32,10 @@
 		</div>
 		<div class="content">
 			<ul class="friendlist">
-				<% @buddies.each do |buddy| %>
+				<% @user.friends.each do |friend| %>
 					<li>
-						<div class="pic48"><%= image_tag "/images/users/"+buddy.id.to_s+"-48.jpg" %></div>
-						<div class="name"><%= buddy.first_name %></div>
+						<div class="pic48"><%= image_tag "/images/users/"+friend.id.to_s+"-48.jpg" %></div>
+						<div class="name"><%= friend.first_name %></div>
 					</li>
 				<% end %>
 			</ul>

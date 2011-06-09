@@ -21,6 +21,7 @@ $radio-background: $light-gray;
 $radio-border: $border-gray;
 $radio-checked-background: white;
 $radio-checked-border: gray;
+$color-selected: #e1ecff;
 
 $info-color: #FFFDBF;
 $info-border: #FF0;
@@ -458,13 +459,16 @@ a {
 				right: 0;
 				z-index: 10;
 				
-				@include rounded; border-top-right-radius: 0;
+				border-bottom-right-radius: 5px;
+				border-bottom-left-radius: 5px;
+				
 				border: 2px solid $gray-darker;
 				padding: 8px;
-				background: white;
+				
+				background: rgba(0, 0, 0, .65);
 				//background: -webkit-gradient(linear, center 80%, center bottom, from(white), to($border-gray));
 				
-				color: $lighter-color;
+				color: white;
 				font-size: .75em;
 				
 				div.space { margin: 8px 0; }
@@ -472,7 +476,17 @@ a {
 				input[type=text], input[type=email], input[type=number], input[type=password] {
 					width: 150px;
 					font-size: 1.2em;
-					padding: 2px 0;
+					padding: 3px 4px;
+					border: none;
+					outline-color: white;
+					background: rgba(255, 255, 255, .5);
+					
+					&:focus {
+						background: rgba(255, 255, 255, 1);
+					}
+				}
+				button[type=submit] {
+					border: none !important;
 				}
 				
 				button {
@@ -669,6 +683,49 @@ h2, h3 {
 /*
  * Special layouts
  */
+.small-form {
+	margin: 120px auto;
+	width: 400px;
+	
+	.box {
+		margin-top: 15px;
+		padding: 15px;
+		@include rounded(10px);
+		background: $light-gray;
+	}
+	
+	form {
+		input {
+			font-size: 1.15em;
+			padding: 2px 4px;
+			width: 180px;
+		}
+		
+		.line {
+			text-align: center;
+			
+			input, button { vertical-align: bottom; }
+		}
+	}
+	
+	&.invitation, &.password-reset {
+		form {
+			text-align: left;
+			display: inline-block;
+		}
+	}
+	&.invitation {
+		text-align: center;
+		h2 {
+			margin: 0 0 15px;
+			font-size: 1.35em;
+		}
+	}
+	&.password-reset .box {
+		text-align: center;
+	}
+}
+
 .login-page {
 	margin: 120px auto;
 	width: 400px;
@@ -682,7 +739,7 @@ h2, h3 {
 		
 		padding: 15px;
 		@include rounded(10px);
-		background: $lighter-gray;
+		background: $light-gray;
 		
 		form {
 			position: relative;
@@ -721,6 +778,12 @@ h2, h3 {
 				}
 			}
 
+			
+		}
+	}
+	
+	&:not(.password-reseting) {
+		form {
 			.submit {
 				position: absolute;
 				//text-align: right;
@@ -733,10 +796,130 @@ h2, h3 {
 		}
 	}
 	
+	&.password-reseting {
+		form {
+			.submit {
+				text-align: right;
+			}
+		}
+	}
+	
 	.recover {
 		font-size: .8em;
 		margin-top: 10px;
 		text-align: right;
+	}
+}
+
+.signup-page {
+	margin: 50px 125px;
+	
+	form {
+		margin-top: 20px;
+		padding: 25px;
+		
+		// TODO: lighter gray with .5 alpha
+		// result color over white should be #fafafa ($light-gray)
+		background: rgba(25, 25, 25, .025);
+		@include rounded(10px);
+		
+		.form-item {
+			padding: 10px 15px;
+			position: relative;
+			
+			.subinput input {
+				width: 200px;
+			}
+			
+			&:not(:first-of-type) {
+				//border-top: 1px solid white;
+			}
+			
+			&.optional {
+				> .title {
+					color: $dark-gray;
+					
+					.info {
+						display: block;
+						color: gray;
+						font-size: .65em;
+					}
+				}
+			}
+			
+			.hybrid-input.password {
+				position: relative;
+				.msg-info {
+					position: absolute;
+					right: -10px;
+					width: 195px;
+					margin-top: 0;
+					
+					&:before {
+						content: "◂";
+						font-size: 32px;
+						color: #FF0;
+						position: absolute;
+						margin-left: -21px;
+						margin-top: -14px;
+						//margin-top: -36px;
+					}
+				}
+			}
+			
+			// override properly at other locations
+			input[type=email] { width: 300px !important; }
+			input[type=password] { width: 200px; }
+			
+			&.with-filter {
+				position: relative;
+				
+				.filter {
+
+					text-align: right;
+
+					.select, .range {
+						//display: inline-block;
+					}
+					.select {
+						text-align: left;
+						position: absolute;
+						right: 15px; top: 10px;
+						&.height { top: 13px; }
+						
+						color: $dark-gray;
+						width: 192px;
+					}
+					.range {
+						display: inline-block;
+						margin-top: 10px;
+						font-size: .85em;
+						
+						&.height { margin-right: 5px; }
+						&.age { margin-right: 20px; }
+					}
+				}
+			}
+			
+			.mj-merged-choices {
+					display: block;
+					label {
+					// TODO: style with black gradient (like create/join radio in stepflow)
+				
+					background: white;
+					//border: none;
+					padding: 2px 3px;
+					//input { display: none; }
+					&.selected {
+						background: rgba(225, 236, 255, .5); //$color-selected
+					}
+				}
+			}
+		}
+		.submit {
+			margin-top: 10px;
+			text-align: right;
+		}
 	}
 }
 
@@ -1577,7 +1760,7 @@ h2, h3 {
 	margin: 0 0 10px !important;
 }
 .form-inputs input {
-	&[type=text], &[type=number], &[type=email] { font-size: 1.2em; }
+	&[type=text], &[type=number], &[type=email], &[type=password] { font-size: 1.2em; }
 }
 .follow-container {
 	display: inline-block;

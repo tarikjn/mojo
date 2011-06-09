@@ -1,14 +1,18 @@
-<div class="password-reset-page">
+<div class="login-page password-reseting">
 	<%= flash_messages %>
-	<h2>Change My Password</h2>
-	<% form_for @user, :url => password_reset_path, :method => :put do |f| %>
-	  <%= f.error_messages %>
-	  <%= f.label :password %><br />
-	  <%= f.password_field :password %><br />
-	  <br />
-	  <%= f.label :password_confirmation %><br />
-	  <%= f.password_field :password_confirmation %><br />
-	  <br />
-	  <%= f.submit "Update my password and log me in" %>
-	<% end %>
+	<h2>Change your password</h2>
+	<div class="box">
+		<%= form_for @user, :url => password_reset_path, :method => :put do |f| %>
+			<div class="labeled-input">
+				<%= format_errors_for @user, :password, {:title => 'Password'} %>
+			    <div><%= f.password_field :password, :size => nil %></div>
+				<%= f.label :password, 'Password' %>
+			</div>
+			<div class="labeled-input space">
+			    <div><%= f.password_field :password_confirmation, :size => nil %></div>
+				<%= f.label :password_confirmation, 'Password confirmation' %>
+			</div>
+			<div class="submit"><button type="submit" class="mj-button mojo">Update and Sign in</button></div>
+		<% end %>
+	</div>
 </div>

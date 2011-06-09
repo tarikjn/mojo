@@ -29,6 +29,17 @@ Mojo::Application.configure do
   
   # ImageMagick path for Paperclip
   #Paperclip.options[:command_path] = "/opt/local/bin"
-
+  
+  # Mail settings, production (Heroku) is automatically using Sendgrid's smtp
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :address              => "smtp.gmail.com",
+    :port                 => 587,
+    :domain               => "mojo.co",
+    :authentication       => "plain",
+    :user_name            => "mailer@mojo.co",
+    :password             => "br8pRasw",
+    :enable_starttls_auto => true
+  }
+  config.action_mailer.default_url_options = { :host => "localhost:3000" }
 end
-

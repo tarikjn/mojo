@@ -1,0 +1,16 @@
+Hi <%= @user.first_name %>,
+
+Welcome to Mojo!
+
+We're thrilled to have you as a new member on this very unique dating concept!
+
+You can now start creating and joining dates. We'll also update you about new features as we roll them out.
+<% if @user.generated_password -%>
+Your generated password is: <%= @user.generated_password %>
+<% end -%>
+
+We hope you enjoy dating with Mojo and have an amazing experience!
+If you've got any questions or run into any problems, simply reply to this email, and we'll be uber-happy to help you :)
+
+The Mojo Team
+http://mojo.co

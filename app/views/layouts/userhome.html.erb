@@ -6,6 +6,13 @@
 				<li<% if current_page?(userhome_path) then %> class="current"<% end %>><%= link_to_unless_current "Dashboard", userhome_path %></li>
 				<li<% if current_page?(userhome_dates_path) then %> class="current"<% end %>><%= link_to_unless_current "Your dates", userhome_dates_path %></li>
 				<li<% if current_page?(userhome_settings_path) then %> class="current"<% end %>><%= link_to_unless_current "Settings", userhome_settings_path %></li>
+			<%=
+				if current_user.admin?
+					content_tag :li, :class => current_page?(new_invitation_path)? 'current' : nil do
+						link_to_unless_current "Invitations", new_invitation_path
+					end
+				end
+			%>
 			</ul>
 		</div>
 		<div class="body">

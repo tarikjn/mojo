@@ -22,6 +22,14 @@ defaults: &defaults
 development:
   <<: *defaults
   bucket: dev-media.mojo.co
+  smtp:
+    address: smtp.gmail.com
+    port: 587
+    domain: mojo.co
+    authentication: plain
+    user_name: mailer@mojo.co
+    password: br8pRasw
+    enable_starttls_auto: Yes # converted to boolean by YAML?
 
 test:
   <<: *defaults

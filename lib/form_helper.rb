@@ -22,6 +22,45 @@ module ActionView
         html.html_safe
              
       end
+      
+      # def gender_field(object, object_name, method, options = {}, html_options = {})
+      #         
+      #         content_tag :div, :class => ['mj-merged-choices', 'hybrid-input'] do
+      #           person_choice(object, object_name, method, 'male')
+      #           +
+      #           person_choice(object, object_name, method, 'female')
+      #         end
+      #       
+      #       end
+      
+      # refactor, this is probably not where its supposed to be
+      def person_choice(object, object_name, method, value, options = {}, html_options = {})
+        
+        images = {
+          'male'   => 'guy',
+          'both'   => 'person',
+          'female' => 'gal'
+        }
+        titles = {
+          'male'   => 'Guy',
+          'both'   => 'Both',
+          'female' => 'Girl'
+        }
+        
+        defaults = {
+          :title => titles[value]
+        }
+        options = defaults.merge(options)
+        
+        label_tag do
+          radio_button_tag("#{object_name}[#{method}]", value, object.send(method) == value) +
+          content_tag(:div, :class => 'person') do
+            content_tag(:div, image_tag("/images/icons/#{images[value]}.png"), :class => 'img') +
+            content_tag(:div, options[:title], :class => 'title')
+          end
+        end
+        
+      end
 
     end
  
@@ -29,6 +68,10 @@ module ActionView
   
       def height_field(method, options = {}, html_options = {})
         @template.height_field(@object, @object_name, method, objectify_options(options), @default_options.merge(html_options))
+      end
+      
+      def person_choice(method, value, options = {}, html_options = {})
+        @template.person_choice(@object, @object_name, method, value, objectify_options(options), @default_options.merge(html_options))
       end
 
     end

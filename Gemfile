@@ -58,3 +58,7 @@ gem 'fog'			# used to access s3
 
 # for SMS notifications
 gem 'delayed_job'
+
+# generate human "rememberable" passwords
+#gem 'ruby-password'
+# broken

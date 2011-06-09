@@ -1,5 +1,9 @@
 Mojo::Application.routes.draw do
   
+  resources :invitations, :only => [:new, :create]
+
+  get "invitations/find"
+
   resources :password_resets
 
   # TODO: pretty up URL/namespace it into account
@@ -13,9 +17,16 @@ Mojo::Application.routes.draw do
   # route bellow uses userhome_path(:action) as helper
   # match "/userhome(/:action)", :controller => :userhome, :as => "userhome"
   
+  resources :users, :path => "account", :only => :create
   scope '/account', :controller => :users, :as => "account" do
-    get "/signup"
-    post "/signup" => :create
+    get "/signup/:invitation_token" => :signup, :as => "signup"
+    post "/signup/:invitation_token" => :create
+  end
+  
+  # pretty-up
+  scope '/invitation', :controller => :invitations, :as => "invitation" do
+    get "/enter" => :enter
+    post "/enter" => :find
   end
   
   scope '/userhome', :controller => :userhome, :as => "userhome" do
