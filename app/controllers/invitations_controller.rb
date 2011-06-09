@@ -3,7 +3,7 @@ class InvitationsController < ApplicationController
   before_filter :require_admin, :only => [:new, :create]
   before_filter :require_no_user, :only => [:enter, :find]
   
-  layout "userhome", :only => [:new, :create]
+  layout :resolve_layout
   
   def new
     @invitation = Invitation.new
@@ -36,5 +36,15 @@ class InvitationsController < ApplicationController
       render :action => :enter
     end
   end
+private
 
+  def resolve_layout
+    case action_name
+    when "new", "create"
+      "userhome"
+    else
+      "application"
+    end
+  end
+  
 end
