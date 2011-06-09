@@ -7,7 +7,7 @@ class PasswordResetsController < ApplicationController
 
   def create
     # TODO (invitations): check if user is active
-    user = User.find_by_email(params[:email])
+    user = User.registered.find_by_email(params[:email])
     if user
       user.deliver_password_reset_instructions!
       flash[:notice] = "Instructions to reset your password have been emailed to you. " +

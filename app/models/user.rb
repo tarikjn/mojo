@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
   belongs_to :invitation
   
   # scopes
-  scope :registered, :conditions => [ 'state != "invitation"' ]
+  scope :registered, :conditions => ["state != ?", 'invitation']
 
   def friends
     direct_friends | inverse_friends
