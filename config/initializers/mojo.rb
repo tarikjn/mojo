@@ -11,7 +11,7 @@ CarrierWave.configure do |config|
     :provider               => 'AWS',       # required
     :aws_access_key_id      => SETTINGS[Rails.env]['s3']['access_key_id'],       # required
     :aws_secret_access_key  => SETTINGS[Rails.env]['s3']['secret_access_key'],       # required
-    #:region                 => 'eu-west-1'  # optional, defaults to 'us-east-1'
+    :region                 => 'eu-west-1'  # optional, defaults to 'us-east-1'
   }
   config.fog_directory  = SETTINGS[Rails.env]['bucket']                     # required
   # TODO: fix to simply use http? or use amazon domain

@@ -40,7 +40,7 @@ staging:
     tarik: meetox
     jordan: bigtitsdoh
     ioventures: sorrywerlate!
-  bucket: media #media.mojo.co
+  bucket: media.mojo.co #media.mojo.co
 
 production:
   <<: *defaults
