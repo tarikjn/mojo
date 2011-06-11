@@ -21,7 +21,7 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  bucket: dev-media.mojo.co
+  bucket: media.mojo.co
   smtp:
     address: smtp.gmail.com
     port: 587
