@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110606003007) do
+ActiveRecord::Schema.define(:version => 20110612021042) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -31,6 +31,14 @@ ActiveRecord::Schema.define(:version => 20110606003007) do
     t.integer  "party_id"
     t.integer  "sortie_id"
     t.string   "state",      :default => "waiting", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "entry_actions", :force => true do |t|
+    t.integer  "entry_id",   :null => false
+    t.integer  "by_id",      :null => false
+    t.string   "action",     :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -79,6 +87,30 @@ ActiveRecord::Schema.define(:version => 20110606003007) do
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
+  create_table "sortie_reports", :force => true do |t|
+    t.integer  "sortie_id",           :null => false
+    t.integer  "by_id",               :null => false
+    t.boolean  "at_location"
+    t.string   "cancellation_notice"
+    t.integer  "late_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "sortie_reports_culprits", :id => false, :force => true do |t|
+    t.integer "sortie_report_id"
+    t.integer "user_id"
+  end
+
+  create_table "sortie_updates", :force => true do |t|
+    t.integer  "sortie_id",  :null => false
+    t.integer  "by_id",      :null => false
+    t.string   "kind",       :null => false
+    t.integer  "late_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "sorties", :force => true do |t|
     t.integer  "size",        :default => 2, :null => false

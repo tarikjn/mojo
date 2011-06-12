@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  sortie: 
+  user: 
+  kind: MyString
+  late_by: 1
+
+two:
+  sortie: 
+  user: 
+  kind: MyString
+  late_by: 1

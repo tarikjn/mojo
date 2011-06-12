@@ -21,7 +21,7 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  bucket: media.mojo.co
+  bucket: dev-media.mojo.co
   smtp:
     address: smtp.gmail.com
     port: 587
@@ -36,10 +36,6 @@ test:
 
 staging:
   <<: *defaults
-  auth:
-    tarik: meetox
-    jordan: bigtitsdoh
-    ioventures: sorrywerlate!
   bucket: media.mojo.co #media.mojo.co
 
 production:

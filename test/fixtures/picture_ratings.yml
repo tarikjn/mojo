@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user: 
+  picture_file_name: MyString
+  by: 
+  sortie: 
+  score: 1
+
+two:
+  user: 
+  picture_file_name: MyString
+  by: 
+  sortie: 
+  score: 1

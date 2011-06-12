@@ -14,6 +14,11 @@ class User < ActiveRecord::Base
   #has_many :hosted_single_sorties, :source => :sortie, :as => :host
   #has_many :invited_single_sorties, :source => :sortie, :as => :guest
   
+  # reports made by the user
+  has_many :authored_reports, :class_name => "SortieReport", :foreign_key => "by_id"
+  # these are reports where the user is tagged as "culprit"
+  has_and_belongs_to_many :received_reports, :class_name => "SortieReport", :join_table => "sortie_reports_culprits"
+  
   # AuthLogic
   acts_as_authentic do |config|
     config.validate_email_field = false

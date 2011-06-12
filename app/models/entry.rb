@@ -1,6 +1,7 @@
 class Entry < ActiveRecord::Base
   belongs_to :party, :polymorphic => true
   belongs_to :sortie
+  has_many :entry_actions, :dependent => :destroy
   
   validates_inclusion_of :state, :in => %w(waiting invited rejected withdrawn overridden) # renamed ejected to rejected
   
@@ -43,7 +44,7 @@ class Entry < ActiveRecord::Base
     # might want to use sortie/duo model to send notification to co-host
     
     # change state of entry
-    self.state = 'ejected'
+    self.state = 'rejected'
     
     #commit
     self.save

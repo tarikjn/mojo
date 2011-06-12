@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  sortie: 
+  by: 
+  cancellation_notice: MyString
+  late_by: 1
+
+two:
+  sortie: 
+  by: 
+  cancellation_notice: MyString
+  late_by: 1

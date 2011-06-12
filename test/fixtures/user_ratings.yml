@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user: 
+  by: 
+  sortie: 
+  score: 1
+
+two:
+  user: 
+  by: 
+  sortie: 
+  score: 1
