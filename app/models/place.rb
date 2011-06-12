@@ -1,6 +1,7 @@
 class Place < ActiveRecord::Base
   
   has_many :sorties
+  has_many :reviews, :class_name => "PlaceReview"
   
   # GeoKit
   acts_as_mappable :default_units => :miles, 

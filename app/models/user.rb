@@ -19,6 +19,9 @@ class User < ActiveRecord::Base
   # these are reports where the user is tagged as "culprit"
   has_and_belongs_to_many :received_reports, :class_name => "SortieReport", :join_table => "sortie_reports_culprits"
   
+  has_many :picture_ratings#, :conditions => ["picture_file_name = ?", self.picture]
+  has_many :ratings, :class_name => "UserRating"
+  
   # AuthLogic
   acts_as_authentic do |config|
     config.validate_email_field = false

@@ -7,6 +7,8 @@ class Sortie < ActiveRecord::Base
   belongs_to :place
   
   has_many :entries, :dependent => :destroy
+  has_many :updates, :class_name => "SortieUpdate"
+  has_many :sortie_reports
   
   validates :title, :presence => true
   validates :place, :presence => true

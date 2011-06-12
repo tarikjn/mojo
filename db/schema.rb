@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110612021042) do
+ActiveRecord::Schema.define(:version => 20110612032116) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -60,6 +60,26 @@ ActiveRecord::Schema.define(:version => 20110612021042) do
     t.datetime "updated_at"
   end
 
+  create_table "picture_ratings", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "picture_file_name"
+    t.integer  "by_id"
+    t.integer  "sortie_id"
+    t.integer  "score"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "place_reviews", :force => true do |t|
+    t.integer  "place_id"
+    t.integer  "by_id"
+    t.integer  "sortie_id"
+    t.integer  "score"
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "places", :force => true do |t|
     t.string   "kind"
     t.float    "lat",           :null => false
@@ -87,6 +107,15 @@ ActiveRecord::Schema.define(:version => 20110612021042) do
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
+  create_table "site_reviews", :force => true do |t|
+    t.integer  "by_id"
+    t.integer  "sortie_id"
+    t.integer  "score"
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "sortie_reports", :force => true do |t|
     t.integer  "sortie_id",           :null => false
@@ -122,6 +151,15 @@ ActiveRecord::Schema.define(:version => 20110612021042) do
     t.integer  "place_id"
     t.string   "title"
     t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_ratings", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "by_id"
+    t.integer  "sortie_id"
+    t.integer  "score"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
