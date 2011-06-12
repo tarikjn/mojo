@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
   # not so secure but practical
   before_validation :generate_password! # has some issue: password is reprinted and not mailed on failed validation
   before_create :set_invitations_left
-  attr_accessor :generated_password
+  attr_accessor :generated_password, :current_password
+  #attr_writer :current_password
   
   has_many :entries, :as => :party
   has_many :entered_sorties, :through => :entries, :source => :sortie, :as => :party
@@ -47,6 +48,7 @@ class User < ActiveRecord::Base
   validates :email, :presence => true, :uniqueness => true, :email => true
   validates :first_name, :presence => true, :if => :active?
   validate :validate_age
+  validate :validate_current_password
   # picture fails with marshaling (stepflow issue)
   validates :picture, :presence => true, :if => :active?
   validates :cellphone, :presence => true, :if => :active?
@@ -109,6 +111,19 @@ class User < ActiveRecord::Base
   
   def validate_age
     errors.add :dob, 'you need to be at least 18' if 18.years.ago < self.dob
+  end
+  
+  def validate_current_password
+    return true
+    errors.add :current_password, 'is incorrect' if !@current_password.nil? and @current_password != password
+  end
+  
+  def current_password=(s)
+    @current_password = s
+  end
+  
+  def current_password
+    nil
   end
   
   # TODO: find a way to remove these, the converter should make it unecessary

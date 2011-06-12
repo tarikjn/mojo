@@ -3,10 +3,9 @@ class InvitationsController < ApplicationController
   before_filter :require_admin, :only => [:new, :create]
   before_filter :require_no_user, :only => [:enter, :find]
   
-  layout :resolve_layout
-  
   def new
     @invitation = Invitation.new
+    render :layout => 'userhome'
   end
   
   def create
@@ -17,7 +16,7 @@ class InvitationsController < ApplicationController
       flash[:notice] = "Thank you, invitation sent."
       redirect_to new_invitation_url
     else
-      render :action => :new
+      render :action => :new, :layout => 'userhome'
     end
   end
 
@@ -34,16 +33,6 @@ class InvitationsController < ApplicationController
       redirect_to account_signup_url(@invitation.token)
     else
       render :action => :enter
-    end
-  end
-private
-
-  def resolve_layout
-    case action_name
-    when "new", "create"
-      "userhome"
-    else
-      "application"
     end
   end
   

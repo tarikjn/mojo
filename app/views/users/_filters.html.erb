@@ -1,0 +1,35 @@
+<div class="form-item optional">
+<div class="title">Age <span class="info">optional</span></div>
+<div class="hybrid-input filter">
+	<div class="select">
+		<label class="mj-check-roll" for="user_filter_age">
+			<%= s.check_box :filter_age %>
+			Age matters to you?
+		</label>
+	</div>
+	<div class="range age">
+		<label>
+			Min:
+			<%= s.number_field :min_age, {:class => "age-text-input", :size => 2} %>
+		</label> ⬌
+		<label>
+			Max:
+			<%= s.number_field :max_age, {:class => "age-text-input", :size => 2} %>
+		</label>
+	</div>
+</div>
+</div>
+<div class="form-item optional">
+<div class="title">Height <span class="info">optional</span></div>
+<div class="hybrid-input filter">
+	<div class="select height">
+		<label class="mj-check-roll" for="user_filter_height">
+			<%= s.check_box :filter_height %>
+			Height matters to you?
+		</label>
+	</div>
+	<div class="range height">
+		Min: <%= s.height_field :min_height %> ⬌ Max: <%= s.height_field :max_height %>
+	</div>
+</div>
+</div>

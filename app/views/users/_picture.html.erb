@@ -1,0 +1,18 @@
+<div class="form-item">
+	<%= format_errors_for s.object, :picture %>
+	<div class="title">Picture</div>
+	<div class="hybrid-input">
+		<%= s.file_field :picture %>
+		<%= s.hidden_field :picture_cache %>
+		<div class="current_picture">
+			<%= image_tag s.object.picture.url if s.object.picture? %>
+		</div>
+		<!--<br />
+		<div class="mj-picture-tool">
+			<img src="/images/tarik-profile.jpg" />
+			<div class="mask"></div>
+			<div class="selection" style="background-image: url(/images/tarik-profile.jpg)"></div/>
+		</div>
+		-->
+	</div>
+</div>

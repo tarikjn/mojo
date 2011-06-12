@@ -17,10 +17,15 @@ Mojo::Application.routes.draw do
   # route bellow uses userhome_path(:action) as helper
   # match "/userhome(/:action)", :controller => :userhome, :as => "userhome"
   
-  resources :users, :path => "account", :only => :create
+  #resources :users, :path => "account", :only => :create
   scope '/account', :controller => :users, :as => "account" do
+    put "/" => :update
+    get "/:account_section" => :edit, :as => :edit
+    
     get "/signup/:invitation_token" => :signup, :as => "signup"
     post "/signup/:invitation_token" => :create
+    
+    get "/" => :index
   end
   
   # pretty-up
@@ -33,9 +38,6 @@ Mojo::Application.routes.draw do
     # match "(/index)" interferes with link_to_unless_current
     root :to => :index, :as => ""
     match "/dates"
-    get "/settings"
-    # replace with put
-    post "/settings" => :update_settings
   end
 
   # todo: refactor stepflow routes, at least namespace

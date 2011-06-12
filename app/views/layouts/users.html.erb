@@ -1,0 +1,29 @@
+<% content_for :body do %>
+	<div class="settings-block">
+
+		<div class="sidebar">
+			<ul class="list">
+				<%
+					['profile', 'picture', 'filters', 'password'].each do |i|
+				%>
+						
+						<%=
+							content_tag :li, :class => (source_action == i)? 'active' : nil do
+								link_to_if source_action != i, i.capitalize, url_for(i)
+							end
+						%>
+				<%		
+					end
+				%>
+		</div>
+
+		<div class="content">
+			<%= flash_messages %>
+			<%= form_for @user, :url => {:action => :update}, :html => { :method => :put, :class => ['form-inputs', 'column-titles'] } do |s| %>
+				<%= hidden_field_tag :source_action, source_action %>
+				<%= yield %>
+			<% end %>
+		</div>
+	</div>
+<% end %>
+<%= render :file => 'layouts/userhome' %>

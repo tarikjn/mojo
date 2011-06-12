@@ -10,6 +10,10 @@ class ApplicationController < ActionController::Base
 
 private
 
+  def resolve_layout(layout_name)
+      self.layout layout_name
+  end
+
   # http://stackoverflow.com/questions/339130/how-do-i-render-a-partial-of-a-different-format-in-rails
   def with_format(format, &block)
     old_formats = formats
@@ -131,4 +135,5 @@ private
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
   end
+
 end

@@ -1,124 +1,123 @@
 <div class="signup-page">
 	<h2>Create your account</h2>
 	<%= form_for @user, :url => account_signup_path, :html => { :class => ['form-inputs', 'column-titles'], :multipart => true } do |s| %>
-	<%= s.hidden_field :invitation_token %>
-	<div class="form-item">
-		<%= format_errors_for s.object, :sex %>
-		<div class="title">You are a</div>
-		<div class="mj-merged-choices hybrid-input">
-			<%= s.person_choice :sex, 'male' %><%= s.person_choice :sex, 'female' %>
-		</div>
-	</div>
-	<div class="form-item">
-		<%= format_errors_for s.object, :sex_preference %>
-		<div class="title">Looking for</div>
-		<div class="mj-merged-choices hybrid-input">
-			<%= s.person_choice :sex_preference, 'male', :title => 'Guys' %><%= s.person_choice :sex_preference, 'both', :title => 'Both' %><%= s.person_choice :sex_preference, 'female', :title => 'Girls' %>
-		</div>
-	</div>
-	<div class="form-item">
-		<%= format_errors_for s.object, :first_name %>
-		<div class="title">Name</div>
-		<div class="hybrid-input">
-			<div class="subinput">
-				<%= s.text_field :first_name %>
-				<div class="title">First</div>
-			</div>
-			<div class="subinput">
-				<%= s.text_field :last_name %>
-				<div class="title">Last</div>
+		<%= s.hidden_field :invitation_token %>
+		<div class="form-item">
+			<%= format_errors_for s.object, :sex %>
+			<div class="title">You are a</div>
+			<div class="mj-merged-choices hybrid-input">
+				<%= s.person_choice :sex, 'male' %><%= s.person_choice :sex, 'female' %>
 			</div>
 		</div>
-	</div>
-	<div class="form-item with-filter">
-		<%= format_errors_for s.object, :dob %>
-		<div class="title">Date of Birth</div>
-		<div class="hybrid-input">
-			<%= s.date_select :dob, { :start_year => Date.today.year - 80, :end_year => Date.today.year - 18, :default => Date.today - 18.year } %>
-		</div>
-		<div class="hybrid-input filter">
-			<div class="select">
-				<label class="mj-check-roll" for="user_filter_age">
-					<%= s.check_box :filter_age %>
-					Age matters to you?
-				</label>
-			</div>
-			<div class="range age">
-				<label>
-					Min:
-					<%= s.number_field :min_age, {:class => "age-text-input", :size => 2} %>
-				</label> ⬌
-				<label>
-					Max:
-					<%= s.number_field :max_age, {:class => "age-text-input", :size => 2} %>
-				</label>
+		<div class="form-item">
+			<%= format_errors_for s.object, :sex_preference %>
+			<div class="title">Looking for</div>
+			<div class="mj-merged-choices hybrid-input">
+				<%= s.person_choice :sex_preference, 'male', :title => 'Guys' %><%= s.person_choice :sex_preference, 'both', :title => 'Both' %><%= s.person_choice :sex_preference, 'female', :title => 'Girls' %>
 			</div>
 		</div>
-	</div>
-	<div class="form-item optional with-filter">
-		<%= format_errors_for s.object, :dob %>
-		<div class="title">Height <span class="info">optional</span></div>
-		<div class="hybrid-input">
-			<%= s.height_field :height %>
-		</div>
-		<div class="hybrid-input filter">
-			<div class="select height">
-				<label class="mj-check-roll" for="user_filter_height">
-					<%= s.check_box :filter_height %>
-					Height matters to you?
-				</label>
-			</div>
-			<div class="range height">
-				Min: <%= s.height_field :min_height %> ⬌ Max: <%= s.height_field :max_height %>
+		<div class="form-item">
+			<%= format_errors_for s.object, :first_name %>
+			<div class="title">Name</div>
+			<div class="hybrid-input">
+				<div class="subinput">
+					<%= s.text_field :first_name %>
+					<div class="title">First</div>
+				</div>
+				<div class="subinput">
+					<%= s.text_field :last_name %>
+					<div class="title">Last</div>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="form-item">
-		<%= format_errors_for s.object, :picture %>
-		<div class="title">Picture</div>
-		<div class="hybrid-input">
-			<%= s.file_field :picture %>
-			<%= s.hidden_field :picture_cache %>
-			<div>
-				<%= image_tag s.object.picture.url if s.object.picture? %>
+		<div class="form-item with-filter">
+			<%= format_errors_for s.object, :dob %>
+			<div class="title">Date of Birth</div>
+			<div class="hybrid-input">
+				<%= s.date_select :dob, { :start_year => Date.today.year - 80, :end_year => Date.today.year - 18, :default => Date.today - 18.year } %>
 			</div>
-			<!--<br />
-			<div class="mj-picture-tool">
-				<img src="/images/tarik-profile.jpg" />
-				<div class="mask"></div>
-				<div class="selection" style="background-image: url(/images/tarik-profile.jpg)"></div/>
-			</div>
-			-->
-		</div>
-	</div>
-	<div class="form-item">
-		<%= format_errors_for s.object, :email %>
-		<div class="title">E-mail</div>
-		<div class="hybrid-input">
-			<%= s.email_field :email %>
-		</div>
-	</div>
-	<div class="form-item optional">
-		<%= format_errors_for s.object, :password %>
-		<div class="title">Password <span class="info">optional</span></div>
-		<div class="hybrid-input password">
-			<div class="msg-info">
-				If you don't provide a password, we'll generate one for you.
-			</div>
-			<div><%= s.password_field :password %></div>
-			<div class="subinput">
-				<%= s.password_field :password_confirmation %>
-				<div class="title">Confirmation</div>
+			<div class="hybrid-input filter">
+				<div class="select">
+					<label class="mj-check-roll" for="user_filter_age">
+						<%= s.check_box :filter_age %>
+						Age matters to you?
+					</label>
+				</div>
+				<div class="range age">
+					<label>
+						Min:
+						<%= s.number_field :min_age, {:class => "age-text-input", :size => 2} %>
+					</label> ⬌
+					<label>
+						Max:
+						<%= s.number_field :max_age, {:class => "age-text-input", :size => 2} %>
+					</label>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="form-item">
-		<%= format_errors_for s.object, :cellphone %>
-		<div class="title">Cell Phone</div>
-		<div class="hybrid-input">
-			<%= s.text_field :cellphone, :class => "mj-input-phone" %>
+		<div class="form-item optional with-filter">
+			<div class="title">Height <span class="info">optional</span></div>
+			<div class="hybrid-input">
+				<%= s.height_field :height %>
+			</div>
+			<div class="hybrid-input filter">
+				<div class="select height">
+					<label class="mj-check-roll" for="user_filter_height">
+						<%= s.check_box :filter_height %>
+						Height matters to you?
+					</label>
+				</div>
+				<div class="range height">
+					Min: <%= s.height_field :min_height %> ⬌ Max: <%= s.height_field :max_height %>
+				</div>
+			</div>
 		</div>
-	</div>
-	<div class="submit"><button type="submit" class="mj-button mojo">Sign up</button></div>
+		<div class="form-item">
+			<%= format_errors_for s.object, :picture %>
+			<div class="title">Picture</div>
+			<div class="hybrid-input">
+				<%= s.file_field :picture %>
+				<%= s.hidden_field :picture_cache %>
+				<div>
+					<%= image_tag s.object.picture.url if s.object.picture? %>
+				</div>
+				<!--<br />
+				<div class="mj-picture-tool">
+					<img src="/images/tarik-profile.jpg" />
+					<div class="mask"></div>
+					<div class="selection" style="background-image: url(/images/tarik-profile.jpg)"></div/>
+				</div>
+				-->
+			</div>
+		</div>
+		<div class="form-item">
+			<%= format_errors_for s.object, :email %>
+			<div class="title">E-mail</div>
+			<div class="hybrid-input">
+				<%= s.email_field :email %>
+			</div>
+		</div>
+		<div class="form-item optional">
+			<%= format_errors_for s.object, :password %>
+			<div class="title">Password <span class="info">optional</span></div>
+			<div class="hybrid-input password">
+				<div class="msg-info">
+					If you don't provide a password, we'll generate one for you.
+				</div>
+				<div><%= s.password_field :password %></div>
+				<div class="subinput">
+					<%= s.password_field :password_confirmation %>
+					<div class="title">Confirmation</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-item">
+			<%= format_errors_for s.object, :cellphone %>
+			<div class="title">Cell Phone</div>
+			<div class="hybrid-input">
+				<%= s.text_field :cellphone, :class => "mj-input-phone" %>
+			</div>
+		</div>
+		<div class="submit"><button type="submit" class="mj-button mojo">Sign up</button></div>
 	<% end %>
 </div>

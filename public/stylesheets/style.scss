@@ -813,113 +813,113 @@ h2, h3 {
 
 .signup-page {
 	margin: 50px 125px;
+}
+.signup-page form, .settings-block form {
 	
-	form {
-		margin-top: 20px;
-		padding: 25px;
+	margin-top: 20px;
+	padding: 25px;
+	
+	// TODO: lighter gray with .5 alpha
+	// result color over white should be #fafafa ($light-gray)
+	background: rgba(25, 25, 25, .025);
+	@include rounded(10px);
+	
+	.form-item {
+		padding: 10px 15px;
+		position: relative;
 		
-		// TODO: lighter gray with .5 alpha
-		// result color over white should be #fafafa ($light-gray)
-		background: rgba(25, 25, 25, .025);
-		@include rounded(10px);
+		.subinput input {
+			width: 200px;
+		}
 		
-		.form-item {
-			padding: 10px 15px;
+		&:not(:first-of-type) {
+			//border-top: 1px solid white;
+		}
+		
+		&.optional {
+			> .title {
+				color: $dark-gray;
+				
+				.info {
+					display: block;
+					color: gray;
+					font-size: .65em;
+				}
+			}
+		}
+		
+		.hybrid-input.password {
+			position: relative;
+			.msg-info {
+				position: absolute;
+				right: -10px;
+				width: 195px;
+				margin-top: 0;
+				
+				&:before {
+					content: "◂";
+					font-size: 32px;
+					color: #FF0;
+					position: absolute;
+					margin-left: -21px;
+					margin-top: -14px;
+					//margin-top: -36px;
+				}
+			}
+		}
+		
+		// override properly at other locations
+		input[type=email] { width: 300px !important; }
+		input[type=password] { width: 200px; }
+		
+		&.with-filter {
 			position: relative;
 			
-			.subinput input {
-				width: 200px;
-			}
-			
-			&:not(:first-of-type) {
-				//border-top: 1px solid white;
-			}
-			
-			&.optional {
-				> .title {
-					color: $dark-gray;
-					
-					.info {
-						display: block;
-						color: gray;
-						font-size: .65em;
-					}
+			.filter {
+
+				text-align: right;
+
+				.select, .range {
+					//display: inline-block;
 				}
-			}
-			
-			.hybrid-input.password {
-				position: relative;
-				.msg-info {
+				.select {
+					text-align: left;
 					position: absolute;
-					right: -10px;
-					width: 195px;
-					margin-top: 0;
+					right: 15px; top: 10px;
+					&.height { top: 13px; }
 					
-					&:before {
-						content: "◂";
-						font-size: 32px;
-						color: #FF0;
-						position: absolute;
-						margin-left: -21px;
-						margin-top: -14px;
-						//margin-top: -36px;
-					}
+					color: $dark-gray;
+					width: 192px;
 				}
-			}
-			
-			// override properly at other locations
-			input[type=email] { width: 300px !important; }
-			input[type=password] { width: 200px; }
-			
-			&.with-filter {
-				position: relative;
-				
-				.filter {
-
-					text-align: right;
-
-					.select, .range {
-						//display: inline-block;
-					}
-					.select {
-						text-align: left;
-						position: absolute;
-						right: 15px; top: 10px;
-						&.height { top: 13px; }
-						
-						color: $dark-gray;
-						width: 192px;
-					}
-					.range {
-						display: inline-block;
-						margin-top: 10px;
-						font-size: .85em;
-						
-						&.height { margin-right: 5px; }
-						&.age { margin-right: 20px; }
-					}
-				}
-			}
-			
-			.mj-merged-choices {
-					display: block;
-					label {
-					// TODO: style with black gradient (like create/join radio in stepflow)
-				
-					background: white;
-					//border: none;
-					padding: 2px 3px;
-					//input { display: none; }
-					&.selected {
-						background: rgba(225, 236, 255, .5); //$color-selected
-					}
+				.range {
+					display: inline-block;
+					margin-top: 10px;
+					font-size: .85em;
+					
+					&.height { margin-right: 5px; }
+					&.age { margin-right: 20px; }
 				}
 			}
 		}
-		.submit {
-			margin-top: 10px;
-			text-align: right;
+		
+		.mj-merged-choices {
+				display: block;
+				label {
+				// TODO: style with black gradient (like create/join radio in stepflow)
+			
+				background: white;
+				//border: none;
+				padding: 2px 3px;
+				//input { display: none; }
+				&.selected {
+					background: rgba(225, 236, 255, .5); //$color-selected
+				}
+			}
 		}
+	}
+	.submit {
+		margin-top: 10px;
+		text-align: right;
 	}
 }
 
@@ -1565,39 +1565,6 @@ h2, h3 {
 	}
 }
 
-.column-titles .form-item {
-	
-	.errors {
-		margin-left: 150px;
-	}
-}
-.column-titles .form-item > .title {
-	position: absolute;
-	text-align: right;
-	width: 125px;
-}
-.column-titles .form-item > .hybrid-input {
-	margin-left: 150px;
-	margin-top: 0;
-	
-	padding: 0;
-	background: transparent;
-}
-
-.column-titles .form-item > .hybrid-input {
-	
-	> input {
-		&[type=text], &[type=number], &[type=email] { width: 400px;}
-	}
-	
-	> textarea {
-		width: 400px;
-		height: 100px;
-	}
-	
-}
-
-
 .stepflow-position {
 	position: relative;
 	
@@ -1716,26 +1683,7 @@ h2, h3 {
 	}
 }
 
-// TODO: remove styling to hybrid-input
-.hybrid-input {
-	//background: white;
-	margin-top: 10px;
-	//padding: 5px;
-	//-webkit-border-radius: 5px;
-}
-.mj-merged-choices.hybrid-input {
-	margin-top: 0;
-}
 
-.hybrid-input .inset-title {
-	position: absolute;
-	color: gray;
-	text-shadow: 1px 1px 0px white;
-	font-size: .85em;
-	background: #F9F9F9;
-	border-radius: 5px;
-	padding: 2px 5px;
-}
 .inline-radio-container {
 	display: inline-block;
 	padding: 12px 5px 12px 15px;
@@ -1758,9 +1706,6 @@ h2, h3 {
 .vertical-radio-container label {
 	display: block !important;
 	margin: 0 0 10px !important;
-}
-.form-inputs input {
-	&[type=text], &[type=number], &[type=email], &[type=password] { font-size: 1.2em; }
 }
 .follow-container {
 	display: inline-block;
@@ -2557,30 +2502,102 @@ select.mj-category-select {
 	}
 }
 
-.hybrid-input .subinput {
-	display: inline-block;
+.mj-merged-choices.hybrid-input {
+	margin-top: 0;
 }
-.hybrid-input .subinput .title {
-	font-size: .75em;
-	color: gray;
+.hybrid-input {
+	
+	// TODO: remove styling to hybrid-input
+	margin-top: 10px;
+	
+	.subinput {
+		display: inline-block;
+		
+		.title {
+			font-size: .75em;
+			color: gray;
+		}
+		input {
+			//border-radius: 5px;
+		}
+		select {
+			font-size: 1.2em;
+		}
+	}
+	
+	input[type=file] {
+	}
+
+	// deprecated?
+	.inset-title {
+		position: absolute;
+		color: gray;
+		text-shadow: 1px 1px 0px white;
+		font-size: .85em;
+		background: #F9F9F9;
+		border-radius: 5px;
+		padding: 2px 5px;
+	}
+	
+	&.inset-view {
+		padding: 0;
+		background: transparent;
+		
+		.mj-timeline-input .view-container {
+			/* */
+		}
+	}
+	
+	.current_picture {
+		margin-top: 10px;
+		img { width: 100%; }
+	}
 }
-.hybrid-input .subinput input {
-	//border-radius: 5px;
-}
-.form-inputs input[type=email] {
-	font-size: 1.2em;
-	width: 300px;
-	//border-radius: 5px;
-}
-.form-inputs input.mj-input-phone {
-	font-size: 1.3em;
-	width: 200px !important;
-	//border-radius: 5px;
-}
-.hybrid-input input[type=file] {
-}
-.hybrid-input .subinput select {
-	font-size: 1.2em;
+.form-inputs {
+	input[type=email] {
+		width: 300px;
+		//border-radius: 5px;
+	}
+	input.mj-input-phone {
+		font-size: 1.3em;
+		width: 200px !important;
+		//border-radius: 5px;
+	}
+	input {
+		&[type=text], &[type=number], &[type=email], &[type=password] { font-size: 1.2em; }
+	}
+	
+	&.column-titles {
+		.form-item {
+
+			.errors {
+				margin-left: 150px;
+			}
+
+			> .title {
+				position: absolute;
+				text-align: right;
+				width: 125px;
+			}
+
+			> .hybrid-input {
+				margin-left: 150px;
+				margin-top: 0;
+
+				padding: 0;
+				background: transparent;
+
+				> input {
+					&[type=text], &[type=number], &[type=email] { width: 400px;}
+				}
+
+				> textarea {
+					width: 400px;
+					height: 100px;
+				}
+			}
+		}
+	}
 }
 
 .mj-picture-tool {
@@ -2603,14 +2620,6 @@ select.mj-category-select {
 	background-position: -45px -30px;
 	border-radius: 10px;
 	cursor: move;
-}
-
-.hybrid-input.inset-view {
-	padding: 0;
-	background: transparent;
-}
-.hybrid-input.inset-view .mj-timeline-input .view-container {
-	/* */
 }
 
 ul.location-list {
@@ -3427,3 +3436,96 @@ h2 {
 	}
 }
 
+.settings-block {
+	position: relative;
+	margin: 35px 0 35px;
+	
+	.sidebar {
+		$sidebar-width: 180px;
+		
+		position: absolute;
+		top: 35px; left: 0;
+		width: $sidebar-width;
+		
+		ul {
+			
+			margin-left: 0;
+			padding-left: 0;
+				border: 1px solid #F2F2F2;
+				border-width: 1px 0 1px 0;
+			
+			li {
+				
+				list-style-type: none;
+				$li-padding: 10px;
+				
+				&.active {
+					
+					padding: $li-padding;
+					
+					&:after {
+						content: " ❯";	
+					}
+				}
+				
+				&:not(.active) {
+					
+					a {
+						display: inline-block;
+						width: $sidebar-width - 2 * $li-padding;
+						padding: $li-padding;
+					}
+				}
+			}
+		}
+	}
+	
+	// use that for content pages
+	.content {
+		margin-left: 200px;
+		min-height: 240px;
+		// for content pages with tabs
+		//padding: 20px;
+		//border: 1px solid gray;
+		//@include rounded(3px);
+		//@include boxshadow(($drop-shadow, $inset-shadow));
+		//background: lighten($paper-color, 50%);
+		
+		// newly added
+		.flash {
+			text-align: center;
+		}
+		
+		form {
+			.hybrid-input.filter .range {
+				margin-top: 10px;
+			}
+		}
+		
+		/*li {
+			list-style-type: none;
+			position: relative;
+			
+			&:before {
+				content: "▪";
+				color: #999;
+				display: block;
+				position: absolute;
+				top: 0;
+				margin-left: -1.25em;
+			}
+			
+			> span {
+				color: $lighter-color;
+			}
+		}
+		
+		h3 {
+			margin-top: 0;
+		}
+		
+		> p {
+			color: $lighter-color;
+		}*/
+	}
+}

@@ -1,0 +1,41 @@
+<div class="form-item">
+	<%= format_errors_for s.object, :first_name %>
+	<div class="title">Name</div>
+	<div class="hybrid-input">
+		<div class="subinput">
+			<%= s.text_field :first_name %>
+			<div class="title">First</div>
+		</div>
+		<div class="subinput">
+			<%= s.text_field :last_name %>
+			<div class="title">Last</div>
+		</div>
+	</div>
+</div>
+<div class="form-item">
+	<%= format_errors_for s.object, :dob %>
+	<div class="title">Date of Birth</div>
+	<div class="hybrid-input">
+		<%= s.date_select :dob, { :start_year => Date.today.year - 80, :end_year => Date.today.year - 18, :default => Date.today - 18.year } %>
+	</div>
+</div>	
+<div class="form-item optional">
+	<div class="title">Height <span class="info">optional</span></div>
+	<div class="hybrid-input">
+		<%= s.height_field :height %>
+	</div>
+</div>
+<div class="form-item">
+	<%= format_errors_for s.object, :email %>
+	<div class="title">E-mail</div>
+	<div class="hybrid-input">
+		<%= s.text_field :email %>
+	</div>
+</div>
+<div class="form-item">
+	<%= format_errors_for s.object, :cellphone %>
+	<div class="title">Cell Phone</div>
+	<div class="hybrid-input">
+		<%= s.text_field :cellphone, :class => "mj-input-phone" %>
+	</div>
+</div>

@@ -1,0 +1,27 @@
+<div class="settings-block">
+
+	<div class="sidebar">
+		<ul class="list">
+			<%
+				['profile', 'picture', 'filters', 'password'].each do |i|
+			%>
+					
+					<%=
+						content_tag :li, :class => (account_section == i)? 'active' : nil do
+							link_to_if account_section != i, i.capitalize, account_edit_path(i)
+						end
+					%>
+			<%		
+				end
+			%>
+	</div>
+
+	<div class="content">
+		<%= flash_messages %>
+		<%= form_for @user, :url => {:action => :update}, :html => { :method => :put, :class => ['form-inputs', 'column-titles'] } do |f| %>
+			<%= hidden_field_tag :account_section, account_section %>
+			<%= render :partial => account_section, :locals => {:s => f} %>
+			<div class="submit"><button type="submit" class="mj-button mojo">Update</button></div>
+		<% end %>
+	</div>
+</div>
