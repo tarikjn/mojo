@@ -6,7 +6,7 @@
 				<%
 					menu = [
 						{ :t => 'Dashboard', :p => userhome_path },
-						{ :t => 'Your dates', :p => userhome_dates_path },
+						{ :t => 'Your dates', :p => dates_path },
 						{ :t => 'Settings', :p => (controller_name == 'users')? url_for : account_edit_path('profile') }
 					]
 					menu << { :t => 'Invitations', :p => new_invitation_path } if current_user.admin?

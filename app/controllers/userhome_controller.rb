@@ -5,11 +5,6 @@ class UserhomeController < ApplicationController
   def index
     @user = current_user
   end
-
-  def dates
-    @open_sorties = current_user.open_sorties
-    @upcoming_dates = current_user.upcoming_dates
-  end
   
   def settings
     @user = current_user

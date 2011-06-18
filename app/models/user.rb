@@ -219,8 +219,12 @@ class User < ActiveRecord::Base
     Sortie.open_sorties_for(self)
   end
   
-  def upcoming_dates
+  def upcoming_sorties
     Sortie.upcoming_sorties_for(self)
+  end
+  
+  def past_sorties
+    []
   end
   
   def clear_password!

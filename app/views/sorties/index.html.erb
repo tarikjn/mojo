@@ -1,0 +1,116 @@
+<div class="dates-layout">
+	<%= flash_messages %>
+	<div class="columns">
+		<div class="col-0">
+			<h3>Past</h3>
+			<%
+				if @past_sorties.size > 0
+			%>
+			<ul>
+				<% @past_sorties.each do |s| %>
+					<li class="date">
+						<div class="status">
+							<%
+								if !s.report_by(current_user)
+							%>
+							Please complete the date report.
+							<%
+								else
+							%>
+							You completed the date report.
+							<%
+								end
+							%>
+						</div>
+						<div class="title"><%= s.title %></div>
+						<div class="actions">
+							<!-- Report -->
+						</div>
+					</li>
+				<% end %>
+			</ul>
+			<%
+				else
+			%>
+			<div class="empty">
+				You don't have any past dates.
+			</div>
+			<%
+				end
+			%>
+		</div>
+		<div class="col-1">
+			<h3>Upcoming</h3>
+			<%
+				if @upcoming_sorties.size > 0
+			%>
+			<ul>
+				<% @upcoming_sorties.each do |s| %>
+					<li class="date">
+						<div class="status">
+							This date is confirmed and scheduled.
+						</div>
+						<div class="title"><%= s.title %></div>
+						<div class="actions">
+							<%= link_to "Details", confirmation_date_path(s.id) %>
+							<!-- Cancel -->
+							<!-- Late -->
+						</div>
+					</li>
+				<% end %>
+			</ul>
+			<%
+				else
+			%>
+			<div class="empty">
+				You don't have any scheduled dates.
+			</div>
+			<%
+				end
+			%>
+		</div>
+		<div class="col-2">
+			<h3>Open</h3>
+			<%
+				if @open_sorties.size > 0
+			%>
+			<ul>
+				<% @open_sorties.each do |s| %>
+					<li class="date">
+						<div class="status">
+							<% if s.entries.size > 0 %>
+								<%= s.entries.size %> members have entered, please go through entrants.
+							<% else %>
+								Waiting for members to join.
+							<% end %>
+								<!-- Waiting for your friend -->
+						</div>
+						<div class="title"><%= s.title %></div>
+						<div class="actions">
+							<%= link_to_if s.entries.size > 0, "Entrants", date_entries_path(s.id) %>
+							<!-- Cancel -->
+						</div>
+					</li>
+				<% end %>
+			</ul>
+			<%
+				else
+			%>
+			<div class="empty">
+				Dates you create will appear here.
+			</div>
+			<%
+				end
+			%>
+		</div>
+	</div>
+</div>
+
+<!-- This is moving into the profile page
+
+<h3>Dates invitations</h3>
+<div>
+	Accept | Decline
+</div>
+
+-->

@@ -6,10 +6,9 @@ class PlacesController < ApplicationController
   
   def search
     
-    cache = ActiveSupport::Cache::FileStore.new('tmp/cache')
-    
     # using fixed bounds on SF for API limit savings
-    results = cache.fetch("yelp_37.679889,-122.544389,37.869849,-122.294451_{params[:q]}") do
+    cache_key = "yelp/sanfrancisco/#{params[:q]}"
+    results = Rails.cache.fetch(cache_key, :expires_in => 12.days) do
       get_results(params[:bounds], params[:q])
     end
     

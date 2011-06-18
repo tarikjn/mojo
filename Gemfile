@@ -62,3 +62,6 @@ gem 'delayed_job'
 # generate human "rememberable" passwords
 #gem 'ruby-password'
 # broken
+
+# memcache on Heroku
+gem 'dalli'

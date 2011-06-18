@@ -5,8 +5,6 @@
 		<%= s.select :category, [["Food and Drinks", "food_and_drinks"], ["Entertainment", "entertainment"], ["Outdoor", "outdoor"]], {}, {:class => "mj-category-select"} %>
 		<div class="after">▾</div>
 	</div>
-
-
 </div> 
 <div class="form-item">
 	<%= format_errors_for s.object, :title %>
@@ -51,6 +49,7 @@
 	</div>
 	<% if s.object.place %>
 	<div class="hybrid-input set-location">
+		<%= s.hidden_field :location %>
 		<span class="name"><%= s.object.place.name %></span>
 		<span class="city">San Francisco, CA</span>
 		<span class="action"><a href="#">change</a></span>

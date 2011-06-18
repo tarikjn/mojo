@@ -38,6 +38,10 @@
 			<div id="logo-wrapper"><a href="/">Mojo</a></div>
 			<div id="auth-links">
 				<% if current_user %>
+				<% if !current_page?(root_path) %>
+					<%= link_to "Create<span> a date</span>".html_safe, new_date_path, :class => (["highlighted"] << ( (current_page?(new_date_path))? "active":nil )) %>
+					<%= link_to "Join<span> a date</span>".html_safe, search_dates_path, :class => (["highlighted"] << ( (current_page?(search_dates_path))? "active":nil )) %>
+				<% end %>
 					<%= link_to current_user.first_name, userhome_path, :class => ((current_page?(userhome_path))? "active":nil) %>
 					<%= link_to "Sign out", logout_path %>
 				<% else %>
@@ -69,13 +73,13 @@
 						<li><a href="#">About Mojo</a></li>
 						<li><a href="#">Our Team</a></li>
 						<li><a href="#">Jobs</a></li>
-						<li><a href="#">Contact Us</a></li>
+						<li><a href="mailto:hello@mojo.co">Contact Us</a></li>
 					</ul>
 				</div>
 				<div class="section">
 					<div class="title">Help</div>
 					<ul>
-						<li><a href="#">Support</a></li>
+						<li><a href="mailto:support@mojo.co">Support</a></li>
 						<li><a href="#">How It Works</a></li>
 						<li><a href="#">FAQ</a></li>
 					</ul>
@@ -83,9 +87,9 @@
 				<div class="section">
 					<div class="title">Follow Us</div>
 					<ul>
-						<li><a href="http://twitter.com/mojoapp">Twitter</a></li>
-						<li><a href="#">Facebook</a></li>
-						<li><a href="#">Blog</a></li>
+						<li><a href="http://blog.mojo.co">Blog</a></li>
+						<li><a href="http://twitter.com/mojo">Twitter</a></li>
+						<li><a href="http://www.facebook.com/mojodate">Facebook</a></li>
 					</ul>
 				</div>
 				<div class="section">

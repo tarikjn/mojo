@@ -13,7 +13,7 @@ class Place < ActiveRecord::Base
   # static methods
   def self.process_yelp_business(business)
     
-    place = Place.where({:kind => 'business', :provider => 'yelp', :provider_id => business['id'].to_i}).first
+    place = Place.where({:kind => 'business', :provider => 'yelp', :provider_id => business['id']}).first
     
     if (!place)
       

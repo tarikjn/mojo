@@ -61,10 +61,10 @@
 				</div>
 				<div class="actions">
 					<div class="left">
-						<%= link_to  "Create", sorties_new_path, :class => "mj-button mojo" %> <span>a date</span>
+						<%= link_to  "Create", new_date_path, :class => "mj-button mojo" %> <span>a date</span>
 					</div>
 					<div class="right">
-						<%= link_to "Join", sorties_join_path, :class => "mj-button mojo" %> <span>a date</span>
+						<%= link_to "Join", search_dates_path, :class => "mj-button mojo" %> <span>a date</span>
 					</div>
 				</div>
 			</div>
@@ -124,6 +124,6 @@
 			makkintosshu.twitterStatuses.tweetCount = 1;
 		</script>
 		<div id="mtaTwitter"></div>
-		<script type="text/javascript" src="http://www.twitter.com/statuses/user_timeline/mojodate.json?skip_user=true&amp;callback=makkintosshu.twitterStatuses.twitterCallback"></script>
+		<script type="text/javascript" src="http://www.twitter.com/statuses/user_timeline/mojo.json?skip_user=true&amp;callback=makkintosshu.twitterStatuses.twitterCallback"></script>
 	</div>
 </div>

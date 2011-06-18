@@ -1,0 +1,76 @@
+<div class="form-item">
+	<div class="title">Timeframe</div>
+	<%= mj_timerange "sorties[timerange]", @sorties['timerange'], :show_sorties => true %>
+</div>
+<div class="form-item">
+	<div class="title">Area</div>
+	<div class="hybrid-input mj-location-input">
+		<div id="map_canvas" class="with-range-selector"></div>
+		<div class="map-side">
+			<div class="selected-subset">
+				<div class="title">City:</div>
+				<div class="item">
+					<div class="name">San Francisco, CA</div>
+					<div class="state">Currently Selected</div>
+				</div>
+			</div>
+			<div class="selected-subset operating">
+				<div class="title">Center:</div>
+				<div class="search"> 
+					<input id="address" type="text" value="Search a biz, a place or an address" class="tip" /> 
+				</div> 
+				<div class="results">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="form-item">
+	<div class="title">Matching Dates</div>
+	<div class="hybrid-input inset-view">
+		<%
+			@find_sorties.each do |sortie|
+		%>
+		<label class="mj-sortie" id="date-<%= sortie.id %>">
+			<div class="checkbox">
+				<input type="checkbox" name="stepflow[sorties][]" value="<%= sortie.id %>" />
+			</div>
+			<div class="point">
+				<div class="lat"><%= sortie.place.lat %></div>
+				<div class="lng"><%= sortie.place.lng %></div>
+			</div>
+			<div class="header">
+				<img src="/images/icons/date-<%= sortie.category %>-micro.png" alt="" class="sortie-marker" />
+				<div class="sortie-info">
+					<div class="title"><%= sortie.title %></div>
+					<div class="time-and-area"><%= sortie.time.strftime("%l:%M%p").downcase %>, <%= sortie.place.neighborhoods %></div>
+				</div>
+			</div>
+			<div class="host-info">
+				<div class="picture" style="background-image: url(<%= sortie.creator.picture_url(:mini) if sortie.creator.picture? %>)">
+					<div class="picture-feedback" style="background: <%= color_for_picture_score(sortie.creator.picture_score) %>">
+						<%= sprintf("%+g", sortie.creator.picture_score) %>
+					</div>
+				</div>
+				<div class="info">
+					<div class="title">
+						<div class="name"><%= sortie.creator.first_name %></div>
+						<div class="rating">★★★☆</div>
+					</div>
+					<div class="compatibility">
+						<div class="canvas"><canvas width="30" height="30" class="afinity-chart" /></div>
+						<div class="score"><span class="int"><%= (sortie.creator.afinity_with(@stepflow.host) * 100).round %></span><span class="percent">%</span></div>
+					</div>
+					<div class="ratings">
+						<div class="rating-ttr">Average time to respond: <em><%= sortie.creator.time_to_respond %></em></div>
+						<div class="rating-ttr">Punctuality: <em><%= sortie.creator.punctuality %></em></div>
+					</div>
+				</div>
+			</div>
+		</label>
+		<%
+			end
+		%>
+	</div>
+</div>

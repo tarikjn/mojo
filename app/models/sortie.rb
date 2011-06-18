@@ -16,8 +16,14 @@ class Sortie < ActiveRecord::Base
   validates_inclusion_of :state, :in => %w(unconfirmed open canceled closed)
   validates_inclusion_of :category, :in => %w(food_and_drinks entertainment outdoor)
   
+  attr_accessor :location
+  
   # GeoKit
   acts_as_mappable :through => :place
+  
+  def report_by(user)
+    self.sortie_reports.where(:by => user)
+  end
   
   # TODO: add shortcut of type sortie.creator => sortie.creator_duo.host
   def creator
@@ -36,6 +42,14 @@ class Sortie < ActiveRecord::Base
   def location=(location_id)
     provider_id = location_id.match(/^[a-z]+-[a-z]+-(.+)$/)[1]
     self.place = Place.where({:kind => 'business', :provider => 'yelp', :provider_id => provider_id}).first
+  end
+  
+  def location
+    if self.place
+      "business-yelp-#{self.place.provider_id}"
+    else
+      nil
+    end
   end
   
   def update_state

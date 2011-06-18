@@ -160,11 +160,20 @@ a {
       background-color: rgba(87, 87, 87, 0.5);
       text-transform: lowercase;
       font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
-      color: #e6e6e6; }
+      color: #e6e6e6;
+      /*&.highlighted {
+      	background-color: rgba(10, 112, 193, .5);
+      	
+      	&.active {
+      		background-color: rgba(10, 112, 193, .9);
+      	}
+      }*/ }
       #head-content #auth-links a:hover {
         color: white; }
       #head-content #auth-links a.active {
         background-color: rgba(87, 87, 87, 0.9); }
+      #head-content #auth-links a > span {
+        font-size: .65em; }
     #head-content #auth-links .relative-container {
       position: relative; }
       #head-content #auth-links .relative-container #login-bubble {
@@ -464,71 +473,71 @@ h2, h3 {
 .signup-page {
   margin: 50px 125px; }
 
-.signup-page form, .settings-block form {
+.signup-page form, .settings-block form, .form-page form {
   margin-top: 20px;
   padding: 25px;
   background: rgba(25, 25, 25, 0.025);
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   border-radius: 10px; }
-  .signup-page form .form-item, .settings-block form .form-item {
+  .signup-page form .form-item, .settings-block form .form-item, .form-page form .form-item {
     padding: 10px 15px;
     position: relative; }
-    .signup-page form .form-item .subinput input, .settings-block form .form-item .subinput input {
+    .signup-page form .form-item .subinput input, .settings-block form .form-item .subinput input, .form-page form .form-item .subinput input {
       width: 200px; }
-    .signup-page form .form-item.optional > .title, .settings-block form .form-item.optional > .title {
+    .signup-page form .form-item.optional > .title, .settings-block form .form-item.optional > .title, .form-page form .form-item.optional > .title {
       color: #636363; }
-      .signup-page form .form-item.optional > .title .info, .settings-block form .form-item.optional > .title .info {
+      .signup-page form .form-item.optional > .title .info, .settings-block form .form-item.optional > .title .info, .form-page form .form-item.optional > .title .info {
         display: block;
         color: gray;
         font-size: .65em; }
-    .signup-page form .form-item .hybrid-input.password, .settings-block form .form-item .hybrid-input.password {
+    .signup-page form .form-item .hybrid-input.password, .settings-block form .form-item .hybrid-input.password, .form-page form .form-item .hybrid-input.password {
       position: relative; }
-      .signup-page form .form-item .hybrid-input.password .msg-info, .settings-block form .form-item .hybrid-input.password .msg-info {
+      .signup-page form .form-item .hybrid-input.password .msg-info, .settings-block form .form-item .hybrid-input.password .msg-info, .form-page form .form-item .hybrid-input.password .msg-info {
         position: absolute;
         right: -10px;
         width: 195px;
         margin-top: 0; }
-        .signup-page form .form-item .hybrid-input.password .msg-info:before, .settings-block form .form-item .hybrid-input.password .msg-info:before {
+        .signup-page form .form-item .hybrid-input.password .msg-info:before, .settings-block form .form-item .hybrid-input.password .msg-info:before, .form-page form .form-item .hybrid-input.password .msg-info:before {
           content: "◂";
           font-size: 32px;
           color: #FF0;
           position: absolute;
           margin-left: -21px;
           margin-top: -14px; }
-    .signup-page form .form-item input[type=email], .settings-block form .form-item input[type=email] {
+    .signup-page form .form-item input[type=email], .settings-block form .form-item input[type=email], .form-page form .form-item input[type=email] {
       width: 300px !important; }
-    .signup-page form .form-item input[type=password], .settings-block form .form-item input[type=password] {
+    .signup-page form .form-item input[type=password], .settings-block form .form-item input[type=password], .form-page form .form-item input[type=password] {
       width: 200px; }
-    .signup-page form .form-item.with-filter, .settings-block form .form-item.with-filter {
+    .signup-page form .form-item.with-filter, .settings-block form .form-item.with-filter, .form-page form .form-item.with-filter {
       position: relative; }
-      .signup-page form .form-item.with-filter .filter, .settings-block form .form-item.with-filter .filter {
+      .signup-page form .form-item.with-filter .filter, .settings-block form .form-item.with-filter .filter, .form-page form .form-item.with-filter .filter {
         text-align: right; }
-        .signup-page form .form-item.with-filter .filter .select, .settings-block form .form-item.with-filter .filter .select {
+        .signup-page form .form-item.with-filter .filter .select, .settings-block form .form-item.with-filter .filter .select, .form-page form .form-item.with-filter .filter .select {
           text-align: left;
           position: absolute;
           right: 15px;
           top: 10px;
           color: #636363;
           width: 192px; }
-          .signup-page form .form-item.with-filter .filter .select.height, .settings-block form .form-item.with-filter .filter .select.height {
+          .signup-page form .form-item.with-filter .filter .select.height, .settings-block form .form-item.with-filter .filter .select.height, .form-page form .form-item.with-filter .filter .select.height {
             top: 13px; }
-        .signup-page form .form-item.with-filter .filter .range, .settings-block form .form-item.with-filter .filter .range {
+        .signup-page form .form-item.with-filter .filter .range, .settings-block form .form-item.with-filter .filter .range, .form-page form .form-item.with-filter .filter .range {
           display: inline-block;
           margin-top: 10px;
           font-size: .85em; }
-          .signup-page form .form-item.with-filter .filter .range.height, .settings-block form .form-item.with-filter .filter .range.height {
+          .signup-page form .form-item.with-filter .filter .range.height, .settings-block form .form-item.with-filter .filter .range.height, .form-page form .form-item.with-filter .filter .range.height {
             margin-right: 5px; }
-          .signup-page form .form-item.with-filter .filter .range.age, .settings-block form .form-item.with-filter .filter .range.age {
+          .signup-page form .form-item.with-filter .filter .range.age, .settings-block form .form-item.with-filter .filter .range.age, .form-page form .form-item.with-filter .filter .range.age {
             margin-right: 20px; }
-    .signup-page form .form-item .mj-merged-choices, .settings-block form .form-item .mj-merged-choices {
+    .signup-page form .form-item .mj-merged-choices, .settings-block form .form-item .mj-merged-choices, .form-page form .form-item .mj-merged-choices {
       display: block; }
-      .signup-page form .form-item .mj-merged-choices label, .settings-block form .form-item .mj-merged-choices label {
+      .signup-page form .form-item .mj-merged-choices label, .settings-block form .form-item .mj-merged-choices label, .form-page form .form-item .mj-merged-choices label {
         background: white;
         padding: 2px 3px; }
-        .signup-page form .form-item .mj-merged-choices label.selected, .settings-block form .form-item .mj-merged-choices label.selected {
+        .signup-page form .form-item .mj-merged-choices label.selected, .settings-block form .form-item .mj-merged-choices label.selected, .form-page form .form-item .mj-merged-choices label.selected {
           background: rgba(225, 236, 255, 0.5); }
-  .signup-page form .submit, .settings-block form .submit {
+  .signup-page form .submit, .settings-block form .submit, .form-page form .submit {
     margin-top: 10px;
     text-align: right; }
 
@@ -1708,6 +1717,8 @@ select.mj-category-select {
       width: 245px;
       overflow-y: auto;
       background: white; }
+      .mj-location-input.place-view .map-and-results .results.loading {
+        background: url(/images/ajax-loading.gif) no-repeat center center; }
       .mj-location-input.place-view .map-and-results .results .result label {
         display: block;
         position: relative;
@@ -1767,7 +1778,7 @@ select.mj-category-select {
   .hybrid-input .current_picture {
     margin-top: 10px; }
     .hybrid-input .current_picture img {
-      width: 100%; }
+      max-width: 100%; }
 
 .form-inputs input[type=email] {
   width: 300px; }
@@ -2664,3 +2675,32 @@ h2 {
       text-align: center; }
     .settings-block .content form .hybrid-input.filter .range {
       margin-top: 10px; }
+
+.dates-layout {
+  margin: 50px 0 100px; }
+  .dates-layout .flash {
+    text-align: center; }
+  .dates-layout > .columns > div {
+    float: left;
+    width: 300px; }
+    .dates-layout > .columns > div:not(:last-of-type) > ul, .dates-layout > .columns > div:not(:last-of-type) > .empty {
+      padding-right: 10px;
+      border-right: 1px solid #e6e6e6; }
+    .dates-layout > .columns > div:not(:first-of-type) > ul, .dates-layout > .columns > div:not(:first-of-type) > .empty {
+      padding-left: 10px; }
+    .dates-layout > .columns > div h3 {
+      text-align: center; }
+    .dates-layout > .columns > div .empty {
+      color: gray;
+      font-size: .8em;
+      text-align: center;
+      font-style: italic; }
+  .dates-layout > .columns:after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both; }
+
+.form-page {
+  position: relative;
+  margin: 35px 25px; }

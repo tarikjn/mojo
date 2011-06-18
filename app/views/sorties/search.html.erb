@@ -1,0 +1,9 @@
+<div class="form-page">
+	<h3>Join a date</h3>
+	<%= form_tag join_dates_path, :html => { :class => ['form-inputs'] } do |f| %>
+		<%= render :partial => "join", :locals => { :s => f } %>
+		<div class="submit">
+			<button type="submit" class="mj-button mojo">Join</button>
+		</div>
+	<% end %>
+</div>

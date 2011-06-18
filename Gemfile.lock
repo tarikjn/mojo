@@ -38,6 +38,7 @@ GEM
       activesupport (~> 3.0)
     crack (0.1.8)
     daemons (1.1.3)
+    dalli (1.0.5)
     delayed_job (2.1.4)
       activesupport (~> 3.0)
       daemons
@@ -120,6 +121,7 @@ PLATFORMS
 DEPENDENCIES
   authlogic
   carrierwave
+  dalli
   delayed_job
   fog
   geokit-rails3

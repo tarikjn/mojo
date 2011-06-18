@@ -28,7 +28,28 @@ Mojo::Application.routes.draw do
     get "/" => :index
   end
   
-  # pretty-up
+  resources :dates, :controller => :sorties, :only => [:index, :new, :create] do
+    
+    collection do
+      get  'search'
+      post 'join'
+    end
+    
+    member do
+      get 'confirmation'
+    end
+    
+    # show/act on a date's entries
+    resources :entries, :only => :index do
+      member do
+        put 'pass'
+        put 'invite'
+      end
+    end
+    
+  end
+  
+  # TODO: pretty-up
   scope '/invitation', :controller => :invitations, :as => "invitation" do
     get "/enter" => :enter
     post "/enter" => :find
@@ -57,17 +78,6 @@ Mojo::Application.routes.draw do
   
   # Twilio, TODO: use https and twilio-ruby verification
   match "/sms" => "sms#receive"
-
-  # todo: namespace it
-  match "/entries/:id/confirmation", :to => "entries#confirmation", :constraints => {:id => /\d+/}
-  match "/entries/pass/:entry", :to => "entries#pass", :constraints => {:entry => /\d+/}
-  match "/entries/invite/:entry", :to => "entries#invite", :constraints => {:entry => /\d+/}
-  match "/entries/:id", :to => "entries#waitlist", :constraints => {:id => /\d+/}
-  
-  get 'sorties/new'
-  post 'sorties' => "sorties#create"
-  get 'sorties/join'
-  get 'sorties/:id' => "sorties#confirmation"
   
   # todo: password protect
   namespace "admin" do

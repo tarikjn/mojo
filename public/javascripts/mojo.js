@@ -697,6 +697,25 @@ var LiveInit = {
 	},
 	mapOnly: function(c) {
 		
+		// load Google Maps (code in mojo-geo.js)
+		$(c).find('#map_canvas:visible').each(function() {
+			
+			if ($("label.mj-activity").length) // TODO: add scope!!
+			{
+				var points = {}; // move outside block?
+				
+				$("label.mj-activity").each(function() {
+					var lat = $(this).find(".point .lat").text();
+					var lng = $(this).find(".point .lng").text();
+					points[this.id] = [lat, lng];
+				});
+			}
+			
+			this.mj_map = new Map(this, points);
+		});
+	},
+	mapResultsOnly: function(c) {
+		
 		// apply "selected" class to label when switching radio
 		$(c).find(".mj-choice, .mj-merged-choices, .mj-operation-choices, .mj-micro-select, .mj-place").find("input[type=radio]")
 			.change(Lib.applySelected).filter(":checked").each(Lib.applySelected);
@@ -743,23 +762,6 @@ var LiveInit = {
 			ctx.closePath();
 			ctx.fillStyle = 'rgba('+red+', '+green+', 0, .25)';
 			ctx.fill();
-		});
-		
-		// load Google Maps (code in mojo-geo.js)
-		$(c).find('#map_canvas').each(function() {
-			
-			if ($("label.mj-activity").length) // TODO: add scope!!
-			{
-				var points = {}; // move outside block?
-				
-				$("label.mj-activity").each(function() {
-					var lat = $(this).find(".point .lat").text();
-					var lng = $(this).find(".point .lng").text();
-					points[this.id] = [lat, lng];
-				});
-			}
-			
-			this.mj_map = new Map(this, points);
 		});
 
 		// mj-timerange-input
@@ -815,11 +817,15 @@ var LiveInit = {
 		
 		$(".set-location .action a").click(function() {
 			
+			// this changes an already selected location
 			var set = $(this).parents(".set-location:eq(0)");
 			var change = set.next();
 			
 			set.hide();
 			change.show();
+			
+			// init map now that it's visible
+			LiveInit.mapOnly(change);
 			
 			return false; // bad
 		});
@@ -836,6 +842,15 @@ var LiveInit = {
 				var query = this.value;
 				var bounds = map.gmap.getBounds().toUrlValue();
 				
+				// clear previous makers
+				map.clearMarkers();
+				
+				// remove results
+				results.empty()
+				
+				// show it's loading
+				results.addClass("loading");
+				
 				$.ajax({
 					url: "/places/search",
 					data: {'bounds': bounds, 'q': query},
@@ -843,10 +858,8 @@ var LiveInit = {
 					success: function(r) {
 						
 						// print results TODO: replace name of input with desired form context
+						results.removeClass("loading");
 						results.html(r.block);
-						
-						// clear previous makers
-						map.clearMarkers();
 						
 						// add new markers
 						for (var i = 0; r.markers[i]; i++)
@@ -861,13 +874,13 @@ var LiveInit = {
 						});
 						
 						// set markers animation event
-						results.children(".result").mouseenter(function(){
+						results.children(".result").hover(function(){
 							this.mj_marker.setAnimation(google.maps.Animation.BOUNCE);
-						}).mouseleave(function(){
+						}, function(){
 							this.mj_marker.setAnimation(null);
 						});
 						
-						LiveInit.mapOnly(results[0]);
+						LiveInit.mapResultsOnly(results[0]);
 					}
 				});
 			
@@ -886,6 +899,9 @@ var LiveInit = {
 		
 		// init map
 		LiveInit.mapOnly(c);
+		
+		// init map results
+		LiveInit.mapResultsOnly(c);
 		
 		// init nav
 		LiveInit.navOnly(c);

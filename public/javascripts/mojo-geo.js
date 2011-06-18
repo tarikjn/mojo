@@ -89,6 +89,7 @@ function Map(obj, activity_points) {
 		for (i in that.markers) {
 			that.markers[i].setMap(null);
 		}
+		that.markers = [];
 	};
 	
 	this.addMarker = function(point, title, type) {
