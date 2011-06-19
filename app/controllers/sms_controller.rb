@@ -11,15 +11,32 @@ class SmsController < ApplicationController
     # lookup sender's callerID
     sender = User.find_by_cellphone(caller_id)
     
-    # find the people on his date
-    sortie = Sortie.find_active_sortie_for(sender)
-    recipients = (sortie.get_people)
-    recipients.delete(sender)
+    if (sender)
+      
+      # find the people on his date
+      sortie = Sortie.find_active_sortie_for(sender)
+      
+      if (sortie)
+        recipients = (sortie.get_people)
+        recipients.delete(sender)
     
-    # format response
-    @message = "#{sender.first_name}: #{body}"
-    @recipients = recipients
+        # format response
+        @message = "#{sender.first_name}: #{body}"
+        @recipients = recipients
+      else
+        @recipients = [sender]
+        @message = "Mojo: Hey #{sender.first_name}, oops you don't have any current date at the moment..."
+      end
+      
+    else
+      
+      @recipients = [User.new(:cellphone => caller_id)]
+      @message = "Mojo: Sorry, we could not recognize your caller ID."
+    
+    end
     
     # default view send message to them
+    
   end
+  
 end

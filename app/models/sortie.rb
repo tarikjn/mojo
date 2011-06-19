@@ -22,7 +22,11 @@ class Sortie < ActiveRecord::Base
   acts_as_mappable :through => :place
   
   # scopes
-  scope :future, lambda { { :conditions => ["sorties.time > ?", Time.now] } } # 'time' column likely to pose an issue with SQL
+  scope :future, lambda { { :conditions => ["time > ?", Time.now] } } # 'time' column likely to pose an issue with SQL
+  scope :active, lambda { where('time < ? and time > ?', Time.now + 2.hours, Time.now - 1.hour) }
+  scope :closed, where(:state => 'closed')
+  scope :with_user, lambda { |user| where('(size = 2 AND (host_id = :user OR guest_id = :user)) OR (size = 4 AND (host_id = :wings OR guest_id = :wings))', 
+    {:user => user.id, :wings => Wing.ids_with(user)}) }
   
   def report_by(user)
     self.sortie_reports.where(:by => user)
@@ -105,7 +109,7 @@ class Sortie < ActiveRecord::Base
     Sms.deliver(self.guest.cellphone, msg % self.host.first_name)
   end
   # 5.minutes.from_now will be evaluated when in_the_future is called
-  handle_asynchronously :start_sms, :run_at => Proc.new { 30.seconds.from_now }
+  handle_asynchronously :start_sms, :run_at => Proc.new { self.time - 2.hours }
   
   def cancel(user)
     if ['open', 'closed', 'unconfirmed'].include?(self.state) and self.host_id == user.id
@@ -147,9 +151,13 @@ class Sortie < ActiveRecord::Base
   end
   
   def self.find_active_sortie_for(user)
-    # implement
-    # testing: first open sortie
-    self.upcoming_sorties_for(user).last
+    
+    # look for the sortie that is within 2 hours from now or less than 1 hour ago
+    # this is used by the SMS controller
+    self.active.with_user(user)
+    
+    # it is the role of the entry/sortie invite actions to make sure that no user can have 2 active dates at the same time
+    
   end
   
   def self.open_sorties_for(user)
@@ -159,12 +167,7 @@ class Sortie < ActiveRecord::Base
   
   def self.upcoming_sorties_for(user)
     # find the closed upcoming sorties where the user is in
-    self.future.where(:host_id => Wing.ids_with(user), :size => 4, :state => 'closed') + self.future.where(:host_id => user, :size => 2, :state => 'closed')
+    self.future.closed.with_user(user)
     # ["time > ", Time.now]
-  end
-  
-  def self.with(user)
-    self.where(:size => 2).where("host_id = :user OR guest_id = :user", { :user => user.id }) + 
-    self.where(:size => 4).where("host_id = :wings OR guest_id = :wings", { :wings => Wing.ids_with(user) })
   end
 end
