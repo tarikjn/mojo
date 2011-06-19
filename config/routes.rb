@@ -37,6 +37,7 @@ Mojo::Application.routes.draw do
     
     member do
       get 'confirmation'
+      put 'cancel'
     end
     
     # show/act on a date's entries

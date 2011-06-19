@@ -1,0 +1,62 @@
+<% content_tag :li, :class => (['date'] << ((sortie.has_tasks?)? 'with_tasks':nil)) do %>
+	<div class="status">
+		<% if sortie.open? %>
+			<% if sortie.entries.waiting.size > 0 %>
+				<%= pluralize(sortie.entries.waiting.size, 'entrant') %> waiting, please go through!
+			<% else %>
+				Waiting for members to join.
+			<% end %>
+			<!-- add Waiting for your friend -->
+		<% end %>
+		<% if sortie.upcoming? %>
+			This date is confirmed and scheduled.
+		<% end %>
+	</div>
+	<div class="header">
+		<div class="calendar-day">
+			<div class="month"><%= sortie.time.strftime("%b") %></div>
+			<div class="day"><%= sortie.time.mday %></div>
+		</div>
+		<img src="/images/icons/date-<%= sortie.category %>-micro.png" alt="" class="category-icon" />
+		<div class="info">
+			<div class="title"><%= sortie.title %></div>
+			<div class="time-and-area"><%= sortie.time.strftime("%l:%M%p").downcase %>, <%= sortie.place.name %></div>
+		</div>
+	</div>
+	<div class="participants">
+		<div class="person">
+			<% if sortie.open? %>
+				<%= image_tag "avatars/#{sortie.host.sex_preference}-46.png", :class => 'open' %> <span class="name">Open</span>
+			<% else %>
+				<%= image_tag sortie.party_of(current_user).picture_url(:mini) %> <span class="name"><%= sortie.party_of(current_user).first_name %></span>
+			<% end %>
+		</div>
+	</div>
+	<div class="actions">
+		<% if sortie.open? %>
+			<% if sortie.entries.waiting.size > 0 %>
+				<%= link_to "Entrants", date_entries_path(sortie.id), :class => ['mj-button', 'small', 'white'] %>
+			<% else %>
+				<span class="mj-button small white disabled">Entrants</span>
+			<% end %>
+		<% end %>
+		<% if sortie.upcoming? %>
+			<%= link_to "Details", confirmation_date_path(sortie), :class => ['mj-button', 'small', 'white'] %>
+			<!-- Late -->
+		<% end %>
+		<% if !sortie.past? %>
+			<%= link_to "Cancel", cancel_date_path(sortie), :class => ['mj-button', 'small', 'white', 'cancel-action'] %>
+		<% end %>
+	</div>
+<% end %>
+<% if !sortie.past? %>
+	<div class="action-box cancel">
+		<div class="prompt">Are you sure you want to cancel this date?</div>
+		<div class="choices">
+			<%= form_tag cancel_date_path(sortie), :method => :put do %>
+				<button class="mj-button red" type="submit">Cancel</button>
+				<button class="mj-button mojo abort">Never mind</button>
+			<% end %>
+		</div>
+	</div>
+<% end %>

@@ -22,7 +22,8 @@
 <div class="form-item"> 
 	<div class="title">Time</div> 
 	<div class="hybrid-input">
-		<%= s.datetime_select :time %>
+		<!-- AM/PM coming in Rails 3.1 -->
+		<%= s.datetime_select :time, {:minute_step => 15, :ampm => true} %>
 	</div>
 </div> 
 <div class="form-item">

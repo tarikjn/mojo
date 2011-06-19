@@ -1,6 +1,6 @@
 <div class="form-item">
 	<div class="title">Timeframe</div>
-	<%= mj_timerange "sorties[timerange]", @sorties['timerange'], :show_sorties => true %>
+	<%= mj_timerange "timerange", @timerange, :show_sorties => true %>
 </div>
 <div class="form-item">
 	<div class="title">Area</div>
@@ -27,14 +27,18 @@
 </div>
 
 <div class="form-item">
+	<% if @single_error %>
+		<div class="errors"><ul><li><%= @single_error %></li></ul></div>
+	<% end %>
 	<div class="title">Matching Dates</div>
 	<div class="hybrid-input inset-view">
 		<%
-			@find_sorties.each do |sortie|
+			@sorties.each do |sortie|
 		%>
 		<label class="mj-sortie" id="date-<%= sortie.id %>">
 			<div class="checkbox">
-				<input type="checkbox" name="stepflow[sorties][]" value="<%= sortie.id %>" />
+				<!-- name="stepflow[sorties][]" -->
+				<input type="checkbox" name="sorties[]" value="<%= sortie.id %>" />
 			</div>
 			<div class="point">
 				<div class="lat"><%= sortie.place.lat %></div>
@@ -60,7 +64,7 @@
 					</div>
 					<div class="compatibility">
 						<div class="canvas"><canvas width="30" height="30" class="afinity-chart" /></div>
-						<div class="score"><span class="int"><%= (sortie.creator.afinity_with(@stepflow.host) * 100).round %></span><span class="percent">%</span></div>
+						<div class="score"><span class="int"><%= (sortie.creator.afinity_with(current_user) * 100).round %></span><span class="percent">%</span></div>
 					</div>
 					<div class="ratings">
 						<div class="rating-ttr">Average time to respond: <em><%= sortie.creator.time_to_respond %></em></div>

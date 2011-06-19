@@ -70,6 +70,8 @@ private
     # The Rack response format is used here
     status, headers, body = response
     
+    # TODO: catch errors (ie. API limit etc.)
+    
     #resp = ActiveSupport::JSON.decode(body)
     
     body

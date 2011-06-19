@@ -38,5 +38,8 @@ module Mojo
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+    
+    # time zone
+    config.time_zone = "Pacific Time (US & Canada)"
   end
 end

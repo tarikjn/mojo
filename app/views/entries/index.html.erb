@@ -1,34 +1,30 @@
-<%
-	if (@left_on_list > 0) then
-%>
-	<div class="incoming">
-		<%= @left_on_list %> more guys
+<h3>Entries</h3>
+<div class="remaining-time"><%= distance_of_time_in_words Time.now, @sortie.time %> left</div>
+<div class="participants-view">
+	<div class="sortie-box">
+		<div class="title"><%= @sortie.title %></div>
+		<div class="content">
+			<div class="participant host">
+				<div class="picture" style="background-image: url(<%= @sortie.creator.picture_url(:mini) %>)">
+				</div>
+				<div class="title">
+					<div class="name"><%= @sortie.creator.first_name %></div>
+					<div class="rating">★★★☆</div>
+				</div>
+			</div>
+			<div class="spot" id="drop-invite" data-action="invite">
+			</div>
+		</div>
 	</div>
-<%
-	end
-%>
-<% if @entry %>
-<div class="current" draggable="true" id="entry-<%= @entry.id %>">
-	<img src="/images/users/<%= @entry.user.id %>-48.jpg" class="drag-icon" alt="" />
-	<div class="host-info">
-		<div class="picture" style="background-image: url(/images/users/<%= @entry.user.id %>-48.jpg)">
-			<div class="picture-feedback">+1.0</div>
+
+	<div class="participants-viewport">
+		<div class="participants">
+		<%= render :partial => 'waitlist' %>
 		</div>
-		<div class="info">
-			<div class="title">
-				<div class="name"><%= @entry.user.first_name %></div>
-				<div class="rating">★★★☆</div>
-			</div>
-			<div class="compatibility">
-				82%
-			</div>
-			<div class="ratings">
-				<div class="rating-ttr">Average time to respond: <em>1 hours</em></div>
-				<div class="rating-ttr">Punctuality: <em>Mostly on-time</em></div>
-			</div>
-		</div>
+	</div>
+
+	<div class="eject">
+		<div class="symbol" id="drop-pass" data-action="pass"><span>⏏</span></div>
+		<div class="title">Good luck!</div>
 	</div>
 </div>
-<% else %>
-<div>Bummer! No entrants yet...</div>
-<% end %>

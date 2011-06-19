@@ -17,6 +17,10 @@ defaults: &defaults
   s3:
     access_key_id: AKIAII5L2KWAARSQ2VHA
     secret_access_key: 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
+  images:
+    male: guy
+    both: person
+    female: girl
   
 
 development:

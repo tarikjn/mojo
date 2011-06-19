@@ -45,19 +45,7 @@
 				if @upcoming_sorties.size > 0
 			%>
 			<ul>
-				<% @upcoming_sorties.each do |s| %>
-					<li class="date">
-						<div class="status">
-							This date is confirmed and scheduled.
-						</div>
-						<div class="title"><%= s.title %></div>
-						<div class="actions">
-							<%= link_to "Details", confirmation_date_path(s.id) %>
-							<!-- Cancel -->
-							<!-- Late -->
-						</div>
-					</li>
-				<% end %>
+				<%= render :partial => 'sortie', :collection => @upcoming_sorties %>
 			</ul>
 			<%
 				else
@@ -75,23 +63,7 @@
 				if @open_sorties.size > 0
 			%>
 			<ul>
-				<% @open_sorties.each do |s| %>
-					<li class="date">
-						<div class="status">
-							<% if s.entries.size > 0 %>
-								<%= s.entries.size %> members have entered, please go through entrants.
-							<% else %>
-								Waiting for members to join.
-							<% end %>
-								<!-- Waiting for your friend -->
-						</div>
-						<div class="title"><%= s.title %></div>
-						<div class="actions">
-							<%= link_to_if s.entries.size > 0, "Entrants", date_entries_path(s.id) %>
-							<!-- Cancel -->
-						</div>
-					</li>
-				<% end %>
+				<%= render :partial => 'sortie', :collection => @open_sorties %>
 			</ul>
 			<%
 				else
@@ -103,6 +75,8 @@
 				end
 			%>
 		</div>
+	</div>
+	<div class="action-boxes">
 	</div>
 </div>
 

@@ -1,14 +1,14 @@
 <div class="date-confirmation">
 	<h3>It's on!</h3>
-	<p>You have a date with <%= @sortie.creator_duo.participant.first_name %>, <em><%= @sortie.time.strftime("%A at %I:%M%P") %></em>.</p>
+	<p>You have a date with <%= @sortie.party_of(current_user).first_name %>, <em><%= @sortie.time.strftime("%A at %I:%M%P") %></em>.</p>
 	<div class="people">
 		<div>
-			<img src="<%= @sortie.creator_duo.host.picture_url(:thumb) %>" />
-			<%= @sortie.creator_duo.host.first_name %>
+			<img src="<%= @sortie.host.picture_url(:thumb) %>" />
+			<%= @sortie.host.first_name %>
 		</div>
 		<div>
-			<img src="<%= @sortie.creator_duo.participant.picture_url(:thumb) %>" />
-			<%= @sortie.creator_duo.participant.first_name %>
+			<img src="<%= @sortie.guest.picture_url(:thumb) %>" />
+			<%= @sortie.guest.first_name %>
 		</div>
 	</div>
 	<div class="location">

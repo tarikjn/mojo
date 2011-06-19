@@ -2,8 +2,8 @@
 class Sortie < ActiveRecord::Base
   include ActiveModelExtensions # Mojo's
   
-  belongs_to :host, :polymorphic => true
-  belongs_to :guest, :polymorphic => true
+  belongs_to :host, :foreign_type => 'host_type', :polymorphic => true
+  belongs_to :guest, :foreign_type => 'guest_type', :polymorphic => true
   belongs_to :place
   
   has_many :entries, :dependent => :destroy
@@ -13,7 +13,7 @@ class Sortie < ActiveRecord::Base
   validates :title, :presence => true
   validates :place, :presence => true
   validates_inclusion_of :size, :in => [2, 4]
-  validates_inclusion_of :state, :in => %w(unconfirmed open canceled closed)
+  validates_inclusion_of :state, :in => %w(unconfirmed open canceled closed expired)
   validates_inclusion_of :category, :in => %w(food_and_drinks entertainment outdoor)
   
   attr_accessor :location
@@ -21,22 +21,21 @@ class Sortie < ActiveRecord::Base
   # GeoKit
   acts_as_mappable :through => :place
   
+  # scopes
+  scope :future, lambda { { :conditions => ["sorties.time > ?", Time.now] } } # 'time' column likely to pose an issue with SQL
+  
   def report_by(user)
     self.sortie_reports.where(:by => user)
   end
   
-  # TODO: add shortcut of type sortie.creator => sortie.creator_duo.host
   def creator
     # do as a has_one :through?
     (self.host.is_a? User)? self.host : self.host.lead
   end
   
-  def invitee
-    self.invitee_duo.host
-  end
-  
-  def hosts
-    # return both creator and invitee
+  def party_of(party)
+    # check if the party is in the sortie at all?
+    self.host == party ? self.guest : self.host
   end
   
   def location=(location_id)
@@ -56,8 +55,7 @@ class Sortie < ActiveRecord::Base
     # figure out if state of sortie changed
     if (self.state == 'open')
       # probably there is a cleaner way to do that
-      # !self.invitee_duo assume we assing 2 duos for sorties
-      if (self.creator_duo.participant and (!self.invitee_duo or (self.invitee_duo and self.invitee_duo.participant)))
+      if self.guest
         self.close()
       end
     end
@@ -66,8 +64,8 @@ class Sortie < ActiveRecord::Base
   def close
     # entrants have been invited, sortie is confirmed/no longer accepts entries
     
-    # send confirmations to co-hosts and participants
-    Notifier::invited_confirmation(self, self.creator_duo.participant)
+    # send confirmations to hosts and guests
+    Notifier::invited_confirmation(self, self.guest)
     
     # set up SMS service?
     self.start_sms # async
@@ -75,41 +73,21 @@ class Sortie < ActiveRecord::Base
     # update state
     self.state = 'closed'
     
-    #commit
+    # commit
     self.save
   end
   
   def get_people
-    people = [self.creator_duo.host, self.creator_duo.participant]
-    people += [self.creator_invitee.host, self.creator_invitee.participant] if self.invitee_duo
+    people = [self.host, self.guest]
+    # refactor for doubles
+    #people += [self.creator_invitee.host, self.creator_invitee.participant] if self.invitee_duo
     people
-  end
-  
-  def location_district
-    # use yelp API, TODO: replace with GeoPlanet? or put badge link to yelp...
-    # need to cache results 100 limit right now
-    cache = ActiveSupport::Cache::MemoryStore.new
-    cache.fetch("date_#{self.id}_district") do
-      # API request
-      response = HTTParty.get("http://api.yelp.com/neighborhood_search?lat=#{self.lat}&long=#{self.lng}&ywsid=#{SETTINGS[Rails.env]['YWSID']}")
-      puts response.body, response.code, response.message, response.headers.inspect
-      
-      # return value (get stored in cache too)
-      # decoding JSON manually, Yelp not sending json header format
-      resp = ActiveSupport::JSON.decode(response.body)
-      
-      if (resp['message']['code'] == 0)
-        resp['neighborhoods'][0]['name']
-      else # exceeded max daily limit
-        "Exceeded daily limit (Yelp)"
-      end
-    end
   end
   
   # called when a user asks to join the date
   def add_entrant(user)
     # add user to entries
-    entry = Entry.new(:sortie => self, :user => user)
+    entry = Entry.new(:sortie => self, :party => user)
     entry.save
     
     # notification send should be in entries?
@@ -122,24 +100,48 @@ class Sortie < ActiveRecord::Base
     msg = "Hi! Your date with %s is in 2 hours, you can now chat to sync any details etc., just respond to this number! Happy Dating :) Mojo."
     
     # sent msg to host
-    Sms.deliver(self.creator_duo.host.cellphone, msg % self.creator_duo.participant.first_name)
-    # sent msg to participant
-    Sms.deliver(self.creator_duo.participant.cellphone, msg % self.creator_duo.host.first_name)
+    Sms.deliver(self.host.cellphone, msg % self.guest.first_name)
+    # sent msg to guest
+    Sms.deliver(self.guest.cellphone, msg % self.host.first_name)
   end
   # 5.minutes.from_now will be evaluated when in_the_future is called
   handle_asynchronously :start_sms, :run_at => Proc.new { 30.seconds.from_now }
+  
+  def cancel(user)
+    if ['open', 'closed', 'unconfirmed'].include?(self.state) and self.host_id == user.id
+      self.updates << SortieUpdate.new(:kind => 'cancel', :by => user)
+      self.state = 'canceled'
+      self.save
+      true
+    else
+      false
+    end
+  end
+  
+  def open?
+    self.state == 'open'
+  end
+  
+  def upcoming?
+    self.state == 'closed' and self.time > Time.now
+  end
+  
+  def past?
+    self.time < Time.now
+  end
+  
+  def has_tasks?
+    self.open? and self.entries.size > 0
+  end
   
   #####
   # Static methods
   ##
   def self.find_sorties_for_user(user)
-    if (user.id == 1)
-      return self.find(6,7,8)
-    else
-      # TODO: eliminate your own sorties or sorties you already joined
-      # add filtering
-      self.find(:all, :conditions => ["time > ?", Time.now])
-    end
+    # TODO: eliminate your own sorties or sorties you already joined
+    # add filtering
+    self.find(:all, :conditions => ["time > ?", Time.now])
+      
     # Geokit radius:
     # Store.find(:all, :origin =>[37.792,-122.393], :within=>10)
   end
@@ -152,12 +154,12 @@ class Sortie < ActiveRecord::Base
   
   def self.open_sorties_for(user)
     # find the open sorties where these wings are hosts or the user host himself (single dates)
-    self.where(:host_id => Wing.ids_with(user), :size => 4, :state => 'open') + self.where(:host_id => user, :size => 2, :state => 'open')
+    self.future.where(:host_id => Wing.ids_with(user), :size => 4, :state => 'open') + self.future.where(:host_id => user, :size => 2, :state => 'open')
   end
   
   def self.upcoming_sorties_for(user)
     # find the closed upcoming sorties where the user is in
-    self.where(:host_id => Wing.ids_with(user), :size => 4, :state => 'closed') + self.where(:host_id => user, :size => 2, :state => 'closed')
+    self.future.where(:host_id => Wing.ids_with(user), :size => 4, :state => 'closed') + self.future.where(:host_id => user, :size => 2, :state => 'closed')
     # ["time > ", Time.now]
   end
   

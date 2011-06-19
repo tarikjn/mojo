@@ -20,7 +20,7 @@ class Notifier < ActionMailer::Base
     @greeting = "Hi"
     
     # temporary fix here
-    @action_path = path_to_url "/entries/#{sortie.id}"
+    @action_path = date_entries_url(sortie.id)
     @sortie = sortie # pass as :locals?
     @host = host
     @waitlist = sortie.entries
@@ -36,14 +36,7 @@ class Notifier < ActionMailer::Base
     @guest = guest
     @sortie = sortie
     # temporary fix here
-    @confirmation_url = path_to_url "/dates/#{sortie.id}"
-  end
-  
-  # duplicated for mailer, find other way...
-  # required for redirects and email urls
-  # /abs -> http://myx.com/abs
-  def path_to_url(path) # find something better, full url needed for redirects per HTTP
-    "http://staging.mojo.co"
+    @confirmation_url = confirmation_date_url(sortie)
   end
   
   def password_reset_instructions(user)

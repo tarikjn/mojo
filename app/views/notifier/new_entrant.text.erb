@@ -1,10 +1,11 @@
 <%= @greeting %> <%= @host.first_name %>,
 
-Someone just joined your date "<%= @sortie.title %>"!
+Youhou! Someone just joined your date "<%= @sortie.title %>"!
 Please sign on to <%= @action_path %> to invite or drop the first user in the waitlist.
 
-You currently have <%= @waitlist.count %> mojoers waiting.
+You currently have <%= pluralize(@waitlist.count, 'mojoto') %> waiting.
 
 Godspeed!
 
-The Mojo Team 
+The Mojo Team
+http://mojo.co

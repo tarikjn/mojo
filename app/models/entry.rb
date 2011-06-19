@@ -3,7 +3,11 @@ class Entry < ActiveRecord::Base
   belongs_to :sortie
   has_many :entry_actions, :dependent => :destroy
   
+  # overridden happens when joining multiple dates happening at close times and the user is selected in one
   validates_inclusion_of :state, :in => %w(waiting invited rejected withdrawn overridden) # renamed ejected to rejected
+  
+  # scopes
+  scope :waiting, :conditions => ["state = ?", 'waiting']
   
   def self.get_waitlist(sortie) # rename to find, unless count is included
     where(:sortie_id => sortie.id, :state => 'waiting').first
@@ -14,22 +18,17 @@ class Entry < ActiveRecord::Base
     (where(:sortie_id => sortie.id, :state => 'waiting').count) - 1
   end
   
+  # should be renamed to invite_by
   def invite(host)
-    # find wether current user is creator or his/her invitee (friend)
-    # participant is self.user
-    # host is current_user
-    sortie = self.sortie
     
-    case host
-    when sortie.creator
-      duo = :creator_duo
-    when false #sortie.guest
-      duo = :invitee_duo
-    end
+    # record entry_action
+    self.entry_actions << EntryAction.new(:by => host, :action => 'approve')
     
-    # add participant to Duo
-    #sortie.creator_duo.assign(self.user) REFACTOR
-    sortie.update_state() # fix for duo.sortie not referenced correctly, fix model relationship
+    # add participant to sortie
+    self.sortie.guest = self.party
+    
+    # add participant to sortie
+    self.sortie.update_state()
     
     # change state of entry
     self.state = 'invited'
@@ -40,13 +39,12 @@ class Entry < ActiveRecord::Base
   
   # eject entry
   def pass
-    # send a notification?
-    # might want to use sortie/duo model to send notification to co-host
+    # send notification to host's mate/lead to look at next entrant, if any
     
     # change state of entry
     self.state = 'rejected'
     
-    #commit
+    # commit
     self.save
   end
 end

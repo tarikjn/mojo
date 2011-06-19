@@ -1,0 +1,38 @@
+<%
+	if (@left_on_list > 0) then
+%>
+	<div class="incoming">
+		<%= pluralize(@left_on_list, 'more entries') %>
+	</div>
+<%
+	end
+%>
+<% if @entry %>
+<div class="current" draggable="true" id="entry-<%= @entry.id %>">
+	<%= image_tag @entry.party.picture_url(:mini), :class => 'drag-icon' %>
+	<div class="host-info">
+		<div class="picture" style="background-image: url(<%= @entry.party.picture_url(:mini) %>)">
+			<div class="picture-feedback">+1.0</div>
+		</div>
+		<div class="info">
+			<div class="title">
+				<div class="name"><%= @entry.party.first_name %></div>
+				<div class="rating">★★★☆</div>
+			</div>
+			<div class="compatibility">
+				82%
+			</div>
+			<div class="ratings">
+				<div class="rating-ttr">Average time to respond: <em>1 hours</em></div>
+				<div class="rating-ttr">Punctuality: <em>Mostly on-time</em></div>
+			</div>
+		</div>
+	</div>
+	<div class="actions">
+		<%= link_to "Eject", pass_date_entry_path(@sortie, @entry), :class => 'pass' %>
+		<%= link_to "Invite", invite_date_entry_path(@sortie, @entry), :class => 'invite' %>
+	</div>
+</div>
+<% else %>
+<div>Bummer! No entrants yet...</div>
+<% end %>

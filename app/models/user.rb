@@ -12,6 +12,8 @@ class User < ActiveRecord::Base
   has_many :entries, :as => :party
   has_many :entered_sorties, :through => :entries, :source => :sortie, :as => :party
   
+  # problem: how to do hosted_sorties both for single sorties and through wings
+  
   #has_many :hosted_single_sorties, :source => :sortie, :as => :host
   #has_many :invited_single_sorties, :source => :sortie, :as => :guest
   
@@ -213,6 +215,18 @@ class User < ActiveRecord::Base
       0.5
     end
     
+  end
+  
+  def tasks_count
+    self.sortie_tasks_count
+  end
+  
+  def sortie_tasks_count
+    c = 0
+    self.open_sorties.each do |s|
+      c += 1 if s.has_tasks? # fod double sorties, will be has_tasks_for?(user)
+    end
+    c
   end
   
   def open_sorties

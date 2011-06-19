@@ -6,7 +6,7 @@
 				<%
 					menu = [
 						{ :t => 'Dashboard', :p => userhome_path },
-						{ :t => 'Your dates', :p => dates_path },
+						{ :t => 'Your dates', :p => dates_path, :c => current_user.sortie_tasks_count },
 						{ :t => 'Settings', :p => (controller_name == 'users')? url_for : account_edit_path('profile') }
 					]
 					menu << { :t => 'Invitations', :p => new_invitation_path } if current_user.admin?
@@ -14,7 +14,7 @@
 				%>
 					<%=
 						content_tag :li, :class => (current_page?(i[:p]))? "current" : nil do
-							link_to_unless_current i[:t], i[:p]
+							link_to_unless_current (i[:t] + ((!i[:c].nil? and i[:c] > 0)? (content_tag :div, i[:c], :class => 'task-count') : '')).html_safe, i[:p]
 						end
 					%>
 				<%

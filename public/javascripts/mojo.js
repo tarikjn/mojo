@@ -588,8 +588,11 @@ var DragAndDrop = {
 		
 		var drop = this;
 		
+		// get action
+		var action = $(".participants-viewport .current .actions ." + this.getAttribute("data-action")).attr('href');
+		
 		// send action, removed (document.location)
-		$.get("/entries/" + this.getAttribute("data-action") + "/" + id.match(/(\d+)$/g)[0], function(r) {
+		$.ajax({type: 'PUT', url: action, success: function(r) {
 			
 			$(drop).removeClass("drop-loading");
 			
@@ -647,7 +650,7 @@ var DragAndDrop = {
 					// TODO: implement
 					break;
 			}
-		});
+		}});
 		
 		return false;
 	},
@@ -1029,6 +1032,30 @@ $(function() {
 		$("body #black-screen").click(killBox);
 		
 		// add ESC key
+		
+		return false;
+	});
+	
+	// actions buttons on date page
+	$(".cancel-action").click(function() {
+		
+		var date = $(this).parents(".date:eq(0)");
+		var prompt = date.next(".action-box.cancel:eq(0)");
+		var action = this;
+		
+		$(action).addClass("disabled");
+		date.css('z-index', '1000');
+		$("body").append('<div id="black-screen"></div>');
+		prompt.show();
+		
+		prompt.find(".abort").click(function() {
+			prompt.hide();
+			$("#black-screen").remove();
+			date.css('z-index', 'auto');
+			$(action).removeClass("disabled");
+			
+			return false;
+		});
 		
 		return false;
 	});
