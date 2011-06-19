@@ -154,7 +154,7 @@ class Sortie < ActiveRecord::Base
     
     # look for the sortie that is within 2 hours from now or less than 1 hour ago
     # this is used by the SMS controller
-    self.active.with_user(user)
+    self.active.with_user(user).first
     
     # it is the role of the entry/sortie invite actions to make sure that no user can have 2 active dates at the same time
     
