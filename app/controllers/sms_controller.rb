@@ -17,12 +17,10 @@ class SmsController < ApplicationController
       sortie = Sortie.find_active_sortie_for(sender)
       
       if (sortie)
-        recipients = (sortie.get_people)
-        recipients.delete(sender)
+        @recipients = [sortie.party_of(sender)]
     
         # format response
         @message = "#{sender.first_name}: #{body}"
-        @recipients = recipients
       else
         @recipients = [sender]
         @message = "Mojo: Hey #{sender.first_name}, oops you don't have any current date at the moment..."

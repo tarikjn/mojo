@@ -53,6 +53,8 @@ class Sortie < ActiveRecord::Base
     
   }
   
+  after_create :set_expiration
+  
   def report_by(user)
     self.sortie_reports.where(:by => user)
   end
@@ -85,12 +87,12 @@ class Sortie < ActiveRecord::Base
     if (self.state == 'open')
       # probably there is a cleaner way to do that
       if self.guest
-        self.close()
+        self.close!()
       end
     end
   end
   
-  def close
+  def close!
     # entrants have been invited, sortie is confirmed/no longer accepts entries
     
     # send confirmations to hosts and guests
@@ -104,6 +106,17 @@ class Sortie < ActiveRecord::Base
     
     # commit
     self.save
+  end
+  
+  def set_expiration
+    self.send_at(:start_or_update_state!, self.time)
+  end
+  
+  def start_or_update_state!
+    if self.state == 'open'
+      self.state = 'expired'
+      self.save
+    end
   end
   
   def get_people
@@ -127,7 +140,7 @@ class Sortie < ActiveRecord::Base
   # perform is a special command sent by the scheduler, we use it to inform SMS service is now active for the date
   def start_sms
     if self.upcoming? # check that the sortie has not been canceled
-      msg = "Hi! Your date with %s is in 2 hours, you can now chat to sync any details etc., just respond to this number! Happy Dating :) Mojo."
+      msg = "Hi! Your date with %s is in #{ distance_of_time_in_words Time.now, self.time } hours, you can now chat to sync any details etc., just respond to this number! Happy Dating :) Mojo."
     
       # sent msg to host
       Sms.deliver(self.host.cellphone, msg % self.guest.first_name)
