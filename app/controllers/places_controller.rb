@@ -8,16 +8,15 @@ class PlacesController < ApplicationController
     
     # using fixed bounds on SF for API limit savings
     cache_key = "yelp/sanfrancisco/#{params[:q]}"
-    results = Rails.cache.fetch(cache_key, :expires_in => 12.days) do
+    businesses = Rails.cache.fetch(cache_key, :expires_in => 12.days) do
       get_results(params[:bounds], params[:q])
     end
     
-    response = ActiveSupport::JSON.decode(results[0])
-    p response.inspect
+    
     
     @places = []
     markers = []
-    response['businesses'].each do |b|
+    businesses.each do |b|
       @places << Place::process_yelp_business(b)
       
       markers << [@places.last.lat, @places.last.lng]
@@ -71,7 +70,10 @@ private
     
     #resp = ActiveSupport::JSON.decode(body)
     
-    body
+    results = ActiveSupport::JSON.decode(body[0])
+    p results.inspect
+    
+    results['businesses']
   
   end
   
