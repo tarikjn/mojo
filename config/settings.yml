@@ -1,6 +1,10 @@
 defaults: &defaults
   # Yelp API v2
-  YWSID: X08AJn-0KHLor3qK4DHrMA
+  YelpV2:
+      :client_credential_key:    86ypn4Dpn4ohLwMF_f24qw
+      :client_credential_secret: 92_sq_DgnNeTiHF96upfP_KHlEI
+      :token_credential_key:     Mm7BAz8uK0_a1LCYTOJDwWIaMkpuIUzc
+      :token_credential_secret:  K0o42jJQL9HeeH2YUiRtpC3yFdc
   Twilio:
     # your Twilio authentication credentials
     ACCOUNT_SID: ACe04542bb0bb52dd68d5ed9e03b87ef99

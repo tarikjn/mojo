@@ -50,27 +50,24 @@ private
     # using GeoKit Geocoding
     
     # Yelp APIv2: business search, TODO: refactor into a Class/ActiveRecord...
-    client = Signet::OAuth1::Client.new(
-      :client_credential_key    => '86ypn4Dpn4ohLwMF_f24qw',
-      :client_credential_secret => '92_sq_DgnNeTiHF96upfP_KHlEI',
-      :token_credential_key     => 'Mm7BAz8uK0_a1LCYTOJDwWIaMkpuIUzc',
-      :token_credential_secret  => 'K0o42jJQL9HeeH2YUiRtpC3yFdc'
-    )
+    client = Signet::OAuth1::Client.new(SETTINGS[Rails.env]['YelpV2'])
     # yelp bounds format: bounds=sw_latitude,sw_longitude|ne_latitude,ne_longitude
     query_params = {
       :bounds => "#{bounds[0]},#{bounds[1]}|#{bounds[2]},#{bounds[3]}",
-      :term => q
-    }.to_params # use this?
+      :term => q,
+      :limit => 8
+    }.to_params
     
     Logger.new(STDOUT).info("Querying Yelp API...")
     
     response = client.fetch_protected_resource(
-      :uri => "http://api.yelp.com/v2/search?bounds=#{bounds[0]},#{bounds[1]}|#{bounds[2]},#{bounds[3]}&term=#{q}&limit=8"
+      :uri => "http://api.yelp.com/v2/search?#{query_params}"
     )
     # The Rack response format is used here
     status, headers, body = response
     
     # TODO: catch errors (ie. API limit etc.)
+    #Logger.new(STDOUT).info(body['errors'].inspect) if body['errors']
     
     #resp = ActiveSupport::JSON.decode(body)
     

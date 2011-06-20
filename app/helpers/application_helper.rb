@@ -28,7 +28,7 @@ module ApplicationHelper
   
   # refactor as a form helper, use object sub-Class
   # attribute must be a string, it is concatened with _start and _end
-  def mj_timerange(name, value = nil, options = {:show_sorties => false})
+  def mj_timerange(name, value = nil, options = {:sorties => []})
 
     if value
       value = {

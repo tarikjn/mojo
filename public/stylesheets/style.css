@@ -1393,12 +1393,15 @@ h2, h3 {
       height: 8px;
       margin: 0 auto;
       z-index: 2; }
-      .mj-timerange-input .frame .sorties .sortie {
-        position: absolute;
-        top: -8px;
-        color: gray; }
-        .mj-timerange-input .frame .sorties .sortie.scoped {
-          color: #0080FF; }
+      .mj-timerange-input .frame .sorties .day {
+        display: none; }
+        .mj-timerange-input .frame .sorties .day .sortie {
+          position: absolute;
+          margin-left: 14px;
+          top: -8px;
+          color: gray; }
+          .mj-timerange-input .frame .sorties .day .sortie.scoped {
+            color: #0080FF; }
     .mj-timerange-input .frame .timeline {
       position: relative;
       width: 722px;

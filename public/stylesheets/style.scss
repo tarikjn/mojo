@@ -1908,20 +1908,26 @@ h2, h3 {
 		$ds: 19px; // half-hour size
 		
 		.sorties {
-			
+				
 			position: relative;
 			width: $ds + $ds * 2 * 18 + $ds; // base + 1 day + baseEnd
 			height: 8px;
 			margin: 0 auto;
 			z-index: 2;
+			
+			.day {
+				// displayed by JS
+				display: none;
 
-			.sortie {
-				position: absolute;
-				top: -8px;
+				.sortie {
+					position: absolute;
+					margin-left: 19px - 5px;
+					top: -8px;
 				
-				color: gray;
+					color: gray;
 
-				&.scoped { color: #0080FF; }
+					&.scoped { color: #0080FF; }
+				}
 			}
 		}
 		

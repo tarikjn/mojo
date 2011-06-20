@@ -62,6 +62,14 @@ var Lib = {
 		return Lib.pad(H, 2) + ':' + Lib.pad(M, 2);
 	},
 	
+	readTime: function(value)
+	{
+		var matches = value.match(/^(\d+):(\d+)$/);
+		
+		// need to specify base-10 or parseInt get confused with leading 0
+		return parseInt(matches[1], 10) + parseInt(matches[2], 10) / 60;
+	},
+	
 	setDataValue: function() {
 		$(this).attr("data-value", this.value);
 	},
@@ -330,9 +338,22 @@ function TimeRangeInput(obj)
 		that.timeline = $(this).find(".timeline")[0];
 		that.range = $(this).find(".selected-time")[0];
 		
+		// reference time inputs
+		that.start_time_input = $(that.input).children("input[name$=\"(2s)\"]");
+		that.end_time_input = $(that.input).children("input[name$=\"(3s)\"]");
+		
+		// reference day markers containers
+		that.days_containers = $(that.input).find(".sorties .day");
+		
 		// init dragging for selected time
 		that.limiter = $(this).find(".frame")[0];
 		var baseEnd = that.timeline.scrollWidth - that.ds;
+		
+		// which day is initially selected?
+		var day = $(".day-tabs label.active input").val();
+		
+		// init date markers: show those of the current selected day
+		that.selectDayMarkers(day);
 		
 		// TODO: set cursor when dragging
 		// TODO: implement keyboard nav
@@ -383,7 +404,41 @@ function TimeRangeInput(obj)
 			// de-activate former tab, activate *this
 			tabs.filter(".active").removeClass("active");
 			$(this).addClass("active");
+			
+			// select markers
+			var day = $(this).find("input").val();
+			that.selectDayMarkers(day);
 		}
+	}
+	
+	this.selectDayMarkers = function(day)
+	{
+		var thisDay = that.days_containers.filter('[data-day="'+day+'"]');
+		
+		// hide previosuly shown markers
+		that.days_containers.filter(":visible").hide();
+		
+		// show current day markers
+		thisDay.show();
+		
+		// update highlighted markers
+		that.updateScopedMarkers();
+	}
+	
+	this.updateScopedMarkers = function()
+	{
+		var start_hour = Lib.readTime(that.start_time_input.val());
+		var end_hour = Lib.readTime(that.end_time_input.val());
+		
+		that.days_containers.filter(":visible").find(".sortie").each(function() {
+			
+			var time = Lib.readTime($(this).attr("data-time"));
+			
+			if (time >= start_hour && time <= end_hour)
+				$(this).addClass("scoped");
+			else
+				$(this).removeClass("scoped");
+		});
 	}
 	
 	this.updateTimeInputs = function()
@@ -394,15 +449,15 @@ function TimeRangeInput(obj)
 		var left = parseInt($(that.range).css("left"));
 		var width = parseInt($(that.range).css("width"));
 		
-		var start_time_input = $(that.input).children("input[name$=\"(2s)\"]");
-		var end_time_input = $(that.input).children("input[name$=\"(3s)\"]");
-		
 		var start_hour = ((left - that.base) / (2 * that.ds)) + 6;
 		var end_hour = start_hour + (width / (2 * that.ds));
 		
 		// set
-		start_time_input.val(Lib.formatTime(start_hour));
-		end_time_input.val(Lib.formatTime(end_hour));
+		that.start_time_input.val(Lib.formatTime(start_hour));
+		that.end_time_input.val(Lib.formatTime(end_hour));
+		
+		// update highlighted markers
+		that.updateScopedMarkers();
 	}
 	
 	// drag support, may be namespaced
@@ -532,7 +587,7 @@ var Flash = {
 		$(el).show();
 	},
 	getEl: function(date_id) {
-		return $(".mj-timerange-input .activities .activity.date-"+date_id)[0];
+		return $(".mj-timerange-input .sorties .sortie.date-"+date_id)[0];
 	}
 };
 
@@ -703,11 +758,11 @@ var LiveInit = {
 		// load Google Maps (code in mojo-geo.js)
 		$(c).find('#map_canvas:visible').each(function() {
 			
-			if ($("label.mj-activity").length) // TODO: add scope!!
+			if ($("label.mj-sortie").length) // TODO: add scope!!
 			{
 				var points = {}; // move outside block?
 				
-				$("label.mj-activity").each(function() {
+				$("label.mj-sortie").each(function() {
 					var lat = $(this).find(".point .lat").text();
 					var lng = $(this).find(".point .lng").text();
 					points[this.id] = [lat, lng];
@@ -726,7 +781,7 @@ var LiveInit = {
 	all: function(c) {
 		
 		// flash date pointers and markers
-		$(c).find(".mj-activity").mouseenter(function(){
+		$(c).find(".mj-sortie").mouseenter(function(){
 			var id = DateList.getId(this);
 			
 			Flash.set(id);

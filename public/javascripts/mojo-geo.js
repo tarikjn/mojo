@@ -7,6 +7,7 @@ function Map(obj, activity_points) {
 	// defaults
 	var that = this;
 	that.gmap = undefined;
+	that.cap = undefined;
 	that.geocoder = new google.maps.Geocoder();
 	that.markers = [];
 	
@@ -18,10 +19,7 @@ function Map(obj, activity_points) {
 		cap_center: Map.L([37.793812, -122.411384]),
 		date_points: (activity_points !== undefined)? activity_points : {}, // id: [lat, lng]
 		date_markers: {}, // id: google.maps.Marker
-		outofrange_markers: [
-			[37.76017247811132, -122.44073878344726], // Castro
-			[37.769943111128704, -122.47524272021484] // GG Park
-		]
+		outofrange_markers: []
 	};
 	
 	/*
@@ -63,7 +61,7 @@ function Map(obj, activity_points) {
 	 * Privileged methods
 	 */
 	this.addRangeSelector = function() {
-		var circle = new google.maps.Circle({
+		that.cap = new google.maps.Circle({
 			center: that.p.cap_center,
 			fillColor: "#e1ecff",
 			fillOpacity: .5,
@@ -130,12 +128,16 @@ function Map(obj, activity_points) {
 		
 		for (var i in that.p.date_points)
 		{
-			that.p.date_markers[i] = that.addMarker(Map.L(that.p.date_points[i]), "", 'in_range');
+			var type = (that.cap.getBounds().contains(Map.L(that.p.date_points[i])))? 'in_range' : 'out_of_range';
+			that.p.date_markers[i] = that.addMarker(Map.L(that.p.date_points[i]), "", type);
 		}
-		for (var i in that.p.outofrange_markers)
-		{
-			that.addMarker(Map.L(that.p.outofrange_markers[i]), "", 'out_of_range');
-		}
+		
+		// update markers under the cap 'in_range'
+		
+		// for (var i in that.p.outofrange_markers)
+		// 		{
+		// 			that.addMarker(Map.L(that.p.outofrange_markers[i]), "", 'out_of_range');
+		// 		}
 	};
 	
 	this.animateMarker = function(date_id) {
