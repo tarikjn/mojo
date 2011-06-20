@@ -25,6 +25,7 @@ class Sortie < ActiveRecord::Base
   scope :future, lambda { { :conditions => ["time > ?", Time.now] } } # 'time' column likely to pose an issue with SQL
   scope :active, lambda { where('time < ? and time > ?', Time.now + 2.hours, Time.now - 1.hour) }
   scope :closed, where(:state => 'closed')
+  scope :open, where(:state => 'open')
   scope :with_user, lambda { |user| where('(size = 2 AND (host_id = :user OR guest_id = :user)) OR (size = 4 AND (host_id = :wings OR guest_id = :wings))', 
     {:user => user.id, :wings => Wing.ids_with(user)}) }
   
@@ -71,8 +72,8 @@ class Sortie < ActiveRecord::Base
     # send confirmations to hosts and guests
     Notifier::invited_confirmation(self, self.guest)
     
-    # set up SMS service?
-    self.start_sms # async
+    # set up  SMS service?
+    self.send_at(self.time - 2.hours, :start_sms) # async
     
     # update state
     self.state = 'closed'
@@ -109,7 +110,7 @@ class Sortie < ActiveRecord::Base
     Sms.deliver(self.guest.cellphone, msg % self.host.first_name)
   end
   # 5.minutes.from_now will be evaluated when in_the_future is called
-  handle_asynchronously :start_sms, :run_at => Proc.new { self.time - 2.hours }
+  #handle_asynchronously :start_sms, :run_at => Proc.new { self.time - 2.hours }
   
   def cancel(user)
     if ['open', 'closed', 'unconfirmed'].include?(self.state) and self.host_id == user.id
@@ -144,7 +145,9 @@ class Sortie < ActiveRecord::Base
   def self.find_sorties_for_user(user)
     # TODO: eliminate your own sorties or sorties you already joined
     # add filtering
-    self.find(:all, :conditions => ["time > ?", Time.now])
+    self.future.open.find(:all, :conditions => ["time > ?", Time.now])
+    
+    # filter sex_preference, dates already joined
       
     # Geokit radius:
     # Store.find(:all, :origin =>[37.792,-122.393], :within=>10)
