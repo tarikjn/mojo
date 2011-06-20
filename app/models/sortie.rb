@@ -109,7 +109,7 @@ class Sortie < ActiveRecord::Base
   end
   
   def set_expiration
-    self.send_at(:start_or_update_state!, self.time)
+    self.send_at(self.time, :start_or_update_state!)
   end
   
   def start_or_update_state!
