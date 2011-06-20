@@ -140,7 +140,7 @@ class Sortie < ActiveRecord::Base
   # perform is a special command sent by the scheduler, we use it to inform SMS service is now active for the date
   def start_sms
     if self.upcoming? # check that the sortie has not been canceled
-      msg = "Hi! Your date with %s is in #{ distance_of_time_in_words Time.now, self.time } hours, you can now chat to sync any details etc., just respond to this number! Happy Dating :) Mojo."
+      msg = "Hi! Your date with %s is in #{ ActionView::Helpers::DateHelper.distance_of_time_in_words Time.now, self.time }, you can now chat to sync any details etc., just respond to this number! Happy Dating :) Mojo."
     
       # sent msg to host
       Sms.deliver(self.host.cellphone, msg % self.guest.first_name)
@@ -195,7 +195,7 @@ class Sortie < ActiveRecord::Base
   def self.find_sorties_for_user(user) # this is used by date search
     
     # filtering open, future dates where the user is not host or didn't enter (except withdrawn, overridden)
-    self.future.open.where('size = 2 AND host_id != ?', user.id).without_entries_with(user).for_filters(user)
+    self.future.open.without_entries_with(user).for_filters(user)
     # where -> replace with not_hosted_by(user)
     
     # also eliminate dates happening when you already have dates scheduled
