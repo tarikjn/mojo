@@ -26,8 +26,32 @@ class Sortie < ActiveRecord::Base
   scope :active, lambda { where('time < ? and time > ?', Time.now + 2.hours, Time.now - 1.hour) }
   scope :closed, where(:state => 'closed')
   scope :open, where(:state => 'open')
-  scope :with_user, lambda { |user| where('(size = 2 AND (host_id = :user OR guest_id = :user)) OR (size = 4 AND (host_id = :wings OR guest_id = :wings))', 
-    {:user => user.id, :wings => Wing.ids_with(user)}) }
+  scope :with_user, lambda { |user|
+    where('(size = 2 AND (host_id = :user OR guest_id = :user)) OR (size = 4 AND (host_id = :wings OR guest_id = :wings))',
+      {:user => user.id, :wings => Wing.ids_with(user)})
+  }
+  scope :without_entries_with, lambda { |user|
+    where('(SELECT count(sortie_id) FROM entries WHERE sorties.id = entries.sortie_id AND entries.party_type = ? AND entries.party_id = ? AND entries.state NOT IN (?)) = 0', 'User', user.id, %w(withdrawn overridden))
+  }
+  scope :for_filters, lambda { |user|
+    #where(:users => {:sex_preference => user.sex, :sex => user.sex_preference}).joins(:host)
+    # {:joins => :host, :conditions => ["users.sex_preference = ? AND users.sex = ?", user.sex, user.sex_preference] }
+    #     :joins => :country, :conditions => 
+    #     ['popular_resort = ?', true], :order => 'countries.name ASC'
+    #User.match_for(user)
+    #where(:all, :conditions => [''], :join => :host)
+    #where(:users => {:sex => 'male'}).joins(:host)
+    #joins(:host).where('users.id = sorties.host_id')
+    #where("host_type = 'User'").includes( [ { :host => [:user, {:subtopic=>:category}] } , :user] )
+    #[{:flaggable=>[:user,{:subtopic=>:category}]},:user]
+    # 
+    
+    # would be great to delegate the user scope part to User.match_for(user), how to do that?
+    # see http://stackoverflow.com/questions/6147052/should-i-drop-a-polymorphic-association?
+    { :joins => 'INNER JOIN users ON users.id = host_id',
+      :conditions => ['host_type = ? AND sex_preference IN (?) AND sex IN (?)', 'User', ['both', user.sex], user.looking_for] }
+    
+  }
   
   def report_by(user)
     self.sortie_reports.where(:by => user)
@@ -38,7 +62,7 @@ class Sortie < ActiveRecord::Base
     (self.host.is_a? User)? self.host : self.host.lead
   end
   
-  def party_of(party)
+  def party_of(party) #pluralize for double dates
     # check if the party is in the sortie at all?
     self.host == party ? self.guest : self.host
   end
@@ -70,10 +94,10 @@ class Sortie < ActiveRecord::Base
     # entrants have been invited, sortie is confirmed/no longer accepts entries
     
     # send confirmations to hosts and guests
-    Notifier::invited_confirmation(self, self.guest)
+    Notifier::invited_confirmation(self, self.guest).deliver
     
     # set up  SMS service?
-    self.send_at(self.time - 2.hours, :start_sms) # async
+    self.send_at(self.time - 2.hours, :start_sms) # async, move time setting to settings.yml
     
     # update state
     self.state = 'closed'
@@ -102,21 +126,34 @@ class Sortie < ActiveRecord::Base
   
   # perform is a special command sent by the scheduler, we use it to inform SMS service is now active for the date
   def start_sms
-    msg = "Hi! Your date with %s is in 2 hours, you can now chat to sync any details etc., just respond to this number! Happy Dating :) Mojo."
+    if self.upcoming? # check that the sortie has not been canceled
+      msg = "Hi! Your date with %s is in 2 hours, you can now chat to sync any details etc., just respond to this number! Happy Dating :) Mojo."
     
-    # sent msg to host
-    Sms.deliver(self.host.cellphone, msg % self.guest.first_name)
-    # sent msg to guest
-    Sms.deliver(self.guest.cellphone, msg % self.host.first_name)
+      # sent msg to host
+      Sms.deliver(self.host.cellphone, msg % self.guest.first_name)
+      # sent msg to guest
+      Sms.deliver(self.guest.cellphone, msg % self.host.first_name)
+    end
   end
   # 5.minutes.from_now will be evaluated when in_the_future is called
   #handle_asynchronously :start_sms, :run_at => Proc.new { self.time - 2.hours }
   
   def cancel(user)
     if ['open', 'closed', 'unconfirmed'].include?(self.state) and self.host_id == user.id
+      
+      # record cancellation
       self.updates << SortieUpdate.new(:kind => 'cancel', :by => user)
+      
+      # send notification to party if the date was already scheduled!
+      Notifier::date_canceled(self, user, self.party_of(user)).deliver if self.state == 'closed'
+      
+      # change the state to canceled
       self.state = 'canceled'
+      
+      # commit
       self.save
+      
+      # success, is this needed? save returns true, no?
       true
     else
       false
@@ -136,18 +173,19 @@ class Sortie < ActiveRecord::Base
   end
   
   def has_tasks?
-    self.open? and self.entries.size > 0
+    self.open? and self.entries.waiting.size > 0
   end
   
   #####
   # Static methods
   ##
-  def self.find_sorties_for_user(user)
-    # TODO: eliminate your own sorties or sorties you already joined
-    # add filtering
-    self.future.open.find(:all, :conditions => ["time > ?", Time.now])
+  def self.find_sorties_for_user(user) # this is used by date search
     
-    # filter sex_preference, dates already joined
+    # filtering open, future dates where the user is not host or didn't enter (except withdrawn, overridden)
+    self.future.open.where('size = 2 AND host_id != ?', user.id).without_entries_with(user).for_filters(user)
+    # where -> replace with not_hosted_by(user)
+    
+    # also eliminate dates happening when you already have dates scheduled
       
     # Geokit radius:
     # Store.find(:all, :origin =>[37.792,-122.393], :within=>10)

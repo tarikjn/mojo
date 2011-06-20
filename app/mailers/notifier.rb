@@ -31,12 +31,22 @@ class Notifier < ActionMailer::Base
   end
   
   def invited_confirmation(sortie, guest)
-    @greeting = "Hi"
     
     @guest = guest
     @sortie = sortie
-    # temporary fix here
+    
     @confirmation_url = confirmation_date_url(sortie)
+    
+    mail :to => guest.email
+  end
+  
+  def date_canceled(sortie, actor, party)
+    
+    @actor = actor
+    @party = party
+    @sortie = sortie
+    
+    mail :to => party.email
   end
   
   def password_reset_instructions(user)

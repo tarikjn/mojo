@@ -1,0 +1,8 @@
+Hi <%= @party.first_name %>,
+
+We're really sorry, <%= @actor.first_name %> canceled your date "<%= @sortie.title %>" which was scheduled in <%= distance_of_time_in_words Time.now, @sortie.time %>.
+
+Best,
+
+The Mojo Team 
+http://mojo.co

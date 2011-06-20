@@ -13,6 +13,13 @@
 	</div>
 </div>
 <div class="form-item">
+	<%= format_errors_for s.object, :sex %>
+	<div class="title">Gender</div>
+	<div class="mj-merged-choices hybrid-input">
+		<%= s.person_choice :sex, 'male' %><%= s.person_choice :sex, 'female' %>
+	</div>
+</div>
+<div class="form-item">
 	<%= format_errors_for s.object, :dob %>
 	<div class="title">Date of Birth</div>
 	<div class="hybrid-input">

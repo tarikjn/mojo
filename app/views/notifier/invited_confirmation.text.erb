@@ -1,9 +1,10 @@
-<%= @greeting %> <%= @guest.first_name %>,
+Hi <%= @guest.first_name %>,
 
-Congratulations! <%= @sortie.creator.first_name %> invited you to her/his date: "<%= @sortie.title %>"
+Congratulations! <%= @sortie.creator.first_name %> invited you to <%= @sortie.creator.possessive %> date: "<%= @sortie.title %>"
 You can review all the details here: <%= @confirmation_url %>
 
-The date is in ...   You will be able to exchange SMS messages 2 hours before the date.
+The date is in <%= distance_of_time_in_words Time.now, @sortie.time %>.
+You will be able to exchange SMS messages 2 hours before the date.
 
 We hope you have an amazing date!
 

@@ -25,6 +25,8 @@ class User < ActiveRecord::Base
   has_many :picture_ratings#, :conditions => ["picture_file_name = ?", self.picture]
   has_many :ratings, :class_name => "UserRating"
   
+  has_many :hosted_sorties, :class_name => "Sortie", :as => :host
+  
   # AuthLogic
   acts_as_authentic do |config|
     config.validate_email_field = false
@@ -83,6 +85,9 @@ class User < ActiveRecord::Base
   
   # scopes
   scope :registered, :conditions => ["state != ?", 'invitation']
+  scope :match_for, lambda { |user|
+    where(:sex_preference => user.sex, :sex => user.sex_preference).join(:hosted_sorties)
+  }
 
   def friends
     direct_friends | inverse_friends
@@ -126,6 +131,15 @@ class User < ActiveRecord::Base
   
   def current_password
     nil
+  end
+  
+  def possessive
+    self.sex == 'male'? 'his' : 'her'
+  end
+  
+  # for SQL scopes
+  def looking_for
+    sex_preference == 'both'? ['male', 'female'] : [sex_preference]
   end
   
   # TODO: find a way to remove these, the converter should make it unecessary
@@ -224,7 +238,7 @@ class User < ActiveRecord::Base
   def sortie_tasks_count
     c = 0
     self.open_sorties.each do |s|
-      c += 1 if s.has_tasks? # fod double sorties, will be has_tasks_for?(user)
+      c += 1 if s.has_tasks? # for double sorties, will be has_tasks_for?(user)
     end
     c
   end
