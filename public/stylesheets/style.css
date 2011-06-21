@@ -237,14 +237,7 @@ a {
       background-color: rgba(87, 87, 87, 0.5);
       text-transform: lowercase;
       font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;
-      color: #e6e6e6;
-      /*&.highlighted {
-      	background-color: rgba(10, 112, 193, .5);
-      	
-      	&.active {
-      		background-color: rgba(10, 112, 193, .9);
-      	}
-      }*/ }
+      color: #e6e6e6; }
       #head-content #auth-links a:hover {
         color: white; }
       #head-content #auth-links a.active {
@@ -253,6 +246,10 @@ a {
         font-size: .65em; }
       #head-content #auth-links a .task-count {
         top: 0; }
+      #head-content #auth-links a.highlighted {
+        background-color: rgba(10, 112, 193, 0.65); }
+        #head-content #auth-links a.highlighted.active {
+          background-color: #0a70c1; }
     #head-content #auth-links .relative-container {
       position: relative; }
       #head-content #auth-links .relative-container #login-bubble {

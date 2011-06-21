@@ -237,8 +237,8 @@ class User < ActiveRecord::Base
   
   def sortie_tasks_count
     c = 0
-    self.open_sorties.each do |s|
-      c += 1 if s.has_tasks? # for double sorties, will be has_tasks_for?(user)
+    (self.open_sorties + self.past_sorties).each do |s|
+      c += 1 if s.has_tasks_for?(self) # for double sorties, will be has_tasks_for?(user)
     end
     c
   end
@@ -252,7 +252,7 @@ class User < ActiveRecord::Base
   end
   
   def past_sorties
-    []
+    Sortie.past_sorties_for(self)
   end
   
   def clear_password!

@@ -22,15 +22,21 @@ class Sortie < ActiveRecord::Base
   acts_as_mappable :through => :place
   
   # scopes
+  scope :past, lambda { { :conditions => ["time < ?", Time.now - 15.minutes] } }
   scope :future, lambda { { :conditions => ["time > ?", Time.now] } } # 'time' column likely to pose an issue with SQL
   scope :active, lambda { where('time < ? and time > ?', Time.now + 2.hours, Time.now - 1.hour) }
   scope :closed, where(:state => 'closed')
   scope :open, where(:state => 'open')
+  scope :hosted_by, lambda { |user|
+    where('(size = 2 AND host_id = :user) OR (size = 4 AND host_id = :wings)',
+      {:user => user.id, :wings => Wing.ids_with(user)})
+  }
   scope :with_user, lambda { |user|
     where('(size = 2 AND (host_id = :user OR guest_id = :user)) OR (size = 4 AND (host_id = :wings OR guest_id = :wings))',
       {:user => user.id, :wings => Wing.ids_with(user)})
   }
   scope :without_entries_with, lambda { |user|
+    # for performance/scaling, the right thing to do would be to have a table with the list of dates a user has joined? Or select entries first and then sorties from there
     where('(SELECT count(sortie_id) FROM entries WHERE sorties.id = entries.sortie_id AND entries.party_type = ? AND entries.party_id = ? AND entries.state NOT IN (?)) = 0', 'User', user.id, %w(withdrawn overridden))
   }
   scope :for_filters, lambda { |user|
@@ -56,7 +62,7 @@ class Sortie < ActiveRecord::Base
   after_create :set_expiration
   
   def report_by(user)
-    self.sortie_reports.where(:by => user)
+    self.sortie_reports.where(:by_id => user).first
   end
   
   def creator
@@ -114,8 +120,17 @@ class Sortie < ActiveRecord::Base
   
   def start_or_update_state!
     if self.state == 'open'
+      
+      # no one entered the sortie and it expired
       self.state = 'expired'
       self.save
+      
+    elsif state == 'closed'
+      
+      # the sortie is expected to be happening now
+      
+      # TODO: schedule other job to email end_of_sortie notification
+      
     end
   end
   
@@ -185,8 +200,14 @@ class Sortie < ActiveRecord::Base
     self.time < Time.now
   end
   
-  def has_tasks?
-    self.open? and self.entries.waiting.size > 0
+  def has_tasks_for?(user)
+    if self.open?
+      # any entries to go through?
+      self.entries.waiting.size > 0
+    else
+      # report completed?
+      self.report_by(user)? false : true
+    end
   end
   
   #####
@@ -216,12 +237,16 @@ class Sortie < ActiveRecord::Base
   
   def self.open_sorties_for(user)
     # find the open sorties where these wings are hosts or the user host himself (single dates)
-    self.future.where(:host_id => Wing.ids_with(user), :size => 4, :state => 'open') + self.future.where(:host_id => user, :size => 2, :state => 'open')
+    self.future.open.hosted_by(user)
   end
   
   def self.upcoming_sorties_for(user)
     # find the closed upcoming sorties where the user is in
     self.future.closed.with_user(user)
     # ["time > ", Time.now]
+  end
+  
+  def self.past_sorties_for(user)
+    self.past.closed.with_user(user)
   end
 end

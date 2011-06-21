@@ -1,16 +1,30 @@
-<% content_tag :li, :class => (['date'] << ((sortie.has_tasks?)? 'with_tasks':nil)) do %>
+<% content_tag :li, :class => (['date'] << ((sortie.has_tasks_for?(current_user))? 'with_tasks':nil)) do %>
 	<div class="status">
-		<% if sortie.open? %>
+		<%
+			case list
+			when :open
+		%>
 			<% if sortie.entries.waiting.size > 0 %>
 				<%= pluralize(sortie.entries.waiting.size, 'entrant') %> waiting, please go through!
 			<% else %>
 				Waiting for members to join.
 			<% end %>
 			<!-- add Waiting for your friend -->
-		<% end %>
-		<% if sortie.upcoming? %>
+		<%
+			when :upcoming
+		%>
 			This date is confirmed and scheduled.
-		<% end %>
+		<%
+			when :past
+		%>
+			<% if !sortie.report_by(current_user) %>
+				Please complete the date report.
+			<% else %>
+				You completed the date report.
+			<% end %>
+		<%
+			end
+		%>
 	</div>
 	<div class="header">
 		<div class="calendar-day">
@@ -46,6 +60,9 @@
 		<% end %>
 		<% if !sortie.past? %>
 			<%= link_to "Cancel", cancel_date_path(sortie), :class => ['mj-button', 'small', 'white', 'cancel-action'] %>
+		<% end %>
+		<% if list == :past %>
+			<span class="mj-button small white disabled">Complete report</span>
 		<% end %>
 	</div>
 <% end %>

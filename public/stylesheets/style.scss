@@ -566,13 +566,13 @@ a {
 				top: 0;
 			}
 			
-			/*&.highlighted {
-				background-color: rgba(10, 112, 193, .5);
+			&.highlighted {
+				background-color: rgba(10, 112, 193, .65);
 				
 				&.active {
-					background-color: rgba(10, 112, 193, .9);
+					background-color: rgba(10, 112, 193, 1);
 				}
-			}*/
+			}
 		}
 		
 		.relative-container {

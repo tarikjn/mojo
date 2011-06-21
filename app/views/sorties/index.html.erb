@@ -7,27 +7,7 @@
 				if @past_sorties.size > 0
 			%>
 			<ul>
-				<% @past_sorties.each do |s| %>
-					<li class="date">
-						<div class="status">
-							<%
-								if !s.report_by(current_user)
-							%>
-							Please complete the date report.
-							<%
-								else
-							%>
-							You completed the date report.
-							<%
-								end
-							%>
-						</div>
-						<div class="title"><%= s.title %></div>
-						<div class="actions">
-							<!-- Report -->
-						</div>
-					</li>
-				<% end %>
+				<%= render :partial => 'sortie', :collection => @past_sorties, :locals => { :list => :past } %>
 			</ul>
 			<%
 				else
@@ -45,7 +25,7 @@
 				if @upcoming_sorties.size > 0
 			%>
 			<ul>
-				<%= render :partial => 'sortie', :collection => @upcoming_sorties %>
+				<%= render :partial => 'sortie', :collection => @upcoming_sorties, :locals => { :list => :upcoming } %>
 			</ul>
 			<%
 				else
@@ -63,7 +43,7 @@
 				if @open_sorties.size > 0
 			%>
 			<ul>
-				<%= render :partial => 'sortie', :collection => @open_sorties %>
+				<%= render :partial => 'sortie', :collection => @open_sorties, :locals => { :list => :open } %>
 			</ul>
 			<%
 				else
