@@ -204,9 +204,11 @@ class Sortie < ActiveRecord::Base
     if self.open?
       # any entries to go through?
       self.entries.waiting.size > 0
-    else
+    elsif self.closed?
       # report completed?
       self.report_by(user)? false : true
+    else
+      false
     end
   end
   
