@@ -189,22 +189,22 @@ class Sortie < ActiveRecord::Base
   end
   
   def open?
-    self.state == 'open'
+    self.state == 'open' and self.time > Time.now
   end
   
   def upcoming?
     self.state == 'closed' and self.time > Time.now
   end
   
-  def past?
-    self.time < Time.now
+  def completed?
+    self.state == 'closed' and self.time < Time.now
   end
   
   def has_tasks_for?(user)
     if self.open?
       # any entries to go through?
       self.entries.waiting.size > 0
-    elsif self.closed?
+    elsif self.completed?
       # report completed?
       self.report_by(user)? false : true
     else

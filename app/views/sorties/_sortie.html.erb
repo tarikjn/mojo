@@ -58,7 +58,7 @@
 			<%= link_to "Details", confirmation_date_path(sortie), :class => ['mj-button', 'small', 'white'] %>
 			<!-- Late -->
 		<% end %>
-		<% if !sortie.past? %>
+		<% if list != :past %>
 			<%= link_to "Cancel", cancel_date_path(sortie), :class => ['mj-button', 'small', 'white', 'cancel-action'] %>
 		<% end %>
 		<% if list == :past %>
@@ -66,7 +66,7 @@
 		<% end %>
 	</div>
 <% end %>
-<% if !sortie.past? %>
+<% if list != :past %>
 	<div class="action-box cancel">
 		<div class="prompt">Are you sure you want to cancel this date?</div>
 		<div class="choices">
