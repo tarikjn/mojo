@@ -1,13 +1,8 @@
 class User < ActiveRecord::Base
   include ActiveModelExtensions # Mojo's
   
-  #attr_accessible :first_name, :last_name, :email, :invitation_token, :dob, :picture, :cellphone
-  
-  # not so secure but practical
-  before_validation :generate_password! # has some issue: password is reprinted and not mailed on failed validation
-  before_create :set_invitations_left
-  attr_accessor :generated_password, :current_password
-  #attr_writer :current_password
+  # should be used soon for security
+  # attr_accessible :first_name, :last_name, :email, :invitation_token, :dob, :picture, :cellphone
   
   has_many :entries, :as => :party
   has_many :entered_sorties, :through => :entries, :source => :sortie, :as => :party
@@ -22,28 +17,43 @@ class User < ActiveRecord::Base
   # these are reports where the user is tagged as "culprit"
   has_and_belongs_to_many :received_reports, :class_name => "SortieReport", :join_table => "sortie_reports_culprits"
   
-  has_many :picture_ratings#, :conditions => ["picture_file_name = ?", self.picture]
+  has_many :picture_ratings #, :conditions => ["picture_file_name = ?", self.picture], nop actually
   has_many :ratings, :class_name => "UserRating"
   
   has_many :hosted_sorties, :class_name => "Sortie", :as => :host
   
+  # :generate_password is not so secure but practical, can be made more secure
+  before_create :set_invitations_left, :generate_password # when adding invitation instances, this need to be hacked
+  
   # AuthLogic
+  # Switch to Rails' SecurePassword after upgrading to Rails 3.1?
   acts_as_authentic do |config|
+    # we already have a RFC-compliant validation for email, damn Authlogic tries to do too much
     config.validate_email_field = false
+    # set to true in the signup to allow auto password-generation
     config.ignore_blank_passwords = false
-    # hack
-    #config.validate_password_field = false
-    #config.require_password_confirmation = false
+  end
+  #
+  # (solution from: http://stackoverflow.com/questions/2174082/force-validation-of-blank-passwords-in-authlogic/3703742#3703742)
+  # object level attribute overrides the config level attribute
+  # replaced ignore_blank_passwords with require_password?
+  def require_password?
+    require_password.nil? ? super : require_password
+  end
+  #
+  # check for current password when doing a normal password change
+  attr_accessor :generated_password, :current_password, :validate_current_password, :require_password
+  #attr_writer :current_password #needed?
+  validate :current_password_valid, :on => :update, :if => :validate_current_password
+  #
+  # (solution from http://stackoverflow.com/questions/3580992/ruby-on-rails-authlogic-gem-password-confirmation-only-for-password-reset-and/3590455#3590455)
+  def current_password_valid
+    # valid_password? (Authlogic) checks current_password against database
+    errors.add(:current_password, 'is incorrect') unless valid_password?(current_password)
   end
   
-  # avatar/s3, TODO: switch to CarrierWave, Paperclip is retarded
-  #attr_accessible :avatar, :age, :filter_age, :filter_height, :first_name, :last_name, :email, :cellphone, :sex, :sex_preference, :dob, :min_age, :max_age, :height, :min_height, :max_height
-  #has_attached_file :avatar, :styles => { :thumb => "96x96#", :mini => "48x48#" },
-  #  :storage => :s3,
-  #  :s3_credentials => SETTINGS[Rails.env]['s3'],
-  #  :path => ":class/:attachment/:id/:style.:extension",
-  #  :bucket => SETTINGS[Rails.env]['bucket']
-  #attr_accessible :picture
+  # switched from Paperclip to CarrierWave
+  # path configuration on Paperclip was: :path => ":class/:attachment/:id/:style.:extension"
   mount_uploader :picture, PictureUploader
   
   # add state machine for stepflow/discovery state (object not saved)
@@ -52,7 +62,6 @@ class User < ActiveRecord::Base
   validates :email, :presence => true, :uniqueness => true, :email => true
   validates :first_name, :presence => true, :if => :active?
   validate :validate_age
-  validate :validate_current_password
   # picture fails with marshaling (stepflow issue)
   validates :picture, :presence => true, :if => :active?
   validates :cellphone, :presence => true, :if => :active?
@@ -118,19 +127,6 @@ class User < ActiveRecord::Base
   
   def validate_age
     errors.add :dob, 'you need to be at least 18' if 18.years.ago < self.dob
-  end
-  
-  def validate_current_password
-    return true
-    errors.add :current_password, 'is incorrect' if !@current_password.nil? and @current_password != password
-  end
-  
-  def current_password=(s)
-    @current_password = s
-  end
-  
-  def current_password
-    nil
   end
   
   def possessive
@@ -265,10 +261,12 @@ private
     self.invitations_left = 10
   end
   
-  def generate_password!
-    if !self.password
-      @generated_password = HTTParty.get("http://www.dinopass.com/password/simple").response.body
-      self.password, self.password_confirmation = @generated_password, @generated_password
+  def generate_password
+    # need to be upgraded when adding invitation instances
+    if !self.password or self.password == ''
+      # not so secure or reliable, at least should be generated locally
+      self.generated_password = HTTParty.get("http://www.dinopass.com/password/simple").response.body
+      self.password, self.password_confirmation = generated_password, generated_password
     end
   end
   

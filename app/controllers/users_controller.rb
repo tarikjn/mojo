@@ -20,6 +20,9 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     
+    # this needs to be passed to the object instance to allow auto password-generation
+    @user.require_password = false if @user.password == '' and @user.password_confirmation == ''
+    
     if @user.save
       flash[:notice] = "Welcome!"
       Notifier.welcome(@user).deliver
@@ -37,7 +40,12 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.xml
   def update
-    @user = current_user
+    # User.find(current_user) vs plain current_user avoids failed name change to appear immediately in layout
+    @user = User.find(current_user.id)
+    
+    # this needs to be passed to the object instance so that it validates the current password
+    # any more elegant way to do it?
+    @user.validate_current_password = true if account_section == 'password'
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
