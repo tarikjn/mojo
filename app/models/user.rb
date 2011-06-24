@@ -139,17 +139,18 @@ class User < ActiveRecord::Base
   end
   
   # TODO: find a way to remove these, the converter should make it unecessary
-  def height=(hash)
-    @height = Height.create(hash)
-  end
-  
-  def min_height=(hash)
-    @min_height = Height.create(hash)
-  end
-  
-  def max_height=(hash)
-    @max_height = Height.create(hash)
-  end
+  # somehow required for stepflow but otherwise break things
+  # def height=(hash)
+  #     @height = Height.create(hash)
+  #   end
+  #   
+  #   def min_height=(hash)
+  #     @min_height = Height.create(hash)
+  #   end
+  #   
+  #   def max_height=(hash)
+  #     @max_height = Height.create(hash)
+  #   end
   
   #rename dob to birthday, min_x to x_min, filter_x to x_filter
   def age

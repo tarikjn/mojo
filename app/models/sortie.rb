@@ -228,8 +228,7 @@ class Sortie < ActiveRecord::Base
   def self.find_sorties_for_user(user) # this is used by date search
     
     # filtering open, future dates where the user is not host or didn't enter (except withdrawn, overridden)
-    self.future.open.without_entries_with(user).for_filters(user).not_within_schedule_of(user)
-    # removed: .where('size = 2 AND host_id != ?', user.id) after .open for testing
+    self.future.open.where('size = 2 AND host_id != ?', user.id).without_entries_with(user).for_filters(user).not_within_schedule_of(user)
     
     # also eliminate dates happening when you already have dates scheduled
     

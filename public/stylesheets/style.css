@@ -1759,14 +1759,16 @@ label.mj-check-roll {
     height: 20px;
     vertical-align: middle;
     border-left: 1px solid white;
-    padding-left: 8px; }
+    padding-left: 8px;
+    cursor: default; }
 
 select.mj-category-select {
   font-size: 1.25em;
-  -webkit-appearance: none;
+  height: 45px;
   border: solid 1px #555;
-  padding: 15px 45px 15px 57px;
   color: #e9e9e9;
+  text-indent: 45px;
+  width: 14em;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
@@ -1777,12 +1779,6 @@ select.mj-category-select {
     background: 10px center url(/images/icons/date_entertainment_white.png) no-repeat, -webkit-gradient(linear, left top, left bottom, from(#888888), to(#575757)); }
   select.mj-category-select[data-value="outdoor"] {
     background: 10px center url(/images/icons/date_outdoor_white.png) no-repeat, -webkit-gradient(linear, left top, left bottom, from(#888888), to(#575757)); }
-
-.afterr {
-  color: white;
-  position: absolute;
-  top: 50%;
-  right: 0; }
 
 .set-location {
   display: inline-block;

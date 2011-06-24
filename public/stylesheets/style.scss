@@ -2419,6 +2419,8 @@ label.mj-check-roll {
 		
 		border-left: 1px solid white;
 		padding-left: 8px;
+		
+		cursor: default;
 	}
 }
 
@@ -2431,10 +2433,15 @@ select.mj-category-select {
 	
 	font-size: 1.25em;
 	
-	-webkit-appearance: none;
+	//-webkit-appearance: none;
+	height: 45px;
 	border: solid 1px #555;
-	padding: 15px (10px + 35px) 15px (10px + 32px + 15px);
+	//padding: 15px (10px + 35px) 15px (10px + 32px + 15px);
 	color: #e9e9e9;
+	
+	// fix hack
+	text-indent: 45px;
+	width: 14em;
 	
 	text-shadow: 0 1px 1px rgba(0,0,0,.3);
 	//@include rounded;
@@ -2443,13 +2450,6 @@ select.mj-category-select {
 	&[data-value="food_and_drinks"] { @include styled-select(url(/images/icons/date_food-and-drinks_white.png)); }
 	&[data-value="entertainment"]   { @include styled-select(url(/images/icons/date_entertainment_white.png)); }
 	&[data-value="outdoor"]         { @include styled-select(url(/images/icons/date_outdoor_white.png)); }
-}
-// still hacking drop down, remove afterr:
-.afterr {
-	color: white;
-	position: absolute;
-	top: 50%;
-	right: 0;
 }
 
 .set-location {

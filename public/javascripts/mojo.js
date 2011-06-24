@@ -886,7 +886,7 @@ var LiveInit = {
 		$(c).find("#form_item_who").each(function() {
 			SubsetForm.initialize(this);
 			AutoselectPersona.initialize(this);
-		})
+		});
 
 		// activate mj-check-roll
 		$(c).find("label.mj-check-roll").each(function() {
