@@ -40,11 +40,12 @@ class Sortie < ActiveRecord::Base
     where('(SELECT count(sortie_id) FROM entries WHERE sorties.id = entries.sortie_id AND entries.party_type = ? AND entries.party_id = ? AND entries.state NOT IN (?)) = 0', 'User', user.id, %w(withdrawn overridden))
   }
   scope :not_within_schedule_of, lambda { |user|
+    # this is quite ugly! need to find a more elegant way to write that
     where('(
     SELECT COUNT(*) FROM sorties up WHERE up.state = :state
     AND ((up.size = 2 AND (up.host_id = :user OR up.guest_id = :user)) OR (up.size = 4 AND (up.host_id = :wings OR up.guest_id = :wings)))
-    AND sorties.time > datetime(up.time, :start)
-    AND sorties.time < datetime(up.time, :end)
+    AND sorties.time > '+((Rails.env == 'development')? 'datetime(up.time, "- 2 hours")':'up.time - INTERVAL "2 hours"')+'
+    AND sorties.time < '+((Rails.env == 'development')? 'datetime(up.time, "+ 1 hour")':'up.time + INTERVAL "1 hour"')+'
     ) = 0',
     {:state => 'closed', :user => user.id, :wings => Wing.ids_with(user), :start => '- 2 hours', :end => '+ 1 hour'})
   }
