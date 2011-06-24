@@ -28,7 +28,7 @@ module ApplicationHelper
   
   # refactor as a form helper, use object sub-Class
   # attribute must be a string, it is concatened with _start and _end
-  def mj_timerange(name, value = nil, options = {:sorties => []})
+  def mj_timerange(name, value = nil, options = {:sorties => [], :upcoming_sorties => []}) # use option defaults instead
 
     if value
       value = {
@@ -39,6 +39,21 @@ module ApplicationHelper
     else
       value = {:day => nil, :time_start => nil, :time_end => nil}
     end
+    
+    # organize sorties by day
+    sorties_by_day = []
+    0.upto 7 do |d|
+			day = Date.today + d.days
+			
+			for_day = []
+			
+			options[:sorties].each do |s|
+		    for_day << s if s.time.to_date == day
+		  end
+		  
+		  sorties_by_day << for_day
+		end
+    
     
   	# start of the timerange at 6:00am
   	base_time = Date.today.to_time + 6.hours
@@ -54,7 +69,7 @@ module ApplicationHelper
   	set = {:ds => ds, :base => base, :elapsed => elapsed}
   	
   	# object_name is ugly, there must be a better way to do that
-    render :partial => "shared/mj_timerange", :locals => {:name => name, :value => value, :options => options, :set => set}
+    render :partial => "shared/mj_timerange", :locals => {:name => name, :value => value, :options => options, :set => set, :sorties_by_day => sorties_by_day}
   end
   
   def login_form

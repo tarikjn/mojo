@@ -7,7 +7,12 @@
 			0.upto 7 do |d|
 				day = Date.today + d.days
 		%>
-			<label<% if (day == value[:day].to_date) %> class="active"<% end %>><%= radio_button_tag "#{name}(1s)", day.strftime("%F"), (day == value[:day].to_date) %><%= (d == 0)? "Today" : day.strftime("%a") %></label>
+			<label<% if (day == value[:day].to_date) %> class="active"<% end %>><%= radio_button_tag "#{name}(1s)", day.strftime("%F"), (day == value[:day].to_date) %><% if sorties_by_day[d].size > 0 %>
+				<div class="result-count">
+					<% t = 0; sorties_by_day[d].size.times do %><div class="marker" style="bottom: <%= t*3 %>px"></div><%  t += 1; end %>
+				</div>
+			<% end %><%= (d == 0)? "Today" : day.strftime("%a") %></label>
+			
 		<%
 			end
 		%>
@@ -26,15 +31,19 @@
 				%>
 				<div class="day" data-day="<%= day.strftime("%F") %>">
 					<%	
-						options[:sorties].each do |sortie|
-							if (sortie.time.to_date == day)
-							
-								base_time = day + 6.hours
-								elapsed_time = sortie.time - base_time
-								position = (elapsed_time > 0)? ((elapsed_time / (60 * 30)) * set[:ds]).floor : 0
+					
+						base_time = day + 6.hours
+						
+						[:sorties, :upcoming_sorties].each do |t|
+							options[t].each do |sortie|
+								if (sortie.time.to_date == day and sortie.time > base_time)
+
+									elapsed_time = sortie.time - base_time
+									position = (elapsed_time > 0)? ((elapsed_time / (60 * 30)) * set[:ds]).floor : 0
 					%>
-					<div class="sortie date-<%= sortie.id %>" style="left: <%= position %>px" data-time="<%= sortie.time.strftime("%R") %>">◆</div>
+					<div class="<%= t == :sorties ? 'sortie':'upcoming' %> date-<%= sortie.id %>" style="left: <%= position %>px" data-time="<%= sortie.time.strftime("%R") %>" data-date-id="<%= sortie.id %>"><div class="range" title="<%= "#{sortie.title} with #{sortie.host.first_name}" %>"></div>◆</div>
 					<%
+								end
 							end
 						end
 					%>

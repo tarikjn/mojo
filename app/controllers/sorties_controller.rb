@@ -29,6 +29,7 @@ class SortiesController < ApplicationController
   def search
     @timerange = TimeRange.new((Date.today + 1.day).strftime("%F"), "12:00", "21:00")
     @sorties = Sortie.find_sorties_for_user(current_user)
+    @upcoming_sorties = current_user.upcoming_sorties
   end
   
   def join
@@ -43,6 +44,7 @@ class SortiesController < ApplicationController
       # TODO: refactor this into an special initilizer
       @timerange = TimeRange.new(params['timerange(1s)'], params['timerange(2s)'], params['timerange(3s)'])
       @sorties = Sortie.find_sorties_for_user(current_user)
+      @upcoming_sorties = current_user.upcoming_sorties
       render :action => :search
     end
   end

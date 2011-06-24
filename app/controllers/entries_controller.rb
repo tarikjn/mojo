@@ -20,15 +20,21 @@ class EntriesController < ApplicationController
     entry = Entry.find(params[:id])
     
     # call model method
-    entry.invite(current_user) # host: current_user
+    if entry.invite(current_user) # host: current_user
+      url = confirmation_date_url(@sortie)
+      code = 'done'
+    else
+      url = date_entries_path(@sortie)
+      code = 'error'
+    end
     
     # done => Done!, redirect to confirmation page
     respond_to do |format|
-      format.html { redirect_to confirmation_date_url(@sortie) }
+      format.html { redirect_to url }
       format.json {
         render :json => {
-          :message => 'done', # any of error, done
-          :redirect_path => confirmation_date_url(@sortie)
+          :message => code, # any of error, done
+          :redirect_path => url
         }
       }
     end

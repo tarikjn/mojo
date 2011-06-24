@@ -39,6 +39,16 @@ class Sortie < ActiveRecord::Base
     # for performance/scaling, the right thing to do would be to have a table with the list of dates a user has joined? Or select entries first and then sorties from there
     where('(SELECT count(sortie_id) FROM entries WHERE sorties.id = entries.sortie_id AND entries.party_type = ? AND entries.party_id = ? AND entries.state NOT IN (?)) = 0', 'User', user.id, %w(withdrawn overridden))
   }
+  scope :not_within_schedule_of, lambda { |user|
+    where('(
+    SELECT COUNT(*) FROM sorties up WHERE up.state = :state
+    AND ((up.size = 2 AND (up.host_id = :user OR up.guest_id = :user)) OR (up.size = 4 AND (up.host_id = :wings OR up.guest_id = :wings)))
+    AND sorties.time > datetime(up.time, :start)
+    AND sorties.time < datetime(up.time, :end)
+    ) = 0',
+    {:state => 'closed', :user => user.id, :wings => Wing.ids_with(user), :start => '- 2 hours', :end => '+ 1 hour'})
+  }
+  # would be nice to have somethign returning the schedule on a user and then simply querying for what is not in there...
   scope :for_filters, lambda { |user|
     #where(:users => {:sex_preference => user.sex, :sex => user.sex_preference}).joins(:host)
     # {:joins => :host, :conditions => ["users.sex_preference = ? AND users.sex = ?", user.sex, user.sex_preference] }
@@ -218,10 +228,12 @@ class Sortie < ActiveRecord::Base
   def self.find_sorties_for_user(user) # this is used by date search
     
     # filtering open, future dates where the user is not host or didn't enter (except withdrawn, overridden)
-    self.future.open.where('size = 2 AND host_id != ?', user.id).without_entries_with(user).for_filters(user)
-    # where -> replace with not_hosted_by(user)
+    self.future.open.without_entries_with(user).for_filters(user).not_within_schedule_of(user)
+    # removed: .where('size = 2 AND host_id != ?', user.id) after .open for testing
     
     # also eliminate dates happening when you already have dates scheduled
+    
+    # where -> replace with not_hosted_by(user)
       
     # Geokit radius:
     # Store.find(:all, :origin =>[37.792,-122.393], :within=>10)

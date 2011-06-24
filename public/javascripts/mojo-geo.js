@@ -11,6 +11,9 @@ function Map(obj, activity_points) {
 	that.geocoder = new google.maps.Geocoder();
 	that.markers = [];
 	
+	that.visible_markers = [];
+	that.scoped_markers = [];
+	
 	// params
 	that.p = {
 		
@@ -21,6 +24,28 @@ function Map(obj, activity_points) {
 		date_markers: {}, // id: google.maps.Marker
 		outofrange_markers: []
 	};
+	
+	// marker images
+	that.marker_images = {
+		shadow: new google.maps.MarkerImage(
+			"/images/markers/location-selected_shadow.png",
+	        new google.maps.Size(30, 27),
+	        new google.maps.Point(0, 0),
+	        new google.maps.Point(8, 27)
+	    ),
+		unscoped: new google.maps.MarkerImage(
+			"/images/markers/location.png",
+	        new google.maps.Size(16, 27),
+	        new google.maps.Point(0, 0),
+	        new google.maps.Point(8, 27)
+	    ),
+		scoped: new google.maps.MarkerImage(
+			"/images/markers/location-scoped.png",
+	        new google.maps.Size(16, 27),
+	        new google.maps.Point(0, 0),
+	        new google.maps.Point(8, 27)
+	    )
+	}
 	
 	/*
 	 * Private methods
@@ -48,7 +73,7 @@ function Map(obj, activity_points) {
 		{
 			that.gmap.setCenter(that.p.cap_center);
 			that.gmap.setZoom(12);
-			that.addRangeSelector();
+			//that.addRangeSelector();
 			that.addDateMarkers();
 		}
 		else if ($(this).hasClass("city-only"))
@@ -90,9 +115,10 @@ function Map(obj, activity_points) {
 		that.markers = [];
 	};
 	
-	this.addMarker = function(point, title, type) {
+	this.addMarker = function(point, title, type, visible) {
 		
 		if (type === undefined) type = 'city';
+		if (visible === undefined) visible = true;
 		types = {
 			city: "-selected",
 			in_range: "-scoped",
@@ -105,18 +131,14 @@ function Map(obj, activity_points) {
 	        new google.maps.Point(0, 0),
 	        new google.maps.Point(8, 27)
 	    );
-	    var shadow = new google.maps.MarkerImage(
-			"/images/markers/location-selected_shadow.png",
-	        new google.maps.Size(30, 27),
-	        new google.maps.Point(0, 0),
-	        new google.maps.Point(8, 27)
-	    );
+	    var shadow = that.marker_images.shadow;
 	    var marker = new google.maps.Marker({
 	        position: point,
 	        map: that.gmap,
 	        icon: image,
 	        shadow: shadow,
-			title: title
+			title: title,
+			visible: visible
 	    });
 		
 		that.markers.push(marker);
@@ -128,8 +150,8 @@ function Map(obj, activity_points) {
 		
 		for (var i in that.p.date_points)
 		{
-			var type = (that.cap.getBounds().contains(Map.L(that.p.date_points[i])))? 'in_range' : 'out_of_range';
-			that.p.date_markers[i] = that.addMarker(Map.L(that.p.date_points[i]), "", type);
+			//var type = (that.cap.getBounds().contains(Map.L(that.p.date_points[i])))? 'in_range' : 'out_of_range';
+			that.p.date_markers[i] = that.addMarker(Map.L(that.p.date_points[i]), "", 'out_of_range', false);
 		}
 		
 		// update markers under the cap 'in_range'

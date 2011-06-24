@@ -1890,6 +1890,25 @@ h2, h3 {
 				color: black;
 				
 				border-right-color: $border-gray;
+				
+				.result-count { display: none; }
+			}
+			
+			.result-count {
+				position: relative;
+				width: 5px;
+				
+				display: inline-block;
+				vertical-align: baseline;
+				
+				.marker {
+					position: absolute;
+					
+					width: 5px;
+					height: 2px;
+					
+					background: gray;
+				}
 			}
 		}
 	}
@@ -1919,14 +1938,31 @@ h2, h3 {
 				// displayed by JS
 				display: none;
 
-				.sortie {
+				.sortie, .upcoming {
 					position: absolute;
 					margin-left: 19px - 5px;
 					top: -8px;
+				}
 				
+				.sortie {
 					color: gray;
-
 					&.scoped { color: #0080FF; }
+				}
+				
+				.upcoming {
+					color: red;
+					
+					.range {
+						position: absolute;
+						background: rgba(255, 0, 0, .2);
+						width: $ds * 6;
+						height: 5px;
+						
+						margin-left: 5px - 4 * $ds;
+						margin-top: 9px;
+						
+						cursor: help;
+					}
 				}
 			}
 		}
@@ -2447,6 +2483,20 @@ select.mj-category-select {
 	
 	.action {
 		font-size: .85em;
+	}
+}
+
+$map-length: 250px;
+.date-results {
+	margin-right: $map-length;
+	min-height: $map-length;
+}
+.results-map {
+	position: absolute; right: 0;
+	width: $map-length;
+	
+	#map_canvas {
+		height: $map-length;
 	}
 }
 

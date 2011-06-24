@@ -1375,6 +1375,18 @@ h2, h3 {
       border-color: gray;
       color: black;
       border-right-color: #e6e6e6; }
+      .mj-timerange-input .day-tabs label.active .result-count {
+        display: none; }
+    .mj-timerange-input .day-tabs label .result-count {
+      position: relative;
+      width: 5px;
+      display: inline-block;
+      vertical-align: baseline; }
+      .mj-timerange-input .day-tabs label .result-count .marker {
+        position: absolute;
+        width: 5px;
+        height: 2px;
+        background: gray; }
   .mj-timerange-input .frame {
     clear: both;
     padding: 15px 10px 12px;
@@ -1392,13 +1404,24 @@ h2, h3 {
       z-index: 2; }
       .mj-timerange-input .frame .sorties .day {
         display: none; }
-        .mj-timerange-input .frame .sorties .day .sortie {
+        .mj-timerange-input .frame .sorties .day .sortie, .mj-timerange-input .frame .sorties .day .upcoming {
           position: absolute;
           margin-left: 14px;
-          top: -8px;
+          top: -8px; }
+        .mj-timerange-input .frame .sorties .day .sortie {
           color: gray; }
           .mj-timerange-input .frame .sorties .day .sortie.scoped {
             color: #0080FF; }
+        .mj-timerange-input .frame .sorties .day .upcoming {
+          color: red; }
+          .mj-timerange-input .frame .sorties .day .upcoming .range {
+            position: absolute;
+            background: rgba(255, 0, 0, 0.2);
+            width: 114px;
+            height: 5px;
+            margin-left: -71px;
+            margin-top: 9px;
+            cursor: help; }
     .mj-timerange-input .frame .timeline {
       position: relative;
       width: 722px;
@@ -1785,6 +1808,17 @@ select.mj-category-select {
     font-size: .85em; }
   .set-location .action {
     font-size: .85em; }
+
+.date-results {
+  margin-right: 250px;
+  min-height: 250px; }
+
+.results-map {
+  position: absolute;
+  right: 0;
+  width: 250px; }
+  .results-map #map_canvas {
+    height: 250px; }
 
 .mj-location-input {
   position: relative;

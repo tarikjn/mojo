@@ -352,6 +352,14 @@ function TimeRangeInput(obj)
 		// which day is initially selected?
 		var day = $(".day-tabs label.active input").val();
 		
+		// associate map
+		that.map = $('#map_canvas')[0].mj_map;
+		
+		// associate markers
+		that.days_containers.find(".sortie").each(function() {
+			this.mj_map_marker = that.map.p.date_markers["date-"+this.getAttribute("data-date-id")];
+		});
+		
 		// init date markers: show those of the current selected day
 		that.selectDayMarkers(day);
 		
@@ -423,6 +431,9 @@ function TimeRangeInput(obj)
 		
 		// update highlighted markers
 		that.updateScopedMarkers();
+		
+		// do the same for shown map markers
+		that.updateShownMapMarkers(thisDay);
 	}
 	
 	this.updateScopedMarkers = function()
@@ -438,6 +449,47 @@ function TimeRangeInput(obj)
 				$(this).addClass("scoped");
 			else
 				$(this).removeClass("scoped");
+		});
+		
+		// also update scoped map markers
+		that.updateResultsAndMapScope();
+	}
+	
+	this.updateShownMapMarkers = function(markers)
+	{
+		// hide all map markers
+		for (var i = 0; i < that.map.visible_markers.length; i++) {
+			that.map.visible_markers[i].setVisible(false);
+		}
+		that.map.visible_markers = [];
+		
+		// only show map markers for that day
+		markers.find(".sortie").each(function() {
+			this.mj_map_marker.setVisible(true);
+			that.map.visible_markers.push(this.mj_map_marker);
+		});
+	}
+	
+	this.updateResultsAndMapScope = function()
+	{
+		// hide results
+		$(".date-results .mj-sortie:visible").hide();
+		
+		// update scoped map markers:
+		// - unscope previous
+		for (var i = 0; i < that.map.scoped_markers.length; i++) {
+			that.map.scoped_markers[i].setIcon(that.map.marker_images.unscoped);
+		}
+		that.map.scoped_markers = [];
+		
+		// - scope new
+		that.days_containers.filter(":visible").find(".sortie.scoped").each(function() {
+			this.mj_map_marker.setIcon(that.map.marker_images.scoped);
+			that.map.scoped_markers.push(this.mj_map_marker);
+			
+			// show new results here:
+			$("#date-"+this.getAttribute("data-date-id")).show();
+			
 		});
 	}
 	
@@ -781,12 +833,12 @@ var LiveInit = {
 	all: function(c) {
 		
 		// flash date pointers and markers
-		$(c).find(".mj-sortie").mouseenter(function(){
+		$(c).find(".mj-sortie").hover(function(){
 			var id = DateList.getId(this);
 			
 			Flash.set(id);
 			$('#map_canvas')[0].mj_map.animateMarker(id);
-		}).mouseleave(function(){
+		}, function(){
 			var id = DateList.getId(this);
 
 			// stop flashing
@@ -821,6 +873,9 @@ var LiveInit = {
 			ctx.fillStyle = 'rgba('+red+', '+green+', 0, .25)';
 			ctx.fill();
 		});
+		
+		// init map (before timerange)
+		LiveInit.mapOnly(c);
 
 		// mj-timerange-input
 		$(c).find(".mj-timerange-input").each(function() {
@@ -954,9 +1009,6 @@ var LiveInit = {
 		
 		// set data-value on select for value-based styling
 		$("select").change(Lib.setDataValue).each(Lib.setDataValue);
-		
-		// init map
-		LiveInit.mapOnly(c);
 		
 		// init map results
 		LiveInit.mapResultsOnly(c);

@@ -8,6 +8,13 @@ class Entry < ActiveRecord::Base
   
   # scopes
   scope :waiting, :conditions => ["state = ?", 'waiting']
+  scope :nearby, lambda { |time|
+    {
+      :include => :sortie,
+      :conditions => ['sorties.state = :state AND sorties.time > :start AND sorties.time < :end',
+        {:state => 'open', :start => time - 2.hour, :end => time + 1.hour}]
+    }
+  }
   
   def self.get_waitlist(sortie) # rename to find, unless count is included
     where(:sortie_id => sortie.id, :state => 'waiting').first
@@ -21,20 +28,28 @@ class Entry < ActiveRecord::Base
   # should be renamed to invite_by
   def invite(host)
     
-    # record entry_action
-    self.entry_actions << EntryAction.new(:by => host, :action => 'approve')
+    if entry.state == 'waiting'
+      # record entry_action
+      self.entry_actions << EntryAction.new(:by => host, :action => 'approve')
     
-    # add participant to sortie
-    self.sortie.guest = self.party
+      # add participant to sortie
+      self.sortie.guest = self.party
     
-    # add participant to sortie
-    self.sortie.update_state()
+      # add participant to sortie
+      self.sortie.update_state()
     
-    # change state of entry
-    self.state = 'invited'
+      # change state of entry
+      self.state = 'invited'
     
-    # commit
-    self.save
+      # commit
+      self.save
+      
+      # override concurrent entries
+      self.override_concurrents
+    else
+      false
+    end
+    
   end
   
   # eject entry
@@ -47,4 +62,15 @@ class Entry < ActiveRecord::Base
     # commit
     self.save
   end
+
+  def self.override_concurrents
+    
+    # find all entries for that party in nearby time
+    concurrents = Entry.find_all_by_party(self.party).where('entries.state = ? AND entries.id != ?', 'waiting', self.id).nearby(self.sortie.time)
+    
+    # set all the waiting ones to overriden
+    concurrents.update_all(:state => 'overridden')
+    
+  end
+  
 end

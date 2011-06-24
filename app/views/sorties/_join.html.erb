@@ -1,7 +1,8 @@
 <div class="form-item">
 	<div class="title">Timeframe</div>
-	<%= mj_timerange "timerange", @timerange, :sorties => @sorties %>
+	<%= mj_timerange "timerange", @timerange, :sorties => @sorties, :upcoming_sorties => @upcoming_sorties %>
 </div>
+<!--
 <div class="form-item">
 	<div class="title">Area</div>
 	<div class="hybrid-input mj-location-input">
@@ -25,56 +26,62 @@
 		</div>
 	</div>
 </div>
+		-->
 
 <div class="form-item">
 	<% if @single_error %>
 		<div class="errors"><ul><li><%= @single_error %></li></ul></div>
 	<% end %>
-	<div class="title">Matching Dates</div>
+	<div class="title">Results</div>
 	<div class="hybrid-input inset-view">
-		<%
-			@sorties.each do |sortie|
-		%>
-		<label class="mj-sortie" id="date-<%= sortie.id %>">
-			<div class="checkbox">
-				<!-- name="stepflow[sorties][]" -->
-				<input type="checkbox" name="sorties[]" value="<%= sortie.id %>" />
-			</div>
-			<div class="point">
-				<div class="lat"><%= sortie.place.lat %></div>
-				<div class="lng"><%= sortie.place.lng %></div>
-			</div>
-			<div class="header">
-				<img src="/images/icons/date-<%= sortie.category %>-micro.png" alt="" class="sortie-marker" />
-				<div class="sortie-info">
-					<div class="title"><%= sortie.title %></div>
-					<div class="time-and-area"><%= sortie.time.strftime("%l:%M%p").downcase %>, <%= sortie.place.neighborhoods %></div>
+		<div class="results-map">
+			<div id="map_canvas" class="with-range-selector"></div>
+		</div>
+		<div class="date-results">
+			<%
+				@sorties.each do |sortie|
+			%>
+			<label class="mj-sortie" id="date-<%= sortie.id %>">
+				<div class="checkbox">
+					<!-- name="stepflow[sorties][]" -->
+					<input type="checkbox" name="sorties[]" value="<%= sortie.id %>" />
 				</div>
-			</div>
-			<div class="host-info">
-				<div class="picture" style="background-image: url(<%= sortie.creator.picture_url(:mini) if sortie.creator.picture? %>)">
-					<div class="picture-feedback" style="background: <%= color_for_picture_score(sortie.creator.picture_score) %>">
-						<%= sprintf("%+g", sortie.creator.picture_score) %>
+				<div class="point">
+					<div class="lat"><%= sortie.place.lat %></div>
+					<div class="lng"><%= sortie.place.lng %></div>
+				</div>
+				<div class="header">
+					<img src="/images/icons/date-<%= sortie.category %>-micro.png" alt="" class="sortie-marker" />
+					<div class="sortie-info">
+						<div class="title"><%= sortie.title %></div>
+						<div class="time-and-area"><%= sortie.time.strftime("%l:%M%p").downcase %>, <%= sortie.place.neighborhoods %></div>
 					</div>
 				</div>
-				<div class="info">
-					<div class="title">
-						<div class="name"><%= sortie.creator.first_name %></div>
-						<div class="rating">★★★☆</div>
+				<div class="host-info">
+					<div class="picture" style="background-image: url(<%= sortie.creator.picture_url(:mini) if sortie.creator.picture? %>)">
+						<div class="picture-feedback" style="background: <%= color_for_picture_score(sortie.creator.picture_score) %>">
+							<%= sprintf("%+g", sortie.creator.picture_score) %>
+						</div>
 					</div>
-					<div class="compatibility">
-						<div class="canvas"><canvas width="30" height="30" class="afinity-chart" /></div>
-						<div class="score"><span class="int"><%= (sortie.creator.afinity_with(current_user) * 100).round %></span><span class="percent">%</span></div>
-					</div>
-					<div class="ratings">
-						<div class="rating-ttr">Average time to respond: <em><%= sortie.creator.time_to_respond %></em></div>
-						<div class="rating-ttr">Punctuality: <em><%= sortie.creator.punctuality %></em></div>
+					<div class="info">
+						<div class="title">
+							<div class="name"><%= sortie.creator.first_name %></div>
+							<div class="rating">★★★☆</div>
+						</div>
+						<div class="compatibility">
+							<div class="canvas"><canvas width="30" height="30" class="afinity-chart" /></div>
+							<div class="score"><span class="int"><%= (sortie.creator.afinity_with(current_user) * 100).round %></span><span class="percent">%</span></div>
+						</div>
+						<div class="ratings">
+							<div class="rating-ttr">Average time to respond: <em><%= sortie.creator.time_to_respond %></em></div>
+							<div class="rating-ttr">Punctuality: <em><%= sortie.creator.punctuality %></em></div>
+						</div>
 					</div>
 				</div>
-			</div>
-		</label>
-		<%
-			end
-		%>
+			</label>
+			<%
+				end
+			%>
+		</div>
 	</div>
 </div>
