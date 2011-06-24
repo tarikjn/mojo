@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
-  include ActiveModelExtensions # Mojo's
+  #include ActiveModelExtensions # Mojo's
   
   # should be used soon for security
-  # attr_accessible :first_name, :last_name, :email, :invitation_token, :dob, :picture, :cellphone
+  #attr_accessible :first_name, :last_name, :email, :invitation_token, :dob, :picture, :cellphone
   
   has_many :entries, :as => :party
   has_many :entered_sorties, :through => :entries, :source => :sortie, :as => :party
@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
   validate :validate_age
   # picture fails with marshaling (stepflow issue)
   validates :picture, :presence => true, :if => :active?
-  validates :cellphone, :presence => true, :if => :active?
+  validates :cellphone, :presence => true, :format => {:with => /^(\+\d{1,3})?[-. ]?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/}, :if => :active?
   validates :sex, :inclusion => { :in => %w(male female), :message => "Please select" }
   validates :sex_preference, :inclusion => { :in => %w(female both male), :message => "Please select" }
   # height is in milimeters
@@ -151,6 +151,22 @@ class User < ActiveRecord::Base
   #   def max_height=(hash)
   #     @max_height = Height.create(hash)
   #   end
+  
+  # weird instance varialbe issue, fix or use Phone Class
+  def cellphone_format
+    @cellphone = self.cellphone if @cellphone.nil?
+    m = /^\+\d(\d{3})(\d{3})(\d{4})$/.match(@cellphone)
+    m.nil? ? @cellphone:"(#{m[1]}) #{m[2]}-#{m[3]}"
+  end
+  def cellphone_format=(phone)
+    m = /^(\+\d{1,3})?[-. ]?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.match(phone)
+    if m
+      @cellphone = "+1#{m[2]}#{m[3]}#{m[4]}"
+    else
+      @cellphone = phone
+    end
+    self.cellphone = @cellphone
+  end
   
   #rename dob to birthday, min_x to x_min, filter_x to x_filter
   def age
