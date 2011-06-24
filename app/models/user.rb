@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
   end
   #
   # check for current password when doing a normal password change
-  attr_accessor :generated_password, :current_password, :validate_current_password, :require_password, :height, :min_height, :max_height
+  attr_accessor :generated_password, :current_password, :validate_current_password, :require_password, :height, :min_height, :max_height, :cellphone_format
   #attr_writer :current_password #needed?
   validate :current_password_valid, :on => :update, :if => :validate_current_password
   #
@@ -156,19 +156,19 @@ class User < ActiveRecord::Base
   #   end
   
   # weird instance varialbe issue, fix or use Phone Class
-  def cellphone_format
-    @cellphone = self.cellphone if @cellphone.nil?
+  def cellphone
+    @cellphone = self[:cellphone] if @cellphone.nil?
     m = /^\+\d(\d{3})(\d{3})(\d{4})$/.match(@cellphone)
     m.nil? ? @cellphone:"(#{m[1]}) #{m[2]}-#{m[3]}"
   end
-  def cellphone_format=(phone)
+  def cellphone=(phone)
     m = /^(\+\d{1,3})?[-. ]?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.match(phone)
     if m
       @cellphone = "+1#{m[2]}#{m[3]}#{m[4]}"
     else
       @cellphone = phone
     end
-    self.cellphone = @cellphone
+    self[:cellphone] = @cellphone if self[:cellphone] != @cellphone
   end
   
   #rename dob to birthday, min_x to x_min, filter_x to x_filter
@@ -318,11 +318,11 @@ class Height
   end
   
   def get_ft
-    (to_in / 12).floor
+    @height.nil? ? nil : (to_in / 12).floor
   end
   
   def get_in
-    to_in % 12
+    @height.nil? ? nil : to_in % 12
   end
   
 private

@@ -21,14 +21,14 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     
     # this needs to be passed to the object instance to allow auto password-generation
-    @user.require_password = false if @user.password == '' and @user.password_confirmation == ''
+    @user.require_password = false if @user.password.blank? and @user.password_confirmation.blank?
     
     if @user.save
       flash[:notice] = "Welcome!"
       Notifier.welcome(@user).deliver
       redirect_to root_url
     else
-      @user.clear_password! if @user.generated_password
+      #@user.clear_password! if @user.generated_password
       render :action => :signup, :layout => 'application'
     end
   end
