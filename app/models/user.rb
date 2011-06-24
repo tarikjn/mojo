@@ -2,7 +2,8 @@ class User < ActiveRecord::Base
   #include ActiveModelExtensions # Mojo's
   
   # should be used soon for security
-  #attr_accessible :first_name, :last_name, :email, :invitation_token, :dob, :picture, :cellphone
+  attr_accessible :first_name, :last_name, :email, :invitation_token, :sex, :dob, :picture, :cellphone, :height, 
+  :sex_preference, :filter_age, :min_age, :max_age, :filter_height, :min_height, :max_height
   
   has_many :entries, :as => :party
   has_many :entered_sorties, :through => :entries, :source => :sortie, :as => :party
@@ -42,7 +43,7 @@ class User < ActiveRecord::Base
   end
   #
   # check for current password when doing a normal password change
-  attr_accessor :generated_password, :current_password, :validate_current_password, :require_password
+  attr_accessor :generated_password, :current_password, :validate_current_password, :require_password, :height, :min_height, :max_height
   #attr_writer :current_password #needed?
   validate :current_password_valid, :on => :update, :if => :validate_current_password
   #
@@ -70,11 +71,12 @@ class User < ActiveRecord::Base
   # height is in milimeters
   
   # overrides access to db height attribute
+  # somehow the write converter are not working, they are hand coded bellow
   composed_of :height, :class_name => 'Height', :mapping => %w(height height),
               :allow_nil => true, :converter => Proc.new { |hash| Height.create(hash) }
-  composed_of :min_height, :class_name => 'Height', :mapping => %w(height_min height),
-               :allow_nil => true, :converter => Proc.new { |hash| Height.create(hash) }
-  composed_of :max_height, :class_name => 'Height', :mapping => %w(height_max height),
+  composed_of :min_height, :class_name => 'Height', :mapping => %w(min_height height),
+              :allow_nil => true, :converter => Proc.new { |hash| Height.create(hash) }
+  composed_of :max_height, :class_name => 'Height', :mapping => %w(max_height height),
               :allow_nil => true, :converter => Proc.new { |hash| Height.create(hash) }
   
   # friendship TODO: add :dependant => :destroy?         
@@ -142,14 +144,15 @@ class User < ActiveRecord::Base
   # somehow required for stepflow but otherwise break things
   # def height=(hash)
   #     @height = Height.create(hash)
+  #     self[:height] = @height.nil? ? nil : @height.height
   #   end
-  #   
   #   def min_height=(hash)
   #     @min_height = Height.create(hash)
+  #     self[:min_height] = @min_height.nil? ? nil : @min_height.height
   #   end
-  #   
   #   def max_height=(hash)
   #     @max_height = Height.create(hash)
+  #     self[:max_height] = @max_height.nil? ? nil : @max_height.height
   #   end
   
   # weird instance varialbe issue, fix or use Phone Class
@@ -305,7 +308,7 @@ class Height
     if (feet != 0 or inches != 0)
       self.new (feet * FT_TO_MM + inches * IN_TO_MM).round
     else
-      nil
+      self.new nil # self.new shouldn't be required, :allow_nil is behaving unexpectedly
     end
   end
   
