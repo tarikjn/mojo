@@ -39,7 +39,11 @@ module Mojo
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
     
-    # time zone
+    # time zone, TODO: move to config/initializers
     config.time_zone = "Pacific Time (US & Canada)"
   end
 end
+
+
+# load YAML config
+SETTINGS = YAML.load_file( Rails.root.join("config/settings.yml") )

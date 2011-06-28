@@ -44,10 +44,10 @@ class Sortie < ActiveRecord::Base
     where('(
     SELECT COUNT(*) FROM sorties up WHERE up.state = :state
     AND ((up.size = 2 AND (up.host_id = :user OR up.guest_id = :user)) OR (up.size = 4 AND (up.host_id = :wings OR up.guest_id = :wings)))
-    AND sorties.time > '+((Rails.env == 'development')? "datetime(up.time, '- 2 hours')":"up.time - INTERVAL '2 hours'")+'
-    AND sorties.time < '+((Rails.env == 'development')? "datetime(up.time, '+ 1 hour')":"up.time + INTERVAL '1 hour'")+'
+    AND sorties.time > '+((Rails.env == 'development')? "datetime(up.time, '-2 hours')":"up.time - INTERVAL '2 hours'")+'
+    AND sorties.time < '+((Rails.env == 'development')? "datetime(up.time, '+1 hour')":"up.time + INTERVAL '1 hour'")+'
     ) = 0',
-    {:state => 'closed', :user => user.id, :wings => Wing.ids_with(user), :start => '- 2 hours', :end => '+ 1 hour'})
+    {:state => 'closed', :user => user.id, :wings => Wing.ids_with(user), :start => '-2 hours', :end => '+1 hour'})
   }
   # would be nice to have somethign returning the schedule on a user and then simply querying for what is not in there...
   scope :for_filters, lambda { |user|

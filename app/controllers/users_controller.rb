@@ -26,6 +26,10 @@ class UsersController < ApplicationController
     if @user.save
       flash[:notice] = "Welcome!"
       Notifier.welcome(@user).deliver
+      
+      # force user autologin when password has been auto-generated
+      UserSession.create(@user) if !current_user
+      
       redirect_to root_url
     else
       #@user.clear_password! if @user.generated_password

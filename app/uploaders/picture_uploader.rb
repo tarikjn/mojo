@@ -11,13 +11,9 @@ class PictureUploader < CarrierWave::Uploader::Base
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
+  # (different than cache_dir)
   def store_dir
     "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
-  end
-  
-  # fix for Heroku, unfortunately, it disables caching, see: https://github.com/jnicklas/carrierwave/wiki/How-to%3A-Make-Carrierwave-work-on-Heroku
-  def cache_dir
-    "#{Rails.root}/tmp/uploads"
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:

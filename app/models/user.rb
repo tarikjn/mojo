@@ -2,8 +2,8 @@ class User < ActiveRecord::Base
   #include ActiveModelExtensions # Mojo's
   
   # should be used soon for security
-  attr_accessible :first_name, :last_name, :email, :invitation_token, :sex, :dob, :picture, :cellphone, :height, 
-  :sex_preference, :filter_age, :min_age, :max_age, :filter_height, :min_height, :max_height
+  #attr_accessible :first_name, :last_name, :email, :invitation_token, :sex, :dob, :picture, :cellphone, :height, 
+  #:sex_preference, :filter_age, :min_age, :max_age, :filter_height, :min_height, :max_height
   
   has_many :entries, :as => :party
   has_many :entered_sorties, :through => :entries, :source => :sortie, :as => :party

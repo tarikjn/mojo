@@ -28,7 +28,7 @@ class Entry < ActiveRecord::Base
   # should be renamed to invite_by
   def invite(host)
     
-    if entry.state == 'waiting'
+    if self.state == 'waiting'
       # record entry_action
       self.entry_actions << EntryAction.new(:by => host, :action => 'approve')
     
@@ -63,13 +63,17 @@ class Entry < ActiveRecord::Base
     self.save
   end
 
-  def self.override_concurrents
+  def override_concurrents
     
     # find all entries for that party in nearby time
-    concurrents = Entry.find_all_by_party(self.party).where('entries.state = ? AND entries.id != ?', 'waiting', self.id).nearby(self.sortie.time)
+    concurrents = Entry.where(:party_id => self.party, :party_type => 'User').where('entries.state = ? AND entries.id != ?', 'waiting', self.id).nearby(self.sortie.time)
     
     # set all the waiting ones to overriden
-    concurrents.update_all(:state => 'overridden')
+    #concurrents.update_all(:state => 'overridden') broken with nearby's query
+    concurrents.each { |c|
+      c.state = 'overridden'
+      c.save
+    }
     
   end
   

@@ -49,7 +49,7 @@ private
   end
 
   def sender_has_invitations
-    unless sender.invitations_left > 0 or sender.invitations_left.nil?
+    unless sender.invitations_left.nil? or sender.invitations_left > 0
       errors.add_to_base 'You have reached your limit of invitations to send.'
     end
   end

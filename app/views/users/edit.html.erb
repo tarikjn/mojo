@@ -18,7 +18,7 @@
 
 	<div class="content">
 		<%= flash_messages %>
-		<%= form_for @user, :url => {:action => :update}, :html => { :method => :put, :class => ['form-inputs', 'column-titles'] } do |f| %>
+		<%= form_for @user, :url => {:action => :update}, :html => { :method => :put, :class => ['form-inputs', 'column-titles'], :multipart => true } do |f| %>
 			<%= hidden_field_tag :account_section, account_section %>
 			<%= render :partial => account_section, :locals => {:s => f} %>
 			<div class="submit"><button type="submit" class="mj-button mojo">Update</button></div>
