@@ -13,6 +13,7 @@ class PictureUploader < CarrierWave::Uploader::Base
   # This is a sensible default for uploaders that are meant to be mounted:
   # (different than cache_dir)
   def store_dir
+    # path configuration on Paperclip was: :path => ":class/:attachment/:id/:style.:extension"
     "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
   end
 

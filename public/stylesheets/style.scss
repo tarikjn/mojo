@@ -1082,8 +1082,9 @@ h2, h3 {
 	}
 }
 #mtaTwitter a img {
-	height: 48px;
-    width: 48px;
+	margin-top: 8px;
+	height: 32px;
+    width: 32px;
     //border: 1px solid #CCC;
 	background: white;
 }
@@ -1110,13 +1111,13 @@ h2, h3 {
 	border-radius: 5px;
     list-style: none;
     margin: 0;
-    margin-left: 66px;
+    margin-left: 46px;
     padding: 0px;
     //font-family: Helvetica, sans-serif;
 	@include thinfont;
 	//@include mjfont
 }
-#mtaTwitter ul li { padding: 10px 10px; font-size: 10pt; }
+#mtaTwitter ul li { padding: 7px; font-size: 10pt; }
 #mtaTwitter ul li.first { font-size: 9pt; /* font-weight: bold; */ }
 #mtaTwitter ul li.even { background-color: #EDEEFD; }
 #mtaTwitter ul li.first span { font-size: .9em; font-weight: normal; display: block; margin-top: 3pt; }

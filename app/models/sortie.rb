@@ -10,11 +10,15 @@ class Sortie < ActiveRecord::Base
   has_many :updates, :class_name => "SortieUpdate"
   has_many :sortie_reports
   
-  validates :title, :presence => true
-  validates :place, :presence => true
+  # silent validations
   validates_inclusion_of :size, :in => [2, 4]
   validates_inclusion_of :state, :in => %w(unconfirmed open canceled closed expired)
   validates_inclusion_of :category, :in => %w(food_and_drinks entertainment outdoor)
+  
+  # validations with view feedback
+  validates :title, :presence => true
+  validates :place, :presence => true
+  validate :validate_time
   
   attr_accessor :location
   
@@ -71,6 +75,26 @@ class Sortie < ActiveRecord::Base
   }
   
   after_create :set_expiration
+  
+  def validate_time
+    if self.time < Time.now + 2.hours
+      errors.add :time, 'Your date has to be scheduled at least 2 hours in advance.'
+    elsif self.time > Time.now + 2.weeks
+      errors.add :time, "You can't schedule a date more than 2 weeks in advance."
+    else
+      # for double-date also check that the friend's time is free
+      if self.host.is_a? User
+        # this repeats with *scope :not_within_schedule_of*, needs some DRYing
+        concurrent_sorties_count = Sortie.count_by_sql(['SELECT COUNT(*) FROM sorties up WHERE up.state = :state
+        AND ((up.size = 2 AND (up.host_id = :user OR up.guest_id = :user)) OR (up.size = 4 AND (up.host_id = :wings OR up.guest_id = :wings)))
+        AND :time > '+((Rails.env == 'development')? "datetime(up.time, '-2 hours')":"up.time - INTERVAL '2 hours'")+'
+        AND :time < '+((Rails.env == 'development')? "datetime(up.time, '+1 hour')":"up.time + INTERVAL '1 hour'"),
+        {:state => 'closed', :user => self.creator.id, :wings => Wing.ids_with(self.creator), :time => self.time}])
+      
+        errors.add :time, "You already have a date scheduled at around that time." if concurrent_sorties_count > 0
+      end
+    end
+  end
   
   def report_by(user)
     self.sortie_reports.where(:by_id => user).first

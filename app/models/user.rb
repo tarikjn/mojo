@@ -54,7 +54,6 @@ class User < ActiveRecord::Base
   end
   
   # switched from Paperclip to CarrierWave
-  # path configuration on Paperclip was: :path => ":class/:attachment/:id/:style.:extension"
   mount_uploader :picture, PictureUploader
   
   # add state machine for stepflow/discovery state (object not saved)

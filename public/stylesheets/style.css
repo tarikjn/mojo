@@ -682,8 +682,9 @@ h2, h3 {
     background-color: transparent; }
 
 #mtaTwitter a img {
-  height: 48px;
-  width: 48px;
+  margin-top: 8px;
+  height: 32px;
+  width: 32px;
   background: white; }
 
 #mtaTwitter ul:before {
@@ -709,12 +710,12 @@ h2, h3 {
   border-radius: 5px;
   list-style: none;
   margin: 0;
-  margin-left: 66px;
+  margin-left: 46px;
   padding: 0px;
   font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif; }
 
 #mtaTwitter ul li {
-  padding: 10px 10px;
+  padding: 7px;
   font-size: 10pt; }
 
 #mtaTwitter ul li.first {
