@@ -916,6 +916,10 @@ var LiveInit = {
 			var tip = $(this).children(".tip");
 			var input = $(this).children("input");
 			
+			// make sure tip doesn't display over input value
+			// when using browser history
+			if (input.val() != "") tip.hide();
+			
 			tip.click(function() {
 				input.focus();
 			});
