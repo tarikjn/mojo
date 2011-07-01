@@ -103,6 +103,11 @@ class User < ActiveRecord::Base
     direct_friends | inverse_friends
   end
   
+  # this helps make Users work well together with Wings
+  def individuals
+    [self]
+  end
+  
   # TODO: secure active and admin attributes with attr_accessible?
   # Authlogic checks this
   def active?

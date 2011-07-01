@@ -1,5 +1,6 @@
 class UserRating < ActiveRecord::Base
   belongs_to :user
-  belongs_to :by, :class_name => "User"
-  belongs_to :sortie
+  belongs_to :sortie_report
+  
+  validates :score, :inclusion => { :in => 1..5 }
 end

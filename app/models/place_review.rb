@@ -1,5 +1,6 @@
 class PlaceReview < ActiveRecord::Base
   belongs_to :place
-  belongs_to :by, :class_name => "User"
-  belongs_to :sortie
+  belongs_to :sortie_report
+  
+  validates :score, :inclusion => { :in => 1..5 }, :allow_nil => true
 end

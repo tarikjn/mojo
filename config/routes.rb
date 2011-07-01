@@ -1,7 +1,6 @@
 Mojo::Application.routes.draw do
-  
-  resources :invitations, :only => [:new, :create]
 
+  resources :invitations, :only => [:new, :create]
   get "invitations/find"
 
   resources :password_resets
@@ -47,6 +46,9 @@ Mojo::Application.routes.draw do
         put 'invite'
       end
     end
+    
+    # new  date report
+    resource :sortie_reports, :path => 'rate', :as => 'report', :only => [:new, :create]
     
   end
   

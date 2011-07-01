@@ -1,0 +1,284 @@
+.sortie.object-view {
+	width: 250px;
+	.person {
+		display: inline-block;
+		img {
+			width: 32px; height: 32px;
+		}
+		.name { display: none; }
+	}
+}
+
+form {
+	.question {
+		margin-bottom: 15px;
+		> .title {
+			font-size: 1.35em;
+			@include mjfont;
+		}
+	}
+	.reply {
+		label {
+			padding: 2px 3px;
+			margin-right: 10px;
+			@include rounded;
+			border: 1px solid transparent;
+			&:hover {
+				background: $light-blue;
+			}
+			&.selected {
+				background: white;
+				border-color: $border-gray;
+			}
+			.extend select {
+				vertical-align: top;
+			}
+		}
+	}
+	.form-item {
+		&.sub-columns {
+			.title {
+				position: absolute;
+			}
+			.hybrid-input {
+				margin-top: 0;
+				margin-left: 150px;
+				min-height: 20px;
+				
+				textarea {
+					width: 450px;
+					height: 4em;
+				}
+			}
+		}
+	}
+	.quick-selects {
+		display: inline-block;
+		vertical-align: top;
+		padding-right: 15px;
+		width: 50px;
+		
+		button { width: 50px; }
+	}
+	.report-culprits {
+		.person {
+			// it's a label
+			display: inline-block;
+			
+			background: white;
+			border-radius: 5px;
+			padding: 8px;
+			margin-right: 10px;
+			border: 1px outset $lighter-gray;
+			
+			padding-left: 25px;
+
+			position: relative;
+			
+			> .name, img { vertical-align: middle; }
+
+			.name { font-size: 115%; }
+
+			&:hover {
+				background: #e1ecff;
+			}
+
+			.checkbox {
+				position: absolute;
+				top: 0; left: 0;
+				//background: $lighter-gray;
+				border-bottom-right-radius: 5px;
+				border-top-left-radius: 5px;
+				border: 1px inset $border-gray;
+				border-width: 0 1px 1px 0;
+			}
+		}
+	}
+	.person-rating {
+		margin-bottom: 15px;
+		
+		.person {
+			position: absolute;
+			
+			> .name, img { vertical-align: middle; }
+			.name { font-size: 115%; }
+		}
+		.ratings {
+			margin-left: 200px;
+			
+			.errors {
+				margin-left: 180px;
+			}
+			.user-rating {
+				height: 23px;
+				margin-bottom: 8px;
+			}
+			.title {
+				display: inline-block;
+				vertical-align: middle;
+				width: 170px;
+				text-align: right;
+				padding-right: 10px;
+			}
+		}
+	}
+	
+	.rating-input {
+		display: inline-block;
+		height: 23px;
+		vertical-align: middle;
+		.rating-label {
+			display: inline-block;
+			width: 23px; height: 23px;
+			background-image: url(/images/rating/inactive.png);
+			cursor: pointer;
+		}
+		&.affinity .rating-label {
+			&.fill, &.set  { background-image: url(/images/rating/affinity-active.png); }
+			&:hover        { background-image: url(/images/rating/affinity-over.png); }
+		}
+		&.review .rating-label {
+			&.fill, &.set  { background-image: url(/images/rating/review-active.png); }
+			&:hover        { background-image: url(/images/rating/review-over.png); }
+		}
+	}
+}
+
+/* CC Slider */
+
+.yui-h-slider{position:relative;}
+.yui-h-slider .yui-slider-thumb{position:absolute;cursor:default;}
+.yui-skin-sam .yui-h-slider .yui-slider-thumb{
+	top: 0;
+	z-index: 1;
+}
+.yui-skin-sam .yui-h-slider {
+    background: url(/images/slider/bg-fader.png) 5px -4px no-repeat;
+    width: 217px;
+    height: 20px;
+}
+.centered-slider .yui-skin-sam .yui-h-slider {
+	background-image: url(/images/slider/centered-bg.png);
+}
+
+.cc-slider {
+	position: relative;	
+}
+
+.cc-slider-marks {
+	height: 16px;
+	font-size: 65%;
+}
+.cc-slider-marks div {
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	line-height: 16px;
+	vertical-align: middle;
+	margin-left: -8px;
+	text-align: center;
+}
+.cc-slider-marks div.selected {
+	background: transparent url(/images/slider/selected-mark.png) center center no-repeat;
+	font-weight: bold;
+	color: white;
+	font-size: larger;
+}
+.cc-slider-bar {
+	background: yellow;
+	width: 2px;
+	height: 2px;
+	position: absolute;
+	bottom: 9px;
+	left: 8px;
+	z-index: 0;
+}
+.centered-slider .cc-slider-bar {
+	background: #ff0000;
+	width: 9px;
+	height: 12px;
+	bottom: 4px;
+	left: 4px;
+}
+
+/* /CC Slider */
+
+/* CC Rating Widget */
+
+.cc-rating-widget {
+	position: relative;
+	margin-top: 10px;
+	padding: 10px 0 3px 4px;
+}
+.cc-rating-widget.even {
+	background-color: #f2f2f2;
+}
+.cc-rating-widget .cc-label {
+	display: inline;
+	font-size: 80%;
+	font-weight: bold;
+}
+.cc-rating-widget .cc-control {
+	position: relative;
+	float: right;
+}
+.cc-slider-left, .cc-slider-right {
+	position: absolute;
+	font-size: 62%;
+	vertical-align: middle;
+	line-height: 15px;
+	margin-top: 5px;
+}
+.cc-slider-left img, .cc-slider-right img {
+	vertical-align: top;
+}
+.cc-slider-left {
+	right: 352px;
+	text-align: right;
+	padding-right: 5px;
+	width: 85px;
+}
+.cc-slider-right {
+	right: 0;
+	text-align: left;
+	padding-left: 5px;
+	width: 130px;
+}
+.cc-slider-control {
+	width: 217px;
+	position: absolute;
+	right: 135px;
+}
+
+.cc-slider-control.leveled-slider .cc-slider {
+	top: -12px;
+}
+.cc-slider-control.centered-slider .cc-slider {
+	top: 3px;
+}
+
+.cc-radioslider {
+	position: relative;
+	width: 217px;
+	top: -7px;
+	height: 5px;
+}
+.cc-radioslider-pos {
+	position: absolute;
+	text-align: center;
+	width: 20px;
+	margin-left: -10px;
+	font-size: 65%;
+	top: 0;
+}
+.cc-radioslider-pos label {
+	display: block;
+	margin: 0;
+}
+.centered-slider .cc-radioslider-pos label {
+	visibility: hidden;
+}
+.cc-radioslider-pos div {
+}
+
+/* /CC Rating Widget */

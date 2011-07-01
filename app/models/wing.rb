@@ -14,4 +14,8 @@ class Wing < ActiveRecord::Base
   def self.ids_with(user)
     self.with(user).map {|x| x.id}
   end
+  
+  def individuals
+    [lead, mate]
+  end
 end

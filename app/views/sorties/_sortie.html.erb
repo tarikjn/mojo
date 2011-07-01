@@ -62,7 +62,9 @@
 			<%= link_to "Cancel", cancel_date_path(sortie), :class => ['mj-button', 'small', 'white', 'cancel-action'] %>
 		<% end %>
 		<% if list == :past %>
-			<span class="mj-button small white disabled">Date report</span>
+			<% if !sortie.report_by(current_user) %>
+				<%= link_to "Date report", new_date_report_path(sortie), :class => ['mj-button', 'small', 'white'] %>
+			<% end %>
 		<% end %>
 	</div>
 <% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110619042123) do
+ActiveRecord::Schema.define(:version => 20110629081523) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -64,21 +64,19 @@ ActiveRecord::Schema.define(:version => 20110619042123) do
   create_table "picture_ratings", :force => true do |t|
     t.integer  "user_id"
     t.string   "picture_file_name"
-    t.integer  "by_id"
-    t.integer  "sortie_id"
     t.integer  "score"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "sortie_report_id"
   end
 
   create_table "place_reviews", :force => true do |t|
     t.integer  "place_id"
-    t.integer  "by_id"
-    t.integer  "sortie_id"
     t.integer  "score"
     t.text     "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "sortie_report_id"
   end
 
   create_table "places", :force => true do |t|
@@ -110,12 +108,11 @@ ActiveRecord::Schema.define(:version => 20110619042123) do
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "site_reviews", :force => true do |t|
-    t.integer  "by_id"
-    t.integer  "sortie_id"
     t.integer  "score"
     t.text     "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "sortie_report_id"
   end
 
   create_table "sortie_reports", :force => true do |t|
@@ -160,11 +157,10 @@ ActiveRecord::Schema.define(:version => 20110619042123) do
 
   create_table "user_ratings", :force => true do |t|
     t.integer  "user_id"
-    t.integer  "by_id"
-    t.integer  "sortie_id"
     t.integer  "score"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "sortie_report_id"
   end
 
   create_table "users", :force => true do |t|

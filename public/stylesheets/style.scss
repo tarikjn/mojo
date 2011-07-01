@@ -960,13 +960,27 @@ h2, h3 {
 }
 .signup-page form, .settings-block form, .form-page form {
 	
+	$form-background-color: rgba(25, 25, 25, .025);
+	position: relative;
+	
 	margin-top: 20px;
 	padding: 25px;
 	
 	// TODO: lighter gray with .5 alpha
 	// result color over white should be #fafafa ($light-gray)
-	background: rgba(25, 25, 25, .025);
+	background: $form-background-color;
 	@include rounded(10px);
+	
+	&.with-object {
+		&:before {
+			content: "▴";
+			font-size: 50px;
+			color: $form-background-color;
+			position: absolute;
+			top: 0; margin-top: -43px;
+			left: 25px;
+		}
+	}
 	
 	.form-item {
 		padding: 10px 15px;
@@ -3784,9 +3798,6 @@ h2 {
 				> .date {
 					
 					list-style-type: none;
-					border: 1px outset $border-gray;
-					@include rounded;
-					padding: 8px;
 					margin-bottom: 15px;
 					
 					&.with_tasks {
@@ -3808,22 +3819,6 @@ h2 {
 						padding: 2px 0;
 						background: $light-blue;
 						margin-bottom: 10px;
-					}
-					
-					.person {
-						
-						margin-top: 8px;
-						> * { vertical-align: middle; }
-						
-						.name { font-size: 115%; }
-						img {
-							height: 48px; width: 48px;
-							
-							&.open {
-								width: 46px; height: 46px;
-								border: 1px solid $border-gray;
-							}
-						}
 					}
 					
 					.actions {
@@ -3891,9 +3886,15 @@ h2 {
 }
 
 // shared date styles
-.date {
+.date, .sortie.object-view {
 	background: white;
 	position: relative;
+	
+	border: 1px outset $border-gray;
+	@include rounded;
+	padding: 8px;
+	
+	//max-width: 300px;
 	
 	.header {
 		> * { vertical-align: middle; }
@@ -3941,4 +3942,22 @@ h2 {
 			font-size: .65em;
 		}
 	}
+	
+	.person {
+		
+		margin-top: 8px;
+		> * { vertical-align: middle; }
+		
+		.name { font-size: 115%; }
+		img {
+			height: 48px; width: 48px;
+			
+			&.open {
+				width: 46px; height: 46px;
+				border: 1px solid $border-gray;
+			}
+		}
+	}
 }
+
+@import 'sortie_reports'

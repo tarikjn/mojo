@@ -105,9 +105,8 @@ class Sortie < ActiveRecord::Base
     (self.host.is_a? User)? self.host : self.host.lead
   end
   
-  def party_of(party) #pluralize for double dates
-    # check if the party is in the sortie at all?
-    self.host == party ? self.guest : self.host
+  def hosts
+    self.host.individuals
   end
   
   def location=(location_id)
@@ -174,6 +173,26 @@ class Sortie < ActiveRecord::Base
     # refactor for doubles
     #people += [self.creator_invitee.host, self.creator_invitee.participant] if self.invitee_duo
     people
+  end
+  
+  
+  def party_of(party) #pluralize for double dates
+    # check if the party is in the sortie at all?
+    self.host == party ? self.guest : self.host
+  end
+  
+  def members
+    self.host.individuals + self.guest.individuals
+  end
+  
+  def companions_of(member)
+    # assuming member is part of the sortie
+     self.members - member
+  end
+  
+  def dates_of(member)
+    # get rid of self.hosts? or add self.guests?
+    (self.hosts.include?(member))? self.guest.individuals : self.hosts
   end
   
   # called when a user asks to join the date

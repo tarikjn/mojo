@@ -79,8 +79,14 @@ var Lib = {
 		var label = $(this).parents("label:eq(0)"); // parents + :eq(0): fix for fields_with_errors
 		var group = label.parents(".hybrid-input:eq(0), .input-holder:eq(0)").eq(0);
 
+		// interactive input:
+		group.find(".selected .extend").hide();
+		
 		group.find(".selected").removeClass("selected");
 		label.addClass("selected");
+		
+		// interactive input:
+		label.find(".extend").show();
 	},
 	
 	// iframe onload

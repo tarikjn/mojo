@@ -1,0 +1,147 @@
+<div class="form-page">
+	<h3>Rate your date</h3>
+	<%= render :partial => 'sortie', :locals => { :sortie => @report.sortie } %>
+	<!-- display Sortie excerpt -->
+	<%= form_for @report, :url => date_report_path(@report.sortie), :html => { :class => ['form-inputs', 'with-object'] } do |f| %>
+		<div class="question">
+			<div class="title">Did the date take place with everyone present?</div>
+			<div class="form-item">
+				<%= format_errors_for f.object, :result %>
+				<div class="reply report-state input-holder mj-choice">
+					<label>
+						<%= f.radio_button :result, 'on-time'  %>
+						Yes, on time at <%= @report.sortie.time.strftime("%l:%M%p").downcase %>
+					</label>
+					<label>
+						<%= f.radio_button :result, 'late'  %>
+						Yes, late<span class="extend"> by about <%= f.select :late_by, [['10 minutes', 10], ['20 minutes', 20], ['30 minutes', 30]] %></span>
+					</label>
+					<label>
+						<%= f.radio_button :result, 'cancelled'  %>
+						No<span class="extend">, one ore more <%= f.select :cancellation_notice, [['cancelled', 'before'], ['cancelled without advance notice', 'after'], ['didn\'t show up', 'no-show']]  %></span>
+					</label>
+				</div> 
+			</div>
+		</div>
+		<div class="question report-culprits">
+			<div class="title">Who <span class="section"></span>?</div>
+			<div class="form-item">
+				<%= format_errors_for f.object, :title %>
+				<div class="reply input-holder mj-choice">
+					<div class="quick-selects">
+						<button class="mj-button small white select-all">All</button>
+						<button class="mj-button small white select-none">None</button>
+					</div>
+					<%
+						@report.sortie.members.each do |u|
+					%>
+					<label class="person">
+						<div class="checkbox">
+							<%= check_box_tag "sortie_report[culprit_ids][]", u.id, @report.culprits.include?(u) %>
+						</div>
+						<%= image_tag u.picture_url(:mini) %> <span class="name"><%= u.first_name %></span>
+					</label>
+					<%
+						end
+					%>
+				</div> 
+			</div>
+		</div>
+		<div class="ratings">
+			<div class="question">
+				<div class="title">How would you rate...</div>
+				<div class="form-item">
+					<%= format_errors_for f.object, :title %>
+					<div class="reply">
+						<%
+							@report.sortie.dates_of(@report.by).each_with_index do |u, i|
+						%>
+						<div class="person-rating">
+							<div class="person">
+								<%= image_tag u.picture_url(:mini) %> <span class="name"><%= u.first_name %>:</span>
+							</div>
+							<div class="ratings">
+								<%= f.fields_for :user_ratings, @report.user_ratings[i] do |s| %>
+								<%= s.hidden_field :user_id %>
+								<%= format_errors_for s.object, :score %>
+								<div class="user-rating rating">
+									<div class="title">Your affinity</div>
+									<%= s.hidden_field :score %>
+									<div class="rating-input affinity"><div class="rating-label"></div><div class="rating-label"></div><div class="rating-label"></div><div class="rating-label"></div><div class="rating-label"></div></div>
+								</div>
+								<% end %>
+								<%= f.fields_for :picture_ratings, @report.picture_ratings[i] do |s| %>
+								<%= s.hidden_field :user_id %>
+								<div class="picture-rating">
+									<div class="title"><%= u.possessive.capitalize %> picture accuracy</div>
+									<%= s.select :score, [['Not accurate', 1], ['Not exactly accurate', 2], ['Accurate', 3], ['Looks better than picture', 4], ['Looks much better than picture', 5]] %>
+								</div>
+								<% end %>
+							</div>
+						</div>
+					
+						<%
+							end
+						%>
+					</div> 
+				</div>
+			</div>
+			<div class="question place-question">
+				<div class="title">Did the date take place at <em><%= @report.sortie.place.name %></em>?</div>
+				<div class="form-item">
+					<%= format_errors_for f.object, :at_location %>
+					<div class="reply report-place input-holder mj-choice">
+						<label>
+							<%= f.radio_button :at_location, 1  %>
+							Yes
+						</label>
+						<label>
+							<%= f.radio_button :at_location, 0  %>
+							No
+						</label>
+					</div> 
+				</div>
+			</div>
+			<div class="question place-review">
+				<div class="title">Wanna drop a quick review of <em><%= @report.sortie.place.name %></em>?</div>
+				<%= f.fields_for :place_review, @report.place_review do |s| %>
+				<%= s.hidden_field :place_id %>
+				<div class="form-item optional sub-columns">
+					<div class="title">Rating <span class="info">optional</span></div>
+					<div class="hybrid-input rating">
+						<%= s.hidden_field :score %>
+						<div class="rating-input review"><div class="rating-label"></div><div class="rating-label"></div><div class="rating-label"></div><div class="rating-label"></div><div class="rating-label"></div></div>
+					</div>
+				</div>
+				<div class="form-item optional sub-columns">
+					<div class="title">Comment <span class="info">optional</span></div>
+					<div class="hybrid-input">
+						<%= s.text_area :comment %>
+					</div>
+				</div>
+				<% end %>
+			</div>
+		</div>
+		<div class="question">
+			<div class="title">How is your experience with Mojo so far?</div>
+			<%= f.fields_for :site_review, @report.site_review do |s| %>
+			<div class="form-item optional sub-columns">
+				<div class="title">Rating <span class="info">optional</span></div>
+				<div class="hybrid-input rating">
+					<%= s.hidden_field :score %>
+					<div class="rating-input review"><div class="rating-label"></div><div class="rating-label"></div><div class="rating-label"></div><div class="rating-label"></div><div class="rating-label"></div></div>
+				</div>
+			</div>
+			<div class="form-item optional sub-columns">
+				<div class="title">Comment <span class="info">optional</span></div>
+				<div class="hybrid-input">
+					<%= s.text_area :comment %>
+				</div>
+			</div>	
+			<% end %>
+		</div>
+		<div class="submit">
+			<button type="submit" class="mj-button mojo">Submit</button>
+		</div>
+	<% end %>
+</div>

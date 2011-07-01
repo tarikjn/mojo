@@ -603,12 +603,21 @@ h2, h3 {
   margin: 50px 125px; }
 
 .signup-page form, .settings-block form, .form-page form {
+  position: relative;
   margin-top: 20px;
   padding: 25px;
   background: rgba(25, 25, 25, 0.025);
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   border-radius: 10px; }
+  .signup-page form.with-object:before, .settings-block form.with-object:before, .form-page form.with-object:before {
+    content: "▴";
+    font-size: 50px;
+    color: rgba(25, 25, 25, 0.025);
+    position: absolute;
+    top: 0;
+    margin-top: -43px;
+    left: 25px; }
   .signup-page form .form-item, .settings-block form .form-item, .form-page form .form-item {
     padding: 10px 15px;
     position: relative; }
@@ -1654,8 +1663,8 @@ label.mj-choice {
       font-size: .75em; }
     .mj-operation-choices > label.selected {
       /*background: white;
-      border-style: inset;
-      color: black;*/ }
+      			border-style: inset;
+      			color: black;*/ }
 
 /*
  * subset form
@@ -3007,11 +3016,6 @@ h2 {
       font-style: italic; }
     .dates-layout > .columns > div ul > .date {
       list-style-type: none;
-      border: 1px outset #e6e6e6;
-      -moz-border-radius: 5px;
-      -webkit-border-radius: 5px;
-      border-radius: 5px;
-      padding: 8px;
       margin-bottom: 15px; }
       .dates-layout > .columns > div ul > .date.with_tasks:before {
         content: "●";
@@ -3029,19 +3033,6 @@ h2 {
         padding: 2px 0;
         background: #e1ecff;
         margin-bottom: 10px; }
-      .dates-layout > .columns > div ul > .date .person {
-        margin-top: 8px; }
-        .dates-layout > .columns > div ul > .date .person > * {
-          vertical-align: middle; }
-        .dates-layout > .columns > div ul > .date .person .name {
-          font-size: 115%; }
-        .dates-layout > .columns > div ul > .date .person img {
-          height: 48px;
-          width: 48px; }
-          .dates-layout > .columns > div ul > .date .person img.open {
-            width: 46px;
-            height: 46px;
-            border: 1px solid #e6e6e6; }
       .dates-layout > .columns > div ul > .date .actions {
         margin-top: 10px;
         border-top: 1px solid #e6e6e6;
@@ -3086,12 +3077,17 @@ h2 {
   position: relative;
   margin: 35px 25px; }
 
-.date {
+.date, .sortie.object-view {
   background: white;
-  position: relative; }
-  .date .header > * {
+  position: relative;
+  border: 1px outset #e6e6e6;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 8px; }
+  .date .header > *, .sortie.object-view .header > * {
     vertical-align: middle; }
-  .date .calendar-day {
+  .date .calendar-day, .sortie.object-view .calendar-day {
     display: inline-block;
     width: 30px;
     height: 30px;
@@ -3100,16 +3096,16 @@ h2 {
     border-radius: 5px;
     border: 1px solid #e6e6e6;
     text-align: center; }
-    .date .calendar-day .month {
+    .date .calendar-day .month, .sortie.object-view .calendar-day .month {
       background: #F00;
       border-top-right-radius: 5px;
       border-top-left-radius: 5px;
       color: white;
       font-size: 11px; }
-    .date .calendar-day .day {
+    .date .calendar-day .day, .sortie.object-view .calendar-day .day {
       font-size: 15px;
       padding-bottom: 1px; }
-  .date .category-icon {
+  .date .category-icon, .sortie.object-view .category-icon {
     width: 24px;
     height: 24px;
     padding: 4px;
@@ -3117,9 +3113,263 @@ h2 {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px; }
-  .date .info {
+  .date .info, .sortie.object-view .info {
     display: inline-block; }
-    .date .info .title {
+    .date .info .title, .sortie.object-view .info .title {
       font-size: .85em; }
-    .date .info .time-and-area {
+    .date .info .time-and-area, .sortie.object-view .info .time-and-area {
       font-size: .65em; }
+  .date .person, .sortie.object-view .person {
+    margin-top: 8px; }
+    .date .person > *, .sortie.object-view .person > * {
+      vertical-align: middle; }
+    .date .person .name, .sortie.object-view .person .name {
+      font-size: 115%; }
+    .date .person img, .sortie.object-view .person img {
+      height: 48px;
+      width: 48px; }
+      .date .person img.open, .sortie.object-view .person img.open {
+        width: 46px;
+        height: 46px;
+        border: 1px solid #e6e6e6; }
+
+.sortie.object-view {
+  width: 250px; }
+  .sortie.object-view .person {
+    display: inline-block; }
+    .sortie.object-view .person img {
+      width: 32px;
+      height: 32px; }
+    .sortie.object-view .person .name {
+      display: none; }
+
+form .question {
+  margin-bottom: 15px; }
+  form .question > .title {
+    font-size: 1.35em;
+    font-family: brevia-1, brevia-2, sans-serif; }
+form .reply label {
+  padding: 2px 3px;
+  margin-right: 10px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px solid transparent; }
+  form .reply label:hover {
+    background: #e1ecff; }
+  form .reply label.selected {
+    background: white;
+    border-color: #e6e6e6; }
+  form .reply label .extend select {
+    vertical-align: top; }
+form .form-item.sub-columns .title {
+  position: absolute; }
+form .form-item.sub-columns .hybrid-input {
+  margin-top: 0;
+  margin-left: 150px;
+  min-height: 20px; }
+  form .form-item.sub-columns .hybrid-input textarea {
+    width: 450px;
+    height: 4em; }
+form .quick-selects {
+  display: inline-block;
+  vertical-align: top;
+  padding-right: 15px;
+  width: 50px; }
+  form .quick-selects button {
+    width: 50px; }
+form .report-culprits .person {
+  display: inline-block;
+  background: white;
+  border-radius: 5px;
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px outset #f2f2f2;
+  padding-left: 25px;
+  position: relative; }
+  form .report-culprits .person > .name, form .report-culprits .person img {
+    vertical-align: middle; }
+  form .report-culprits .person .name {
+    font-size: 115%; }
+  form .report-culprits .person:hover {
+    background: #e1ecff; }
+  form .report-culprits .person .checkbox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border: 1px inset #e6e6e6;
+    border-width: 0 1px 1px 0; }
+form .person-rating {
+  margin-bottom: 15px; }
+  form .person-rating .person {
+    position: absolute; }
+    form .person-rating .person > .name, form .person-rating .person img {
+      vertical-align: middle; }
+    form .person-rating .person .name {
+      font-size: 115%; }
+  form .person-rating .ratings {
+    margin-left: 200px; }
+    form .person-rating .ratings .errors {
+      margin-left: 180px; }
+    form .person-rating .ratings .user-rating {
+      height: 23px;
+      margin-bottom: 8px; }
+    form .person-rating .ratings .title {
+      display: inline-block;
+      vertical-align: middle;
+      width: 170px;
+      text-align: right;
+      padding-right: 10px; }
+form .rating-input {
+  display: inline-block;
+  height: 23px;
+  vertical-align: middle; }
+  form .rating-input .rating-label {
+    display: inline-block;
+    width: 23px;
+    height: 23px;
+    background-image: url(/images/rating/inactive.png);
+    cursor: pointer; }
+  form .rating-input.affinity .rating-label.fill, form .rating-input.affinity .rating-label.set {
+    background-image: url(/images/rating/affinity-active.png); }
+  form .rating-input.affinity .rating-label:hover {
+    background-image: url(/images/rating/affinity-over.png); }
+  form .rating-input.review .rating-label.fill, form .rating-input.review .rating-label.set {
+    background-image: url(/images/rating/review-active.png); }
+  form .rating-input.review .rating-label:hover {
+    background-image: url(/images/rating/review-over.png); }
+
+/* CC Slider */
+.yui-h-slider {
+  position: relative; }
+
+.yui-h-slider .yui-slider-thumb {
+  position: absolute;
+  cursor: default; }
+
+.yui-skin-sam .yui-h-slider .yui-slider-thumb {
+  top: 0;
+  z-index: 1; }
+
+.yui-skin-sam .yui-h-slider {
+  background: url(/images/slider/bg-fader.png) 5px -4px no-repeat;
+  width: 217px;
+  height: 20px; }
+
+.centered-slider .yui-skin-sam .yui-h-slider {
+  background-image: url(/images/slider/centered-bg.png); }
+
+.cc-slider {
+  position: relative; }
+
+.cc-slider-marks {
+  height: 16px;
+  font-size: 65%; }
+
+.cc-slider-marks div {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  vertical-align: middle;
+  margin-left: -8px;
+  text-align: center; }
+
+.cc-slider-marks div.selected {
+  background: transparent url(/images/slider/selected-mark.png) center center no-repeat;
+  font-weight: bold;
+  color: white;
+  font-size: larger; }
+
+.cc-slider-bar {
+  background: yellow;
+  width: 2px;
+  height: 2px;
+  position: absolute;
+  bottom: 9px;
+  left: 8px;
+  z-index: 0; }
+
+.centered-slider .cc-slider-bar {
+  background: #ff0000;
+  width: 9px;
+  height: 12px;
+  bottom: 4px;
+  left: 4px; }
+
+/* /CC Slider */
+/* CC Rating Widget */
+.cc-rating-widget {
+  position: relative;
+  margin-top: 10px;
+  padding: 10px 0 3px 4px; }
+
+.cc-rating-widget.even {
+  background-color: #f2f2f2; }
+
+.cc-rating-widget .cc-label {
+  display: inline;
+  font-size: 80%;
+  font-weight: bold; }
+
+.cc-rating-widget .cc-control {
+  position: relative;
+  float: right; }
+
+.cc-slider-left, .cc-slider-right {
+  position: absolute;
+  font-size: 62%;
+  vertical-align: middle;
+  line-height: 15px;
+  margin-top: 5px; }
+
+.cc-slider-left img, .cc-slider-right img {
+  vertical-align: top; }
+
+.cc-slider-left {
+  right: 352px;
+  text-align: right;
+  padding-right: 5px;
+  width: 85px; }
+
+.cc-slider-right {
+  right: 0;
+  text-align: left;
+  padding-left: 5px;
+  width: 130px; }
+
+.cc-slider-control {
+  width: 217px;
+  position: absolute;
+  right: 135px; }
+
+.cc-slider-control.leveled-slider .cc-slider {
+  top: -12px; }
+
+.cc-slider-control.centered-slider .cc-slider {
+  top: 3px; }
+
+.cc-radioslider {
+  position: relative;
+  width: 217px;
+  top: -7px;
+  height: 5px; }
+
+.cc-radioslider-pos {
+  position: absolute;
+  text-align: center;
+  width: 20px;
+  margin-left: -10px;
+  font-size: 65%;
+  top: 0; }
+
+.cc-radioslider-pos label {
+  display: block;
+  margin: 0; }
+
+.centered-slider .cc-radioslider-pos label {
+  visibility: hidden; }
+
+/* /CC Rating Widget */
