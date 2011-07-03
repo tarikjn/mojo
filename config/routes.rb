@@ -58,11 +58,13 @@ Mojo::Application.routes.draw do
     post "/enter" => :find
   end
   
-  scope '/userhome', :controller => :userhome, :as => "userhome" do
-    # match "(/index)" interferes with link_to_unless_current
-    root :to => :index, :as => ""
-    match "/dates"
-  end
+  # scope '/userhome', :controller => :userhome, :as => "userhome" do
+  #     # match "(/index)" interferes with link_to_unless_current
+  #     root :to => :index, :as => ""
+  #     match "/dates"
+  #   end
+  # alias:
+  get '/dates' => "sorties#index", :as => 'userhome'
 
   # todo: refactor stepflow routes, at least namespace
   # stepflow is disabled: refactor for open-beta with state machine

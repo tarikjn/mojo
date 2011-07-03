@@ -612,11 +612,12 @@ h2, h3 {
   border-radius: 10px; }
   .signup-page form.with-object:before, .settings-block form.with-object:before, .form-page form.with-object:before {
     content: "▴";
+    text-shadow: 1px -1px 1px rgba(0, 0, 0, 0.3);
     font-size: 50px;
-    color: rgba(25, 25, 25, 0.025);
+    color: #fafafa;
     position: absolute;
     top: 0;
-    margin-top: -43px;
+    margin-top: -42px;
     left: 25px; }
   .signup-page form .form-item, .settings-block form .form-item, .form-page form .form-item {
     padding: 10px 15px;
@@ -3001,12 +3002,16 @@ h2 {
   .dates-layout > .columns > div {
     float: left;
     position: relative;
-    width: 300px; }
+    width: 300px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background: rgba(25, 25, 25, 0.025); }
     .dates-layout > .columns > div:not(:last-of-type) > ul, .dates-layout > .columns > div:not(:last-of-type) > .empty {
-      padding-right: 10px;
+      margin-right: 10px;
       border-right: 1px solid #e6e6e6; }
     .dates-layout > .columns > div:not(:first-of-type) > ul, .dates-layout > .columns > div:not(:first-of-type) > .empty {
-      padding-left: 10px; }
+      margin-left: 10px; }
     .dates-layout > .columns > div h3 {
       text-align: center; }
     .dates-layout > .columns > div .empty {
@@ -3085,8 +3090,11 @@ h2 {
   -webkit-border-radius: 5px;
   border-radius: 5px;
   padding: 8px; }
-  .date .header > *, .sortie.object-view .header > * {
-    vertical-align: middle; }
+  .date .header, .sortie.object-view .header {
+    white-space: nowrap;
+    overflow: hidden; }
+    .date .header > *, .sortie.object-view .header > * {
+      vertical-align: middle; }
   .date .calendar-day, .sortie.object-view .calendar-day {
     display: inline-block;
     width: 30px;

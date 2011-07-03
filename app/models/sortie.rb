@@ -18,7 +18,8 @@ class Sortie < ActiveRecord::Base
   # validations with view feedback
   validates :title, :presence => true
   validates :place, :presence => true
-  validate :validate_time
+  # also do that check when inviting a friend (check it goes in his/her schedule...)
+  validate :validate_time, :on => :create # add validation for update?
   
   attr_accessor :location
   
@@ -127,7 +128,7 @@ class Sortie < ActiveRecord::Base
     if (self.state == 'open')
       # probably there is a cleaner way to do that
       if self.guest
-        self.close!()
+        self.close!
       end
     end
   end
@@ -168,28 +169,27 @@ class Sortie < ActiveRecord::Base
     end
   end
   
-  def get_people
-    people = [self.host, self.guest]
-    # refactor for doubles
-    #people += [self.creator_invitee.host, self.creator_invitee.participant] if self.invitee_duo
-    people
-  end
-  
-  
-  def party_of(party) #pluralize for double dates
+  # phase out this method
+  def party_of(party)
     # check if the party is in the sortie at all?
     self.host == party ? self.guest : self.host
   end
   
+  # # #
+  # participants accessors
+  
+  # everyone in the date
   def members
     self.host.individuals + self.guest.individuals
   end
   
+  # everyone else but the specified member
   def companions_of(member)
     # assuming member is part of the sortie
      self.members - member
   end
   
+  # the people other than the specified member and his possible friend
   def dates_of(member)
     # get rid of self.hosts? or add self.guests?
     (self.hosts.include?(member))? self.guest.individuals : self.hosts

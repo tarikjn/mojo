@@ -17,7 +17,7 @@ class SmsController < ApplicationController
       sortie = Sortie.find_active_sortie_for(sender)
       
       if (sortie)
-        @recipients = [sortie.party_of(sender)]
+        @recipients = sortie.companions_of(sender)
     
         # format response
         @message = "#{sender.first_name}: #{body}"

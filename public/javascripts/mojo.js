@@ -526,7 +526,7 @@ function TimeRangeInput(obj)
 		// assign spec
 		el.mj_drag_spec = spec;
 		
-		$(el).bind('mousedown', that.startDrag, false);
+		$(el).bind('mousedown', that.startDrag);
 	}
 	this.startDrag = function(e)
 	{
@@ -540,6 +540,8 @@ function TimeRangeInput(obj)
 		
 		document.onselectstart = that.preventSelect;
 		
+		// prevent default
+		//e.preventDefault();
 		// stop bubbling
 		e.stopPropagation();
 	}

@@ -1,0 +1,24 @@
+<div id="auth-links">
+	<% if current_user %>
+	<% if !current_page?(root_path) %>
+		<%= link_to "Create<span> a date</span>".html_safe, new_date_path, :class => (["highlighted"] << ( (current_page?(new_date_path))? "active":nil )) %>
+		<%= link_to "Join<span> a date</span>".html_safe, search_dates_path, :class => (["highlighted"] << ( (current_page?(search_dates_path))? "active":nil )) %>
+	<% end %>
+		<%=
+			link_to userhome_path, :class => ((current_page?(userhome_path))? "active":nil) do
+				(current_user.first_name + ((current_user.tasks_count > 0)? (content_tag :div, current_user.tasks_count, :class => 'task-count') : '')).html_safe
+				# issue: first_name shouldn't be html_safe...
+			end
+		%>
+		<%= link_to "Sign out", logout_path %>
+	<% else %>
+		<%= link_to "Sign In", login_path, :id => "login-link" %>
+		<% if controller.controller_name != 'user_sessions' %>
+		<div class="relative-container">
+			<div id="login-bubble">
+				<%= login_form %>
+			</div>
+		</div>
+		<% end %>
+	<% end %>
+</div>

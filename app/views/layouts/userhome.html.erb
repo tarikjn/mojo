@@ -5,7 +5,6 @@
 			<ul class="links">
 				<%
 					menu = [
-						{ :t => 'Dashboard', :p => userhome_path },
 						{ :t => 'Your dates', :p => dates_path, :c => current_user.sortie_tasks_count },
 						{ :t => 'Settings', :p => (controller_name == 'users')? url_for : account_edit_path('profile') }
 					]

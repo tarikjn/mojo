@@ -13,6 +13,8 @@ $border-gray: #E6E6E6;
 $dark-gray: #636363;
 $gray-darker: #575757;
 
+$form-background-color: rgba(25, 25, 25, .025);
+
 $light-blue: #E1ECFF;
 $border-blue: darken(#E1ECFF, 15%);
 $dark-blue: #0080FF;
@@ -960,7 +962,6 @@ h2, h3 {
 }
 .signup-page form, .settings-block form, .form-page form {
 	
-	$form-background-color: rgba(25, 25, 25, .025);
 	position: relative;
 	
 	margin-top: 20px;
@@ -974,10 +975,11 @@ h2, h3 {
 	&.with-object {
 		&:before {
 			content: "▴";
+			text-shadow: 1px -1px 1px rgba(0,0,0,.3);
 			font-size: 50px;
-			color: $form-background-color;
+			color: #fafafa;
 			position: absolute;
-			top: 0; margin-top: -43px;
+			top: 0; margin-top: -42px;
 			left: 25px;
 		}
 	}
@@ -3767,10 +3769,13 @@ h2 {
 			float: left;
 			position: relative;
 			width: 300px;
+			
+			@include rounded;
+			background: $form-background-color;
 		
 			&:not(:last-of-type) {
 				> ul, > .empty {
-					padding-right: 10px;
+					margin-right: 10px;
 					border-right: 1px solid $border-gray;
 				}
 			
@@ -3778,7 +3783,7 @@ h2 {
 		
 			&:not(:first-of-type) {
 				> ul, > .empty {
-					padding-left: 10px;
+					margin-left: 10px;
 				}
 			}
 		
@@ -3898,6 +3903,8 @@ h2 {
 	
 	.header {
 		> * { vertical-align: middle; }
+		white-space: nowrap;
+		overflow: hidden;
 	}
 	
 	.calendar-day {
