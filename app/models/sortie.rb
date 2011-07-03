@@ -186,7 +186,7 @@ class Sortie < ActiveRecord::Base
   # everyone else but the specified member
   def companions_of(member)
     # assuming member is part of the sortie
-     self.members - member
+     self.members - [member]
   end
   
   # the people other than the specified member and his possible friend
