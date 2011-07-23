@@ -1,0 +1,13 @@
+<%= content_tag :div, class: 'follow-action' do %>
+	<%
+		if current_user.following?(user)
+	%>
+		<%= link_to "✓ Following", destroy_user_follows_path(user), class: ['mj-button', 'unfollow', 'green'], 'data-hover' => "✗ Unfollow" %>
+	<%
+		else
+	%>
+		<%= link_to "★ Follow", create_user_follows_path(user), class: ['mj-button', 'white'] %>
+	<%
+		end
+	%>
+<% end %>

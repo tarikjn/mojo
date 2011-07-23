@@ -38,19 +38,37 @@
 			%>
 		</div>
 		<div class="col-2">
-			<h3>Open</h3>
+			<div class="tabs">
+				<h3>Open <span class="count"><%= @open_sorties.size %></span></h3>
+				<h3 class="inactive">Entered <span class="count"><%= @entered_sorties.size %></span></h3>
+			</div>
 			<%
 				if @open_sorties.size > 0
 			%>
-			<ul>
-				<%= render :partial => 'sortie', :collection => @open_sorties, :locals => { :list => :open } %>
-			</ul>
+				<ul>
+					<%= render :partial => 'sortie', :collection => @open_sorties, :locals => { :list => :open } %>
+				</ul>
 			<%
 				else
 			%>
-			<div class="empty">
-				Dates you create will appear here.
-			</div>
+				<div class="empty">
+					Dates you create will appear here.
+				</div>
+			<%
+				end
+			%>
+			<%
+				if @entered_sorties.size > 0
+			%>
+				<ul class="inactive">
+					<%= render :partial => 'sortie', :collection => @entered_sorties, :locals => { :list => :entered } %>
+				</ul>
+			<%
+				else
+			%>
+				<div class="empty inactive">
+					Dates you entered will appear here.
+				</div>
 			<%
 				end
 			%>

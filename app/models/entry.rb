@@ -62,6 +62,14 @@ class Entry < ActiveRecord::Base
     # commit
     self.save
   end
+  
+  def withdraw!
+    # change state of entry
+    self.state = 'withdrawn'
+    
+    # commit
+    self.save
+  end
 
   def override_concurrents
     

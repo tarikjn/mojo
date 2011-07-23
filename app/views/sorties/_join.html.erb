@@ -40,6 +40,7 @@
 		<div class="date-results">
 			<%
 				@sorties.each do |sortie|
+				# TODO move markup and CSS to partial
 			%>
 			<label class="mj-sortie" id="date-<%= sortie.id %>">
 				<div class="checkbox">
@@ -57,26 +58,13 @@
 						<div class="time-and-area"><%= sortie.time.strftime("%l:%M%p").downcase %>, <%= sortie.place.neighborhoods %></div>
 					</div>
 				</div>
-				<div class="host-info">
-					<div class="picture" style="background-image: url(<%= sortie.creator.picture_url(:mini) if sortie.creator.picture? %>)">
-						<div class="picture-feedback" style="background: <%= color_for_picture_score(sortie.creator.picture_score) %>">
-							<%= sprintf("%+g", sortie.creator.picture_score) %>
-						</div>
-					</div>
-					<div class="info">
-						<div class="title">
-							<div class="name"><%= sortie.creator.first_name %></div>
-							<div class="rating">★★★☆</div>
-						</div>
-						<div class="compatibility">
-							<div class="canvas"><canvas width="30" height="30" class="afinity-chart"></canvas></div>
-							<div class="score"><span class="int"><%= (sortie.creator.afinity_with(current_user) * 100).round %></span><span class="percent">%</span></div>
-						</div>
-						<div class="ratings">
-							<div class="rating-ttr">Average time to respond: <em><%= sortie.creator.time_to_respond %></em></div>
-							<div class="rating-ttr">Punctuality: <em><%= sortie.creator.punctuality %></em></div>
-						</div>
-					</div>
+				<% if !sortie.description.empty? %>
+				<div class="description ellipsis toggle-text">
+					<%= sortie.description %>
+				</div>
+				<% end %>
+				<div class="hosts">
+					<%= render :partial => 'users/user', :collection => sortie.hosts, locals: {kind: :match} %>
 				</div>
 			</label>
 			<%

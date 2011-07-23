@@ -64,4 +64,17 @@ class Notifier < ActionMailer::Base
     mail :to => invitation.recipient_email
     invitation.update_attribute(:sent_at, Time.now)
   end
+  
+  def new_date_by_followed(sortie, host, user)
+    
+    @sortie = sortie
+    @followed = host
+    @follower = user
+    
+    @sortie_url = search_dates_url
+    @unfollow_url = destroy_user_follows_url(host)
+    
+    mail to: user.email, subject: "#{host.name} just created a date!"
+    
+  end
 end

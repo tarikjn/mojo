@@ -4,22 +4,19 @@
 	<div class="sortie-box">
 		<div class="title"><%= @sortie.title %></div>
 		<div class="content">
-			<div class="participant host">
-				<div class="picture" style="background-image: url(<%= @sortie.creator.picture_url(:mini) %>)">
-				</div>
-				<div class="title">
-					<div class="name"><%= @sortie.creator.first_name %></div>
-					<div class="rating">★★★☆</div>
-				</div>
+			<div class="hosts full-width">
+				<%= render :partial => 'users/user', :collection => @sortie.hosts, locals: {kind: :host} %>
 			</div>
-			<div class="spot" id="drop-invite" data-action="invite">
-			</div>
+			<!-- for some reason, .spot needs to be bellow the draggable for the whole zone to be droppable -->
+			<div class="spot" id="drop-invite" data-action="invite"></div>
 		</div>
 	</div>
 
 	<div class="participants-viewport">
-		<div class="participants">
-		<%= render :partial => 'waitlist' %>
+		<div class="spacer">
+			<div class="participants">
+			<%= render :partial => 'waitlist' %>
+			</div>
 		</div>
 	</div>
 

@@ -40,6 +40,10 @@ class Sortie < ActiveRecord::Base
     where('(size = 2 AND (host_id = :user OR guest_id = :user)) OR (size = 4 AND (host_id = :wings OR guest_id = :wings))',
       {:user => user.id, :wings => Wing.ids_with(user)})
   }
+  scope :having_entries_with, lambda { |user|
+    # for performance/scaling, the right thing to do would be to have a table with the list of dates a user has joined? Or select entries first and then sorties from there
+    where('(SELECT count(sortie_id) FROM entries WHERE sorties.id = entries.sortie_id AND entries.party_type = ? AND entries.party_id = ? AND entries.state NOT IN (?)) > 0', 'User', user.id, %w(withdrawn overridden))
+  }
   scope :without_entries_with, lambda { |user|
     # for performance/scaling, the right thing to do would be to have a table with the list of dates a user has joined? Or select entries first and then sorties from there
     where('(SELECT count(sortie_id) FROM entries WHERE sorties.id = entries.sortie_id AND entries.party_type = ? AND entries.party_id = ? AND entries.state NOT IN (?)) = 0', 'User', user.id, %w(withdrawn overridden))
@@ -75,7 +79,7 @@ class Sortie < ActiveRecord::Base
     
   }
   
-  after_create :set_expiration
+  after_create :set_expiration, :send_to_followers
   
   def validate_time
     if self.time < Time.now + 2.hours
@@ -108,6 +112,14 @@ class Sortie < ActiveRecord::Base
   
   def hosts
     self.host.individuals
+  end
+  
+  def guests
+    if self.guest
+      self.guest.individuals
+    else
+      self.size == 2 ? [User.new(sex: self.host.sex_preference)] : [nil, nil]
+    end
   end
   
   def location=(location_id)
@@ -152,6 +164,17 @@ class Sortie < ActiveRecord::Base
   def set_expiration
     self.send_at(self.time, :start_or_update_state!)
   end
+  
+  def send_to_followers
+    
+    self.hosts.each do |host|
+      host.followers.each do |user|
+        Notifier::new_date_by_followed(self, host, user).deliver
+      end
+    end
+    
+  end
+  handle_asynchronously :send_to_followers
   
   def start_or_update_state!
     if self.state == 'open'
@@ -221,13 +244,18 @@ class Sortie < ActiveRecord::Base
   #handle_asynchronously :start_sms, :run_at => Proc.new { self.time - 2.hours }
   
   def cancel(user)
-    if ['open', 'closed', 'unconfirmed'].include?(self.state) and self.host_id == user.id
+    if ['open', 'closed', 'unconfirmed'].include?(self.state) and self.members.include?(user)
       
       # record cancellation
       self.updates << SortieUpdate.new(:kind => 'cancel', :by => user)
       
       # send notification to party if the date was already scheduled!
-      Notifier::date_canceled(self, user, self.party_of(user)).deliver if self.state == 'closed'
+      if self.state == 'closed'
+        self.companions_of(user).each do |u|
+          # TODO: use delayed?
+          Notifier::date_canceled(self, user, u).deliver
+        end
+      end
       
       # change the state to canceled
       self.state = 'canceled'
@@ -266,6 +294,18 @@ class Sortie < ActiveRecord::Base
     end
   end
   
+  def place_for(user)
+    if self.hosts.include?(user)
+      self.place.name
+    else
+      self.place.neighborhoods
+    end
+  end
+  
+  def find_entry_of(user)
+    self.entries.where(:party_id => user, :party_type => 'User').first
+  end
+  
   #####
   # Static methods
   ##
@@ -290,6 +330,11 @@ class Sortie < ActiveRecord::Base
     
     # it is the role of the entry/sortie invite actions to make sure that no user can have 2 active dates at the same time
     
+  end
+  
+  def self.entered_sorties_for(user)
+    # find the open sorties where these wings are hosts or the user host himself (single dates)
+    self.future.open.having_entries_with(user)
   end
   
   def self.open_sorties_for(user)

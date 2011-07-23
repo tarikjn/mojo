@@ -855,10 +855,10 @@ var LiveInit = {
 			$('#map_canvas')[0].mj_map.stopAnimateMarker(id);
 		});
 
-		// afinity
-		$(c).find("canvas.afinity-chart").each(function(){
+		// affinity
+		$(c).find("canvas.affinity-chart").each(function(){
 			var r = this.width / 2; // radius
-			var a = parseInt($(this.parentNode.parentNode).find(".score .int").text()) / 100; // afinity
+			var a = parseInt($(this.parentNode.parentNode).find(".score .int").text()) / 100; // affinity
 
 			var red = Math.round(255 - ((a > .5)? 255 * (a - .5) * 2 : 0));
 			var green = Math.round((a > .5)? 255 : 255 * a * 2);
@@ -1081,6 +1081,7 @@ $(function() {
 	if ($(".participants-view").length) {
 		DragAndDrop.init();
 	}
+	//$('.image-zoom img').bind('dragstart', function(event) { event.preventDefault(); });
 	
 	// login bubble
 	$("#login-link").click(function() {
@@ -1094,7 +1095,22 @@ $(function() {
 		}
 		
 		// simply go to the link if the box is not there
-		return ($("#login-bubble").length > 0)? false : true;
+		return (box.length > 0)? false : true;
+	});
+	
+	// user-link submenu
+	$(".user-link").click(function() {
+		// TODO: hide when clicking outside
+		var box = $(this).next().find(".link-bubble");
+		if (box.length > 0)
+		{
+			$(this).toggleClass("active");
+			box.toggle();
+			if (box.is(":visible")) $("#login-bubble").find("input:visible").first().focus();
+		}
+		
+		// simply go to the link if the box is not there
+		return (box.length > 0)? false : true;
 	});
 	
 	// signup form, TODO: integrate better with stepflow/discovery
@@ -1138,17 +1154,35 @@ $(function() {
 	// homepage graphic animation
 	$("#landing .illustration").find(".layer-0, .layer-2").each(Animate.leftToRight);
 	
-	$("a.youtube-box").click(function() {
-		
-		var matches = this.href.match(/\?v=(.+)$/);
-		var video_id = matches[1];
+	$("a.youtube-box, a.image-zoom").click(function() {
 		
 		$("body").append('<div id="black-screen"></div>');
 		$("body").append('<div id="video-box"><div class="close"></div></div>');
-		$("body #video-box").append('<iframe width="640" height="390" src="http://www.youtube.com/embed/'+video_id+'?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>');
+		
+		var popup = $("body #video-box");
+		
+		if ( $(this).hasClass("youtube-box") ) {
+			
+			var matches = this.href.match(/\?v=(.+)$/);
+			var video_id = matches[1];
+			
+			popup.append('<iframe width="640" height="390" src="http://www.youtube.com/embed/'+video_id+'?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>');
+			popup.css( {marginLeft: -popup.width() / 2, marginTop: -popup.height() / 2} );
+		}
+		else {
+			var image = $('<img src="'+this.href+'" alt="" />')
+			image.appendTo(popup);
+			
+			image.load(function() {
+				// TODO: move to CarrierWave read width/height
+				popup.css( {marginLeft: -popup.width() / 2, marginTop: -popup.height() / 2} );
+			})
+		}
 		
 		$("body #video-box > .close").click(killBox);
 		$("body #black-screen").click(killBox);
+		
+		
 		
 		// add ESC key
 		
@@ -1177,6 +1211,11 @@ $(function() {
 		});
 		
 		return false;
+	});
+	
+	// show/hide description on date
+	$(".toggle-text").click(function() {
+		$(this).toggleClass("ellipsis");
 	});
 	
 });

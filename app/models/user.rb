@@ -87,6 +87,12 @@ class User < ActiveRecord::Base
   has_many :pending_friends, :through => :friendships, :conditions => ["approved = ?", false], :foreign_key => "user_id", :source => :user
   has_many :requested_friendships, :class_name => "Friendship", :foreign_key => "friend_id", :conditions => ["approved = ?", false]
   
+  # following
+  has_many :follows, :foreign_key => "follower_id", :dependent => :destroy
+  has_many :following, :through => :follows, :source => :followed
+  has_many :reverse_follows, :foreign_key => "followed_id", :class_name => "Follow", :dependent => :destroy
+  has_many :followers, :through => :reverse_follows, :source => :follower
+  
   # invitations
   validates :invitation_id, :presence => {:message => 'is required'}, :uniqueness => true
   # todo if an invitation user exists, load that user/update...
@@ -103,6 +109,18 @@ class User < ActiveRecord::Base
     direct_friends | inverse_friends
   end
   
+  def following?(followed)
+    follows.find_by_followed_id(followed)
+  end
+
+  def follow!(followed)
+    follows.create!(:followed_id => followed.id) unless related?(followed)
+  end
+  
+  def unfollow!(followed)
+    follows.find_by_followed_id(followed).destroy
+  end
+  
   # this helps make Users work well together with Wings
   def individuals
     [self]
@@ -116,6 +134,10 @@ class User < ActiveRecord::Base
   
   def admin?
     level == 'admin'
+  end
+  
+  def related?(user)
+    self == user or self.friends.include?(user)
   end
   
   def invitation_token
@@ -192,6 +214,10 @@ class User < ActiveRecord::Base
     end
   end
   
+  def name
+    first_name
+  end
+  
   def full_name
     # first + last
   end
@@ -232,23 +258,9 @@ class User < ActiveRecord::Base
     end
   end
   
-  def afinity_with(user)
+  def affinity_with(user)
     # temporary
-    if user.id == 1
-      case self.id
-      when 4
-        0.82
-      when 9
-        0.76
-      when 10
-        0.55
-      else
-        0.5
-      end
-    else
-      0.5
-    end
-    
+    0.5
   end
   
   def tasks_count
@@ -261,6 +273,14 @@ class User < ActiveRecord::Base
       c += 1 if s.has_tasks_for?(self) # for double sorties, will be has_tasks_for?(user)
     end
     c
+  end
+  
+  def friend_tasks_count
+    0
+  end
+  
+  def entered_sorties
+    Sortie.entered_sorties_for(self)
   end
   
   def open_sorties

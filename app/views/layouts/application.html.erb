@@ -19,6 +19,8 @@
 	<%= javascript_include_tag 'jquery.autogrow-textarea' %>
 	<%= javascript_include_tag 'mojo' %>
 	<%= javascript_include_tag 'sortie_reports' %>
+	<%= javascript_include_tag 'sorties' %>
+	<%= javascript_include_tag 'follows' %>
 	<%= javascript_include_tag 'mtaTwitterStatuses' %>
 	
 	<!-- Typekit -->
@@ -43,9 +45,7 @@
 	</div>
 	
 	<div id="main-content">
-		<div class="auto-margin-cell">
-			<%= content_for?(:content) ? yield(:content) : yield %>
-		</div>
+		<%= content_for?(:content) ? yield(:content) : (content_tag :div, class: ['auto-margin-cell', 'with-space'] do yield end) %>
 	</div>
 
 	<div id="foot-content">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110629081523) do
+ActiveRecord::Schema.define(:version => 20110720004853) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -43,6 +43,17 @@ ActiveRecord::Schema.define(:version => 20110629081523) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "follows", :force => true do |t|
+    t.integer  "follower_id"
+    t.integer  "followed_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "follows", ["followed_id"], :name => "index_follows_on_followed_id"
+  add_index "follows", ["follower_id", "followed_id"], :name => "index_follows_on_follower_id_and_followed_id", :unique => true
+  add_index "follows", ["follower_id"], :name => "index_follows_on_follower_id"
 
   create_table "friendships", :force => true do |t|
     t.integer  "user_id"

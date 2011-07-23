@@ -1,5 +1,13 @@
 Mojo::Application.routes.draw do
 
+  get "follows/follow"
+
+  get "follows/unfollow"
+
+  get "followings/follow"
+
+  get "followings/unfollow"
+
   resources :invitations, :only => [:new, :create]
   get "invitations/find"
 
@@ -27,6 +35,18 @@ Mojo::Application.routes.draw do
     get "/" => :index
   end
   
+  resources :users, :only => [] do
+  
+    # using GET instead of PUT/DELETE so it works from email links
+    resources :follows, :only => [], :path => '' do
+      collection do
+        get 'follow'   => :create,  :as => 'create'
+        get 'unfollow' => :destroy, :as => 'destroy'
+      end
+    end
+  
+  end
+  
   resources :dates, :controller => :sorties, :only => [:index, :new, :create] do
     
     collection do
@@ -44,6 +64,7 @@ Mojo::Application.routes.draw do
       member do
         put 'pass'
         put 'invite'
+        get 'withdraw' # change to PUT, add JS/confirmation in UI
       end
     end
     
@@ -64,6 +85,7 @@ Mojo::Application.routes.draw do
   #     match "/dates"
   #   end
   # alias:
+  get '/userhome' => "userhome#index"
   get '/dates' => "sorties#index", :as => 'userhome'
 
   # todo: refactor stepflow routes, at least namespace

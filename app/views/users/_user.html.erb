@@ -1,3 +1,81 @@
-<div class="person">
-	<%= image_tag user.picture_url(:mini), title: user.first_name %> <span class="name"><%= user.first_name %></span>
-</div>
+<% if user.new_record? %>
+	<div class="person partial">
+		<div class="box">
+			<div class="picture">
+				<%= image_tag "avatars/#{user.sex}-46.png", :class => 'open' %>
+			</div>
+			<div class="info">
+				<div class="title">
+					<div class="name">Open</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<% else %>
+	<%= content_tag :div, class: (['person', 'partial'] << (user.related?(current_user) ? 'relation':nil)) do %>
+		<div class="box">
+			<div class="picture">
+				<%= image_tag user.picture_url(:mini), title: user.first_name %>
+			</div>
+			<%
+				if kind == :match
+			%>
+			<div class="title">
+				<div class="name"><%= user.first_name %></div>
+				<div class="reputation">Reput.: <span class="reputation"></span></div>
+			</div>
+			<!-- TODO: user helper for compatibility -->
+			<div class="compatibility">
+				<div class="canvas"><canvas width="30" height="30" class="affinity-chart"></canvas></div>
+				<div class="score"><span class="int"><%= (user.affinity_with(current_user) * 100).round %></span><span class="percent">%</span></div>
+			</div>
+			<%
+				else
+			%>
+			<div class="title">
+				<div class="name"><%= user.first_name %></div>
+				<div class="type"><%= (kind == :host) ? "Host":"Guest" %></div>
+			</div>
+			<%
+				end
+			%>
+			<!--
+					<div class="ratings">
+						<div class="rating-ttr">Average time to respond: <em><%= user.time_to_respond %></em></div>
+						<div class="rating-ttr">Punctuality: <em><%= user.punctuality %></em></div>
+					</div>
+			-->
+			<%
+				if kind == :match or !user.related?(current_user)
+			%>
+			<div class="profile">
+				<div class="box">
+					<div class="avatar">
+						<%= link_to (image_tag user.picture_url(:thumb), title: user.first_name), user.picture_url, 
+						  {class: 'image-zoom', 'data-fullsize' => "width=\"\" height=\"\""} %>
+						<div class="name"><%= user.first_name %></div>
+					</div>
+					<div class="details">
+						<div class="columns">
+							<div class="col-0">Reputation:</div>
+							<div class="col-1"><span class="reputation"></span></div>
+						</div>
+						<div class="columns">
+							<div class="col-0">Your compatibility:</div>
+							<div class="col-1"><div class="compatibility">
+								<div class="canvas"><canvas width="30" height="30" class="affinity-chart"></canvas></div>
+								<div class="score"><span class="int"><%= (user.affinity_with(current_user) * 100).round %></span><span class="percent">%</span></div>
+							</div></div>
+						</div>
+						<div class="follow">
+							<%= render :partial => 'follows/button', locals: {user: user} %>
+						</div>
+					</div>
+				</div>
+			</div>
+			<%
+				end
+			%>
+		</div>
+	<% end %>
+<% end %>

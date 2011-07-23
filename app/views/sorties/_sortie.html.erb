@@ -1,4 +1,4 @@
-<% content_tag :li, :class => (['date'] << ((sortie.has_tasks_for?(current_user))? 'with_tasks':nil)) do %>
+<% content_tag :li, :class => (['date'] << ((list != :entered and sortie.has_tasks_for?(current_user))? 'with_tasks':nil)) do %>
 	<div class="status">
 		<%
 			case list
@@ -23,6 +23,10 @@
 				You completed the date report.
 			<% end %>
 		<%
+			when :entered
+		%>
+			You haven't been invited yet.
+		<%
 			end
 		%>
 	</div>
@@ -34,20 +38,20 @@
 		<img src="/images/icons/date-<%= sortie.category %>-micro.png" alt="" class="category-icon" />
 		<div class="info">
 			<div class="title"><%= sortie.title %></div>
-			<div class="time-and-area"><%= sortie.time.strftime("%l:%M%p").downcase %>, <%= sortie.place.name %></div>
+			<div class="time-and-area"><%= sortie.time.strftime("%l:%M%p").downcase %>, <%= sortie.place_for(current_user) %></div>
 		</div>
 	</div>
+	<% if !sortie.description.empty? %>
+	<div class="description ellipsis toggle-text">
+		<%= sortie.description %>
+	</div>
+	<% end %>
 	<div class="participants">
-		<div class="person">
-			<% if sortie.open? %>
-				<%= image_tag "avatars/#{sortie.host.sex_preference}-46.png", :class => 'open' %> <span class="name">Open</span>
-			<% else %>
-				<%= image_tag sortie.party_of(current_user).picture_url(:mini) %> <span class="name"><%= sortie.party_of(current_user).first_name %></span>
-			<% end %>
-		</div>
+		<%= render :partial => 'users/user', :collection => sortie.hosts, locals: {kind: :host} %>
+		<%= render :partial => 'users/user', :collection => sortie.guests, locals: {kind: :guest} %>
 	</div>
 	<div class="actions">
-		<% if sortie.open? %>
+		<% if sortie.open? and sortie.hosts.include?(current_user) %>
 			<% if sortie.entries.waiting.size > 0 %>
 				<%= link_to "Entrants", date_entries_path(sortie.id), :class => ['mj-button', 'small', 'white'] %>
 			<% else %>
@@ -58,7 +62,7 @@
 			<%= link_to "Details", confirmation_date_path(sortie), :class => ['mj-button', 'small', 'white'] %>
 			<!-- Late -->
 		<% end %>
-		<% if list != :past %>
+		<% unless [:past, :entered].include?(list) %>
 			<%= link_to "Cancel", cancel_date_path(sortie), :class => ['mj-button', 'small', 'white', 'cancel-action'] %>
 		<% end %>
 		<% if list == :past %>
@@ -66,9 +70,12 @@
 				<%= link_to "Date report", new_date_report_path(sortie), :class => ['mj-button', 'small', 'white'] %>
 			<% end %>
 		<% end %>
+		<% if list == :entered %>
+			<%= link_to "Withdraw", withdraw_date_entry_path(sortie, sortie.find_entry_of(current_user)), :class => ['mj-button', 'small', 'white'] %>
+		<% end %>
 	</div>
 <% end %>
-<% if list != :past %>
+<% unless [:past, :entered].include?(list) %>
 	<div class="action-box cancel">
 		<div class="prompt">Are you sure you want to cancel this date?</div>
 		<div class="choices">

@@ -71,4 +71,16 @@ class EntriesController < ApplicationController
     end
   end
   
+  def withdraw
+    entry = Entry.find(params[:id])
+    
+    if entry.state == 'waiting' and entry.party == current_user
+      entry.withdraw!
+      flash[:notice] = "Your entry has been withdrawn."
+    else
+      flash[:error] = "Action forbidden."
+    end
+    redirect_to(dates_url)
+  end
+  
 end

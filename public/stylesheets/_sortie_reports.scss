@@ -130,16 +130,17 @@ form {
 		.rating-label {
 			display: inline-block;
 			width: 23px; height: 23px;
-			background-image: url(/images/rating/inactive.png);
+			
 			cursor: pointer;
+			
+			&.fill, &.set  { background-position: 0 -23px; }
+			&:hover        { background-position: 0 -46px; }
 		}
 		&.affinity .rating-label {
-			&.fill, &.set  { background-image: url(/images/rating/affinity-active.png); }
-			&:hover        { background-image: url(/images/rating/affinity-over.png); }
+			background-image: url(/images/rating/affinity.png);
 		}
 		&.review .rating-label {
-			&.fill, &.set  { background-image: url(/images/rating/review-active.png); }
-			&:hover        { background-image: url(/images/rating/review-over.png); }
+			background-image: url(/images/rating/review.png);
 		}
 	}
 }

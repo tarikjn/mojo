@@ -1,28 +1,34 @@
 <% content_for :content do %>
 	<div class="userhome-container">
 		<div class="header">
-			<h2>Hello, <%= current_user.first_name %> :)</h2>
-			<ul class="links">
-				<%
-					menu = [
-						{ :t => 'Your dates', :p => dates_path, :c => current_user.sortie_tasks_count },
-						{ :t => 'Settings', :p => (controller_name == 'users')? url_for : account_edit_path('profile') }
-					]
-					menu << { :t => 'Invitations', :p => new_invitation_path } if current_user.admin?
-					menu.each do |i|
-				%>
-					<%=
-						content_tag :li, :class => (current_page?(i[:p]))? "current" : nil do
-							link_to_unless_current (i[:t] + ((!i[:c].nil? and i[:c] > 0)? (content_tag :div, i[:c], :class => 'task-count') : '')).html_safe, i[:p]
+			<div class="auto-margin-cell">
+				<h2>Hello, <%= current_user.first_name %> :)</h2>
+				<% if false %>
+				<ul class="links">
+					<%
+						menu = [
+							{ :t => 'Your dates', :p => dates_path, :c => current_user.sortie_tasks_count },
+							{ :t => 'Settings', :p => (controller_name == 'users')? url_for : account_edit_path('profile') }
+						]
+						menu << { :t => 'Invitations', :p => new_invitation_path } if current_user.admin?
+						menu.each do |i|
+					%>
+						<%=
+							content_tag :li, :class => (current_page?(i[:p]))? "current" : nil do
+								link_to_unless_current (i[:t] + ((!i[:c].nil? and i[:c] > 0)? (content_tag :div, i[:c], :class => 'task-count') : '')).html_safe, i[:p]
+							end
+						%>
+					<%
 						end
 					%>
-				<%
-					end
-				%>
-			</ul>
+				</ul>
+				<% end %>
+			</div>
 		</div>
 		<div class="body">
-			<%= content_for?(:body) ? yield(:body) : yield %>
+			<div class="auto-margin-cell">
+				<%= content_for?(:body) ? yield(:body) : yield %>
+			</div>
 		</div>
 <% end %>
 <%= render :file => 'layouts/application' %>

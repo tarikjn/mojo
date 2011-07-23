@@ -7,6 +7,7 @@ class SortiesController < ApplicationController
     @past_sorties = current_user.past_sorties
     @upcoming_sorties = current_user.upcoming_sorties
     @open_sorties = current_user.open_sorties
+    @entered_sorties = current_user.entered_sorties
   end
   
   def new

@@ -1,0 +1,164 @@
+.full-width > .person.partial {
+	
+	width: auto;
+	float: none;
+	margin-top: 0;
+}
+
+.person.partial {
+	
+	margin-top: 8px;
+	float: left;
+	width: 50%;
+	
+	> .box, .profile {
+		@include rounded;
+		border: 1px solid $border-gray;
+	}
+	
+	> .box {
+		padding: 3px;
+		position: relative;
+		background: white;
+		
+		> .picture, > .title, > .compatibility {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		> .picture {
+			height: 48px; width: 48px;
+
+			img {
+				&.open {
+					width: 46px; height: 46px;
+					border: 1px solid $border-gray;
+					background: #E5EEFF;
+				}
+			}
+		}
+
+		> .title {
+			.name {
+				font-size: 115%;
+				overflow: hidden;
+			}
+			.type {
+				font-size: 85%;
+				color: gray;
+			}
+			.reputation {
+				font-size: 65%;
+				color: gray;
+			}
+		}
+		
+		> .compatibility {
+			margin-left: 5px;
+		}
+		
+		// for both .box and .profile
+		span.reputation {
+			display: inline-block;
+			width: 12px; height: 12px;
+			@include rounded(4px);
+			background: rgb(0, 255, 0);
+		}
+		.compatibility {
+			display: inline-block;
+			font-size: 1.25em;
+			position: relative;
+
+			// ua-generated pie image
+			.canvas {
+				position: absolute;
+				top: 0;
+				//top:0; left:0;
+				//width: 40px;
+				//height: 40px;
+
+			}
+			.score {
+				//z-index: 10;
+				//z-index: 100;
+				opacity: .65;
+				margin: 2px 2px 0;
+
+				.percent {
+					font-size: 65%;
+				}
+			}
+		}
+		
+		> .profile {
+			display: none;
+			position: absolute;
+			top: -7px; left: -7px;
+			border: 5px solid rgba(0, 0, 0, .25);
+			width: 300px;
+			
+			z-index: 10;
+			
+			.box {
+				background: white;
+				padding: 5px;
+				min-height: 130px;
+			}
+			
+			.compatibility {
+				vertical-align: top;
+			}
+			
+			.avatar {
+				position: absolute;
+			}
+			
+			.avatar .name {
+				text-align: center;
+				font-size: 120%;
+				margin-top: 5px;
+			}
+			
+			.details {
+				margin-left: 108px;
+				
+				.columns {
+					@include clear-after;
+					margin-bottom: 5px;
+					.col-0 {
+						float: left;
+						font-size: 80%;
+						color: gray;
+					}
+					.col-1 {
+						float: right;
+						width: 45px;
+						text-align: left;
+					}
+				}
+			}
+			
+			.follow {
+				margin-top: 10px + 35px;
+				margin-right: 5px;
+				text-align: right;
+			}
+		}
+		
+		&:hover {
+			//border-color: gray;
+			
+			> .profile {
+				display: block;
+			}
+		}
+	}
+	
+	&.relation > .box {
+		background: $lighter-gray;
+	}
+	
+	&:nth-of-type(2n) {
+		> .box { margin-left: 5px; }
+	}
+}
