@@ -2508,7 +2508,7 @@ input.age-text-input {
 	//text-align: right;
 }
 
-label.mj-check-roll {
+label.mj-check-roll, label.mj-label-check {
 	
 	padding: 2px;
 	font-size: .85em;
@@ -2932,6 +2932,12 @@ $map-length: 250px;
 					width: 400px;
 					height: 100px;
 				}
+			}
+			
+			> .preview {
+				margin-left: 150px;
+				margin-top: 8px;
+				font-size: 80%;
 			}
 		}
 	}
@@ -3700,57 +3706,6 @@ h2 {
 	
 }
 
-.date-confirmation {
-	margin: 50px 100px;
-	
-	p {
-		font-size: 1.25em;
-		
-		em {
-			font-style: normal;
-			font-size: 115%;
-		}
-	}
-	
-	.people {
-		> div {
-			display: inline-block;
-			margin-right: 25px;
-			font-size: 115%;
-			
-			img { height: 48px; width: 48px; vertical-align: middle; }
-		}
-	}
-	
-	.location {
-		margin: 25px 0;
-		//height: 400px;
-		position: relative;
-		
-		.map {
-			
-		}
-		
-		.place {
-			position: absolute;
-			margin-left: 425px;
-			top: 50px;
-			
-			.title {
-				font-size: 125%;
-				margin-bottom: 10px;
-			}
-		}
-	}
-	
-	.info {
-		margin-top: 25px;
-		padding: 10px;
-		@include rounded;
-		background: $info-color;
-	}
-}
-
 .settings-block {
 	position: relative;
 	margin: 35px 0 35px;
@@ -3932,7 +3887,7 @@ h2 {
 				@include clear-after;
 			}
 			
-			ul, .empty {
+			> ul, > .empty {
 				border-bottom-left-radius: $border-radius;
 				border-bottom-right-radius: $border-radius;
 				background: $form-background-color;
@@ -3954,7 +3909,7 @@ h2 {
 				padding: 25px 10px;
 			}
 		
-			ul {
+			> ul {
 				// 286px of width available
 				margin: 0;
 				
@@ -4117,7 +4072,7 @@ h2 {
 		margin-top: 8px;
 		> * { vertical-align: middle; }
 		
-		.name { font-size: 115%; }
+		> .name { font-size: 115%; }
 /*		img {
 			height: 48px; width: 48px;
 			
@@ -4130,5 +4085,6 @@ h2 {
 }
 
 @import 'sortie_reports';
-@import 'user';
+@import 'sorties';
+@import 'users';
 @import 'follows';

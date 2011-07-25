@@ -49,29 +49,7 @@
 				if kind == :match or !user.related?(current_user)
 			%>
 			<div class="profile">
-				<div class="box">
-					<div class="avatar">
-						<%= link_to (image_tag user.picture_url(:thumb), title: user.first_name), user.picture_url, 
-						  {class: 'image-zoom', 'data-fullsize' => "width=\"\" height=\"\""} %>
-						<div class="name"><%= user.first_name %></div>
-					</div>
-					<div class="details">
-						<div class="columns">
-							<div class="col-0">Reputation:</div>
-							<div class="col-1"><span class="reputation"></span></div>
-						</div>
-						<div class="columns">
-							<div class="col-0">Your compatibility:</div>
-							<div class="col-1"><div class="compatibility">
-								<div class="canvas"><canvas width="30" height="30" class="affinity-chart"></canvas></div>
-								<div class="score"><span class="int"><%= (user.affinity_with(current_user) * 100).round %></span><span class="percent">%</span></div>
-							</div></div>
-						</div>
-						<div class="follow">
-							<%= render :partial => 'follows/button', locals: {user: user} %>
-						</div>
-					</div>
-				</div>
+				<%= render partial: 'users/user.full', locals: {user: user} %>
 			</div>
 			<%
 				end

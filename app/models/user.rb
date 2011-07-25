@@ -104,6 +104,8 @@ class User < ActiveRecord::Base
   scope :match_for, lambda { |user|
     where(:sex_preference => user.sex, :sex => user.sex_preference).join(:hosted_sorties)
   }
+  
+  after_update :clear_foodia
 
   def friends
     direct_friends | inverse_friends
@@ -297,6 +299,30 @@ class User < ActiveRecord::Base
   
   def clear_password!
     self.password, self.password_confirmation = nil, nil
+  end
+  
+  def foodia_profile    
+    
+    if (self.show_foodia)
+    
+      r = Rails.cache.fetch("foodia/#{self.email}", :expires_in => 12.days) do
+        HTTParty.get("http://foodia.com/api/partner_profile/#{email}").response
+      end
+    
+      if (r.code == '200')
+        ActiveSupport::JSON.decode(r.body)
+      else
+        false
+      end
+    
+    else
+      false
+    end
+    
+  end
+  
+  def clear_foodia
+    Rails.cache.delete("foodia/#{self.email}")
   end
 
 private

@@ -1,0 +1,53 @@
+.date-confirmation {
+	margin: 50px 100px;
+	
+	p {
+		font-size: 1.25em;
+		
+		em {
+			font-style: normal;
+			font-size: 115%;
+		}
+	}
+	
+	.people {
+		> div {
+			display: inline-block;
+			margin-right: 25px;
+			font-size: 115%;
+			
+			img { height: 48px; width: 48px; vertical-align: middle; }
+		}
+	}
+	
+	.location {
+		margin: 25px 0;
+		//height: 400px;
+		position: relative;
+		
+		.map {
+			img {
+				width: 400px;
+				height: 400px;
+			}
+		}
+		
+		.place {
+			position: absolute;
+			margin-left: 425px;
+			top: 50px;
+			
+			.title {
+				font-size: 125%;
+				margin-bottom: 10px;
+			}
+		}
+	}
+	
+	.info {
+		margin-top: 25px;
+		padding: 10px;
+		@include rounded;
+		background: $info-color;
+	}
+}

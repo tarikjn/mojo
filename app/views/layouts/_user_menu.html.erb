@@ -19,7 +19,7 @@
 		<% end %>
 		<div class="relative-container">
 			<div class="link-bubble">
-				<%= link_to "Profile", account_edit_path('profile') %>
+				<!--<%= link_to "Profile", account_profile_path %>-->
 				<%= link_to "Settings", account_edit_path('profile') %>
 				<%= current_user.admin? ? (link_to "Invitations", new_invitation_path) : nil %>
 				<%= link_to "Sign out", logout_path %>

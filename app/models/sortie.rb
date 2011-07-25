@@ -203,7 +203,7 @@ class Sortie < ActiveRecord::Base
   
   # everyone in the date
   def members
-    self.host.individuals + self.guest.individuals
+    self.host.individuals + (self.guest ? self.guest.individuals : [])
   end
   
   # everyone else but the specified member

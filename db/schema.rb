@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110720004853) do
+ActiveRecord::Schema.define(:version => 20110725075218) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -200,6 +200,7 @@ ActiveRecord::Schema.define(:version => 20110720004853) do
     t.string   "perishable_token"
     t.integer  "invitation_id"
     t.integer  "invitations_left"
+    t.boolean  "show_foodia",       :default => true
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

@@ -1,0 +1,21 @@
+<div class="foodia">
+	<ul>
+		<%
+			foodia.each_with_index do |item, i|
+				base = "http://foodia.com"
+		%>
+		<li>
+			<%= link_to "#{base}#{item['url']}" do %>
+				<div class="image" style="background-image: url(<%= "#{base}#{item['product_image']}" %>)"></div>
+				<div class="name"><%= item['product_name'] %></div>
+			<% end %>
+		</li>
+		<%
+				break if i == 3
+			end
+		%>
+	</ul>
+	<div class="foot">
+		Food likes by <a href="http://foodia.com">Foodia™</a>
+	</div>
+</div>

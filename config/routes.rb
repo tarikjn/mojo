@@ -27,7 +27,8 @@ Mojo::Application.routes.draw do
   #resources :users, :path => "account", :only => :create
   scope '/account', :controller => :users, :as => "account" do
     put "/" => :update
-    get "/:account_section" => :edit, :as => :edit
+    get "/settings/:account_section" => :edit, :as => :edit
+    get "/profile" => :profile
     
     get "/signup/:invitation_token" => :signup, :as => "signup"
     post "/signup/:invitation_token" => :create

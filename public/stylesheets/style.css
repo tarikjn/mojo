@@ -1839,10 +1839,10 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 input.age-text-input {
   width: 2em; }
 
-label.mj-check-roll {
+label.mj-check-roll, label.mj-label-check {
   padding: 2px;
   font-size: .85em; }
-  label.mj-check-roll:hover {
+  label.mj-check-roll:hover, label.mj-label-check:hover {
     background: #e1ecff;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -2116,6 +2116,10 @@ select.mj-category-select {
   .form-inputs.column-titles .form-item > .hybrid-input > textarea {
     width: 400px;
     height: 100px; }
+.form-inputs.column-titles .form-item > .preview {
+  margin-left: 150px;
+  margin-top: 8px;
+  font-size: 80%; }
 
 .mj-picture-tool {
   display: inline-block;
@@ -3028,39 +3032,6 @@ h2 {
             margin-top: 5px;
             font-size: 75%; }
 
-.date-confirmation {
-  margin: 50px 100px; }
-  .date-confirmation p {
-    font-size: 1.25em; }
-    .date-confirmation p em {
-      font-style: normal;
-      font-size: 115%; }
-  .date-confirmation .people > div {
-    display: inline-block;
-    margin-right: 25px;
-    font-size: 115%; }
-    .date-confirmation .people > div img {
-      height: 48px;
-      width: 48px;
-      vertical-align: middle; }
-  .date-confirmation .location {
-    margin: 25px 0;
-    position: relative; }
-    .date-confirmation .location .place {
-      position: absolute;
-      margin-left: 425px;
-      top: 50px; }
-      .date-confirmation .location .place .title {
-        font-size: 125%;
-        margin-bottom: 10px; }
-  .date-confirmation .info {
-    margin-top: 25px;
-    padding: 10px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    background: #fffdbf; }
-
 .settings-block {
   position: relative;
   margin: 35px 0 35px; }
@@ -3179,14 +3150,14 @@ h2 {
       display: block;
       height: 0;
       clear: both; }
-    .dates-layout > .columns > div ul, .dates-layout > .columns > div .empty {
+    .dates-layout > .columns > div > ul, .dates-layout > .columns > div > .empty {
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
       background: rgba(25, 25, 25, 0.025);
       padding: 10px;
       border: 1px solid #e6e6e6;
       border-top-width: 0; }
-      .dates-layout > .columns > div ul.inactive, .dates-layout > .columns > div .empty.inactive {
+      .dates-layout > .columns > div > ul.inactive, .dates-layout > .columns > div > .empty.inactive {
         display: none; }
     .dates-layout > .columns > div .empty {
       color: gray;
@@ -3194,12 +3165,12 @@ h2 {
       text-align: center;
       font-style: italic;
       padding: 25px 10px; }
-    .dates-layout > .columns > div ul {
+    .dates-layout > .columns > div > ul {
       margin: 0; }
-      .dates-layout > .columns > div ul > .date {
+      .dates-layout > .columns > div > ul > .date {
         list-style-type: none;
         margin-bottom: 15px; }
-        .dates-layout > .columns > div ul > .date.with_tasks:before {
+        .dates-layout > .columns > div > ul > .date.with_tasks:before {
           content: "●";
           font-size: 32px;
           color: red;
@@ -3207,20 +3178,20 @@ h2 {
           margin-top: -32px;
           margin-right: -10px;
           right: 0; }
-        .dates-layout > .columns > div ul > .date.with_tasks .status {
+        .dates-layout > .columns > div > ul > .date.with_tasks .status {
           background: #fffdbf; }
-        .dates-layout > .columns > div ul > .date .participants:after {
+        .dates-layout > .columns > div > ul > .date .participants:after {
           content: "";
           display: block;
           height: 0;
           clear: both; }
-        .dates-layout > .columns > div ul > .date .status {
+        .dates-layout > .columns > div > ul > .date .status {
           font-size: .75em;
           text-align: center;
           padding: 2px 0;
           background: #e1ecff;
           margin-bottom: 10px; }
-        .dates-layout > .columns > div ul > .date .actions {
+        .dates-layout > .columns > div > ul > .date .actions {
           margin-top: 10px;
           border-top: 1px solid #e6e6e6;
           padding: 3px 0; }
@@ -3321,7 +3292,7 @@ h2 {
     		}*/ }
     .date .person > *, .sortie.object-view .person > * {
       vertical-align: middle; }
-    .date .person .name, .sortie.object-view .person .name {
+    .date .person > .name, .sortie.object-view .person > .name {
       font-size: 115%; }
 
 .sortie.object-view {
@@ -3563,6 +3534,42 @@ form .rating-input {
   visibility: hidden; }
 
 /* /CC Rating Widget */
+.date-confirmation {
+  margin: 50px 100px; }
+  .date-confirmation p {
+    font-size: 1.25em; }
+    .date-confirmation p em {
+      font-style: normal;
+      font-size: 115%; }
+  .date-confirmation .people > div {
+    display: inline-block;
+    margin-right: 25px;
+    font-size: 115%; }
+    .date-confirmation .people > div img {
+      height: 48px;
+      width: 48px;
+      vertical-align: middle; }
+  .date-confirmation .location {
+    margin: 25px 0;
+    position: relative; }
+    .date-confirmation .location .map img {
+      width: 400px;
+      height: 400px; }
+    .date-confirmation .location .place {
+      position: absolute;
+      margin-left: 425px;
+      top: 50px; }
+      .date-confirmation .location .place .title {
+        font-size: 125%;
+        margin-bottom: 10px; }
+  .date-confirmation .info {
+    margin-top: 25px;
+    padding: 10px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background: #fffdbf; }
+
 .full-width > .person.partial {
   width: auto;
   float: none;
@@ -3603,6 +3610,11 @@ form .rating-input {
       color: gray; }
     .person.partial > .box > .compatibility {
       margin-left: 5px; }
+    .person.partial > .box > .profile {
+      display: none;
+      position: absolute;
+      top: -7px;
+      left: -7px; }
     .person.partial > .box span.reputation {
       display: inline-block;
       width: 12px;
@@ -3623,53 +3635,98 @@ form .rating-input {
         margin: 2px 2px 0; }
         .person.partial > .box .compatibility .score .percent {
           font-size: 65%; }
-    .person.partial > .box > .profile {
-      display: none;
-      position: absolute;
-      top: -7px;
-      left: -7px;
-      border: 5px solid rgba(0, 0, 0, 0.25);
-      width: 300px;
-      z-index: 10; }
-      .person.partial > .box > .profile .box {
-        background: white;
-        padding: 5px;
-        min-height: 130px; }
-      .person.partial > .box > .profile .compatibility {
-        vertical-align: top; }
-      .person.partial > .box > .profile .avatar {
-        position: absolute; }
-      .person.partial > .box > .profile .avatar .name {
-        text-align: center;
-        font-size: 120%;
-        margin-top: 5px; }
-      .person.partial > .box > .profile .details {
-        margin-left: 108px; }
-        .person.partial > .box > .profile .details .columns {
-          margin-bottom: 5px; }
-          .person.partial > .box > .profile .details .columns:after {
-            content: "";
-            display: block;
-            height: 0;
-            clear: both; }
-          .person.partial > .box > .profile .details .columns .col-0 {
-            float: left;
-            font-size: 80%;
-            color: gray; }
-          .person.partial > .box > .profile .details .columns .col-1 {
-            float: right;
-            width: 45px;
-            text-align: left; }
-      .person.partial > .box > .profile .follow {
-        margin-top: 45px;
-        margin-right: 5px;
-        text-align: right; }
     .person.partial > .box:hover > .profile {
       display: block; }
   .person.partial.relation > .box {
     background: #f2f2f2; }
   .person.partial:nth-of-type(2n) > .box {
     margin-left: 5px; }
+
+.person.partial > .box > .profile, .profile-block > .box {
+  border: 5px solid rgba(0, 0, 0, 0.25);
+  width: 305px;
+  z-index: 10; }
+  .person.partial > .box > .profile .box, .profile-block > .box .box {
+    background: white;
+    padding: 5px;
+    min-height: 130px; }
+  .person.partial > .box > .profile .compatibility, .profile-block > .box .compatibility {
+    vertical-align: top; }
+  .person.partial > .box > .profile .avatar, .profile-block > .box .avatar {
+    position: absolute; }
+  .person.partial > .box > .profile .avatar .name, .profile-block > .box .avatar .name {
+    text-align: center;
+    font-size: 120%;
+    margin-top: 5px; }
+  .person.partial > .box > .profile .details, .profile-block > .box .details {
+    margin-left: 108px; }
+    .person.partial > .box > .profile .details .columns, .profile-block > .box .details .columns {
+      margin-bottom: 5px; }
+      .person.partial > .box > .profile .details .columns:after, .profile-block > .box .details .columns:after {
+        content: "";
+        display: block;
+        height: 0;
+        clear: both; }
+      .person.partial > .box > .profile .details .columns .col-0, .profile-block > .box .details .columns .col-0 {
+        float: left;
+        font-size: 80%;
+        color: gray; }
+      .person.partial > .box > .profile .details .columns .col-1, .profile-block > .box .details .columns .col-1 {
+        float: right;
+        width: 45px;
+        text-align: left; }
+  .person.partial > .box > .profile .follow, .profile-block > .box .follow {
+    margin-top: 12px;
+    margin-right: 5px;
+    text-align: right; }
+
+.preview .foodia {
+  width: 198px; }
+
+.foodia {
+  margin-top: 8px;
+  border: 1px solid #e6e6e6;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  margin-right: 5px; }
+  .foodia ul {
+    margin: 0;
+    padding: 0; }
+    .foodia ul:after {
+      content: "";
+      display: block;
+      height: 0;
+      clear: both; }
+    .foodia ul li {
+      list-style-type: none;
+      float: left;
+      width: 80px;
+      padding: 5px; }
+      .foodia ul li a {
+        display: block; }
+      .foodia ul li .image {
+        position: relative;
+        margin: 0 15px 5px;
+        width: 50px;
+        height: 50px;
+        background-position: center center;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+        border: 1px solid #f2f2f2; }
+      .foodia ul li .name {
+        text-align: center;
+        font-size: 70%;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden; }
+  .foodia .foot {
+    background: #e6e6e6;
+    padding: 2px 3px;
+    font-size: 65%;
+    color: gray;
+    text-align: right; }
 
 .follow-action {
   display: inline-block;

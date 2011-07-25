@@ -13,9 +13,8 @@
 	</div>
 	<div class="location">
 		<div class="map">
-			
-			<img src="http://maps.google.com/maps/api/staticmap?center=San+Francisco,CA&amp;zoom=13&amp;size=400x400&amp;markers=<%= "#{@sortie.place.lat},#{@sortie.place.lng}" %>&amp;sensor=false" alt="map" />
-		</map>
+			<img src="http://maps.google.com/maps/api/staticmap?zoom=13&amp;size=400x400&amp;markers=<%= "#{@sortie.place.lat},#{@sortie.place.lng}" %>&amp;sensor=false" alt="map" />
+		</div>
 		<div class="place">
 			<div class="title"><%= @sortie.place.name %></div>
 			<div class="address">
