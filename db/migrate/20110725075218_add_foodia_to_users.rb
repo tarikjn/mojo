@@ -1,6 +1,6 @@
 class AddFoodiaToUsers < ActiveRecord::Migration
   def self.up
-    add_column :users, :show_foodia, :boolean, :default => 1
+    add_column :users, :show_foodia, :boolean, :default => true
   end
 
   def self.down

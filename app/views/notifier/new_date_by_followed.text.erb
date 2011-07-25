@@ -1,6 +1,6 @@
 Hi <%= @follower.first_name %>,
 
-<%= @followed.name %> just created a date: "<%= @sortie.title %>" in <%= @sortie.place.neighborhoods %> on <%= @sortie.time.strftime("%A %e at %I:%M %p") %>.
+<%= @followed.name %> just created a date: "<%= @sortie.title %>" in <%= @sortie.place.neighborhoods %> on <%= @sortie.time.strftime("%A %e at %I:%M%P") %>.
 To find <%= @followed.possessive %> date, go to: <%= @sortie_url %>
 
 To stop following <%= @followed.name %>, go to: <%= @unfollow_url %>
