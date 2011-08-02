@@ -348,7 +348,7 @@ class User < ActiveRecord::Base
     
     if (self.show_foodia)
     
-      r = Rails.cache.fetch("foodia/#{self.email}", :expires_in => 12.days) do
+      r = Rails.cache.fetch(foodia_key, :expires_in => 12.days) do
         HTTParty.get("http://foodia.com/api/partner_profile/#{email}").response
       end
     
@@ -365,10 +365,15 @@ class User < ActiveRecord::Base
   end
   
   def clear_foodia
-    Rails.cache.delete("foodia/#{self.email}")
+    Rails.cache.delete(foodia_key)
   end
   
 private
+  
+  # TODO: find a better structure/class?
+  def foodia_key
+    "foodia/#{CGI.escape(self.email)}"
+  end
 
   def set_invitations_left
     self.invitations_left = 10
