@@ -23,7 +23,7 @@ class Notifier < ActionMailer::Base
     @action_path = date_entries_url(sortie.id)
     @sortie = sortie # pass as :locals?
     @host = host
-    @waitlist = sortie.entries
+    @waitlist = sortie.entries.waiting
     
     
     # add conditional formating: first user or other user waiting

@@ -3609,7 +3609,9 @@ form .rating-input {
       font-size: 65%;
       color: gray; }
     .person.partial > .box > .compatibility {
-      margin-left: 5px; }
+      position: absolute !important;
+      right: 3px;
+      bottom: 5px; }
     .person.partial > .box > .profile {
       display: none;
       position: absolute;
@@ -3625,14 +3627,16 @@ form .rating-input {
       background: lime; }
     .person.partial > .box .compatibility {
       display: inline-block;
-      font-size: 1.25em;
+      font-size: 20px;
+      line-height: 30px;
       position: relative; }
       .person.partial > .box .compatibility .canvas {
         position: absolute;
         top: 0; }
       .person.partial > .box .compatibility .score {
+        vertical-align: middle;
         opacity: .65;
-        margin: 2px 2px 0; }
+        margin-left: 2px; }
         .person.partial > .box .compatibility .score .percent {
           font-size: 65%; }
     .person.partial > .box:hover > .profile {

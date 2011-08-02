@@ -105,7 +105,17 @@ class User < ActiveRecord::Base
     where(:sex_preference => user.sex, :sex => user.sex_preference).join(:hosted_sorties)
   }
   
-  after_update :clear_foodia
+  after_create :add_email_to_list, :if => lambda { |u| u.active? }
+  after_update :clear_foodia, :update_email_in_list
+
+  # move to EventMachine
+  # TODO: make it work with invites/requests system
+  def after_signup
+    self.add_email_to_list
+  end
+  def after_changes
+    self.update_email_in_list
+  end
 
   def friends
     direct_friends | inverse_friends
@@ -262,7 +272,40 @@ class User < ActiveRecord::Base
   
   def affinity_with(user)
     # temporary
+    # case user.id
+    # when 2
+    #   0.82
+    # when 9
+    #   0.82
+    # when 11
+    #   0.76
+    # when 10
+    #   0.55
+    # else
+    #   0.5
+    # end
     0.5
+  end
+  
+  def reputation
+    #rgb(255, 0, 0)
+    #rgb(255, 255, 0)
+    #rgb(0, 255, 0)
+    # temporary
+    # goes from 0 to 511
+    # case self.id
+    # when 2
+    #   450
+    # when 9
+    #   500
+    # when 11
+    #   150
+    # when 10
+    #   350
+    # else
+    #   511
+    # end
+    511
   end
   
   def tasks_count
@@ -324,7 +367,7 @@ class User < ActiveRecord::Base
   def clear_foodia
     Rails.cache.delete("foodia/#{self.email}")
   end
-
+  
 private
 
   def set_invitations_left
@@ -338,6 +381,34 @@ private
       self.generated_password = HTTParty.get("http://www.dinopass.com/password/simple").response.body
       self.password, self.password_confirmation = generated_password, generated_password
     end
+  end
+  
+  
+  # TODO: move to HTTParty class
+  # TODO: set through event observer
+  def update_email_in_list
+    if email_changed?
+      auth = {:username => SETTINGS[Rails.env]['CampaignMonitor']['APIKey'], :password => nil}
+      q = {
+        "EmailAddress" => self.email,
+        "Name"         => self.name }
+      r = HTTParty.put("http://api.createsend.com/api/v3/subscribers/#{SETTINGS[Rails.env]['CampaignMonitor']['UserListID']}.json", 
+        basic_auth: auth,
+        query: { email: self.email_was },
+        body: ActiveSupport::JSON.encode(q) )
+    end
+  end
+  
+  def add_email_to_list
+    # http://www.campaignmonitor.com/api/subscribers/#adding_a_subscriber
+    auth = {:username => SETTINGS[Rails.env]['CampaignMonitor']['APIKey'], :password => nil}
+    q = {
+      "EmailAddress" => self.email,
+      "Name"         => self.name,
+      "Resubscribe"  => true }
+    HTTParty.post("http://api.createsend.com/api/v3/subscribers/#{SETTINGS[Rails.env]['CampaignMonitor']['UserListID']}.json",
+      basic_auth: auth,
+      body: ActiveSupport::JSON.encode(q) )
   end
   
 end

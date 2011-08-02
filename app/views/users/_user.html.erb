@@ -22,12 +22,12 @@
 			%>
 			<div class="title">
 				<div class="name"><%= user.first_name %></div>
-				<div class="reputation">Reput.: <span class="reputation"></span></div>
+				<div class="reputation">Reput.: <span class="reputation" style="background: <%= reputation_color(user) %>;"></span></div>
 			</div>
 			<!-- TODO: user helper for compatibility -->
 			<div class="compatibility">
 				<div class="canvas"><canvas width="30" height="30" class="affinity-chart"></canvas></div>
-				<div class="score"><span class="int"><%= (user.affinity_with(current_user) * 100).round %></span><span class="percent">%</span></div>
+				<div class="score"><span class="int"><%= (current_user.affinity_with(user) * 100).round %></span><span class="percent">%</span></div>
 			</div>
 			<%
 				else

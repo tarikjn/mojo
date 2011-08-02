@@ -25,6 +25,11 @@ defaults: &defaults
     male: guy
     both: person
     female: girl
+  CampaignMonitor: &CampaignMonitor
+    APIKey: 8d91618b9b1e76f00886f14cff94ed51
+    APIClientID: cc363600fe3afcc2ce53e8d6dc1e06d2
+    UserListID: 83d1738e8ac10d8395473a3788ebf4ff
+    SubscribersListID: fc5a863e5f5458e584f17375ba166c2e
   
 
 development:
@@ -38,6 +43,9 @@ development:
     user_name: mailer@mojo.co
     password: br8pRasw
     enable_starttls_auto: Yes # converted to boolean by YAML?
+  CampaignMonitor:
+    <<: *CampaignMonitor
+    UserListID: 695d28f3964f7ba53b7f25b4b2012578
 
 test:
   <<: *defaults
