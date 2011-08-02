@@ -347,33 +347,32 @@ class User < ActiveRecord::Base
   def foodia_profile    
     
     if (self.show_foodia)
-    
-      r = Rails.cache.fetch(foodia_key, :expires_in => 12.days) do
-        HTTParty.get("http://foodia.com/api/partner_profile/#{email}").response
-      end
-    
-      if (r.code == '200')
-        ActiveSupport::JSON.decode(r.body)
-      else
-        false
-      end
-    
+      self.foodia_data
     else
       false
     end
     
   end
+  def foodia_data
+    
+    r = Rails.cache.fetch("foodia/#{self.email}", :expires_in => 12.days) do
+      HTTParty.get("http://foodia.com/api/partner_profile/#{email}").response
+    end
   
+    if (r.code == '200')
+      ActiveSupport::JSON.decode(r.body)
+    else
+      false
+    end
+    
+  end
   def clear_foodia
-    Rails.cache.delete(foodia_key)
+    Rails.cache.delete("foodia/#{self.email}")
   end
   
 private
+
   
-  # TODO: find a better structure/class?
-  def foodia_key
-    "foodia/#{CGI.escape(self.email)}"
-  end
 
   def set_invitations_left
     self.invitations_left = 10

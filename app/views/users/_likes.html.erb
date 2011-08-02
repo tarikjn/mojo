@@ -3,19 +3,19 @@
 	<div class="hybrid-input">
 		<label class="mj-label-check" for="user_show_foodia">
 			<%= s.check_box :show_foodia %>
-			Import my four top-rated items
+			Import my top-rated items
 		</label>
 	</div>
 	<div class="preview">
 	<%
-		if !current_user.foodia_profile
+		if !current_user.foodia_data
 	%>
 		We couldn't find a Foodia™ profile associated with your email address, <a href="http://foodia.com/accounts/register/">sign-up for Foodia</a> to enhance your Mojo profile.
 	<%
 		else
 	%>
 		Here is your Foodia™ profile:
-		<%= render partial: 'users/foodia', locals: {foodia: current_user.foodia_profile} %>
+		<%= render partial: 'users/foodia', locals: {foodia: current_user.foodia_data} %>
 	<%
 		end
 	%>
