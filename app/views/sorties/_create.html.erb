@@ -61,7 +61,7 @@
 			<div class="input">
 				<div class="input-with-tip">
 					<div class="tip">Search a biz, a place or an address</div>
-					<input type="text" value="" class="place-search" />
+					<input type="text" value="" class="place-search" /><button class="mj-button white place-search-button">Go</button>
 				</div>
 			</div>
 			<div class="city">
@@ -76,6 +76,9 @@
 			<div class="results input-holder">
 				
 			</div>
+		</div>
+		<div class="powered-by">
+			<span>Reviews from</span> <%= link_to "http://www.yelp.com/" do %><%= image_tag "/images/partners/yelp.png" %><% end %>
 		</div>
 	</div>
 </div>

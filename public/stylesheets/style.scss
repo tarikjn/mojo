@@ -58,6 +58,14 @@ $radius-default: 5px;
 	border-top-left-radius: $r;
 	border-top-right-radius: $r;
 }
+@mixin rounded-bottom($r: $radius-default) {
+	-moz-border-radius-bottomleft: $r;
+	-moz-border-radius-bottomright: $r;
+	-webkit-border-bottom-left-radius: $r;
+	-webkit-border-bottom-right-radius: $r;
+	border-bottom-left-radius: $r;
+	border-bottom-right-radius: $r;
+}
 
 @mixin opacity($o) {
 	filter: alpha(opacity = $o x 100);
@@ -126,68 +134,7 @@ $radius-default: 5px;
 }
 
 // from http://www.webdesignerwall.com/tutorials/css3-gradient-buttons/
-@mixin orange {
-	
-	color: #fcd3a5;
-	border: solid 1px #da7c0c;
-	background: #f78d1d;
-	background: -webkit-gradient(linear, left top, left bottom, from(#faa51a), to(#f47a20));
-	background: -moz-linear-gradient(top,  #faa51a,  #f47a20);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
-		
-	/*&:hover {
-		background: #f47c20;
-		background: -webkit-gradient(linear, left top, left bottom, from(#f88e11), to(#f06015));
-		background: -moz-linear-gradient(top,  #f88e11,  #f06015);
-		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');
-	}*/
-	/*&:hover,*/ &.selected {
-		color: #fef4e9;
-		background: -webkit-gradient(linear, left top, left bottom, from(#f47a20), to(#faa51a));
-		background: -moz-linear-gradient(top,  #f47a20,  #faa51a);
-		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
-	}
-}
-.red {
-	color: #faddde;
-	border: solid 1px #980c10;
-	background: #d81b21;
-	background: -webkit-gradient(linear, left top, left bottom, from(#ed1c24), to(#aa1317));
-	background: -moz-linear-gradient(top,  #ed1c24,  #aa1317);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ed1c24', endColorstr='#aa1317');
-}
-.red:hover {
-	background: #b61318;
-	background: -webkit-gradient(linear, left top, left bottom, from(#c9151b), to(#a11115));
-	background: -moz-linear-gradient(top,  #c9151b,  #a11115);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#c9151b', endColorstr='#a11115');
-}
-.red:active {
-	color: #de898c;
-	background: -webkit-gradient(linear, left top, left bottom, from(#aa1317), to(#ed1c24));
-	background: -moz-linear-gradient(top,  #aa1317,  #ed1c24);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#aa1317', endColorstr='#ed1c24');
-}
-.white {
-	color: #606060;
-	border: solid 1px #b7b7b7;
-	background: #fff;
-	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
-	background: -moz-linear-gradient(top,  #fff,  #ededed);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed');
-}
-.white:hover {
-	background: #ededed;
-	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#dcdcdc));
-	background: -moz-linear-gradient(top,  #fff,  #dcdcdc);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dcdcdc');
-}
-.white:active {
-	color: #999;
-	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff));
-	background: -moz-linear-gradient(top,  #ededed,  #fff);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#ffffff');
-}
+
 @mixin white {
 	
 	/*color: #606060;
@@ -234,7 +181,7 @@ color: #e9e9e9;
 @mixin wdw-button {
 	
 	display: inline-block;
-	outline: none;
+	//outline: none;
 	text-align: center;
 	text-decoration: none;
 	font: 14px/100% Arial, Helvetica, sans-serif;
@@ -267,6 +214,20 @@ color: #e9e9e9;
 		&.white:active {
 			color: #999;
 			@include std_gradient(#ededed, #fff);
+		}
+		
+		// red
+		&.red:hover {
+			background: #b61318;
+			background: -webkit-gradient(linear, left top, left bottom, from(#c9151b), to(#a11115));
+			background: -moz-linear-gradient(top,  #c9151b,  #a11115);
+			filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#c9151b', endColorstr='#a11115');
+		}
+		&.red:active {
+			color: #de898c;
+			background: -webkit-gradient(linear, left top, left bottom, from(#aa1317), to(#ed1c24));
+			background: -moz-linear-gradient(top,  #aa1317,  #ed1c24);
+			filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#aa1317', endColorstr='#ed1c24');
 		}
 		
 		// gray theme
@@ -328,6 +289,13 @@ color: #e9e9e9;
 		border: solid 1px #b7b7b7;
 		background: #fff;
 		@include std_gradient(#fff, #ededed);
+	}
+	
+	&.red {
+		color: #faddde;
+		border: solid 1px #980c10;
+		background: #d81b21;
+		@include std_gradient(#ed1c24, #aa1317);
 	}
 	
 	// gray theme
@@ -2633,208 +2601,11 @@ $map-length: 250px;
 	}
 }
 
-.mj-location-input {
-	position: relative;
-	background: transparent;
-	padding: 0;
-	
-	#map_canvas {
-		height: 350px;
-		margin-right: 250px;
-		
-		&.city-only {
-			height: 250px;
-		}
-	}
-	
-	// temporarly taken outside .map-side
-	.selected-subset {
-		
-		padding: 5px 8px;
-		@include rounded;
-		background: $light-gray;
-		border: 1px solid $border-gray;
-
-		.title {
-			font-size: .85em;
-			margin-bottom: 5px;
-		}
-
-		.item {
-
-			.name { font-weight: bold; }
-			.state { font-size: .85em; }
-
-			min-height: 27px;
-			background: url(/images/markers/location-selected.png) no-repeat 5px center;
-			vertical-align: middle;
-			font-size: .85em;
-
-			background-color: white;
-			padding: 5px 5px 5px (24px + 5px);
-			@include rounded;
-		}
-		
-		margin-bottom: 10px;
-		
-		&.operating {
-			
-			background: white;
-		}
-	}
-	
-	.map-side {
-		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		width: 245px;
-		
-		
-		
-		.search {
-			
-			
-			input {
-			
-				width: 245px - 2*8px - 2px - 21px;
-				font-size: .75em;
-				border-radius: 12px;
-				padding: 2px 2px 2px 19px;
-				background: url(/images/icons/search.png) 4px center no-repeat white;
-				
-				&.tip {
-					color: gray;
-				}
-			}
-		}
-	}
-	
-	&.place-view {
-
-		#map_canvas {
-			height: 350px;
-			margin-left: 250px;
-			margin-right: 0;
-		}
-		
-		.search {
-			position: relative;
-			margin-bottom: 10px;
-			
-			.city {
-				margin-left: 65%;
-				//height: 25px;
-				
-				padding: 5px 8px;
-				@include rounded;
-				background: $light-gray;
-				border: 1px solid $border-gray;
-				
-				font-size: .85em;
-				
-				.title {
-					position: absolute;
-					top: 10px;
-				}
-				
-				.selection {
-					margin-left: 50px;
-					padding: 3px 5px;
-					
-					background: white;
-					@include rounded;
-					
-					@include thinfont;
-					font-weight: bold;
-				}
-			}
-			.input {
-				position: absolute;
-				top: 0;
-				//padding: 5px 8px;
-				
-				//@include rounded;
-				//background: $light-gray;
-				//border: 1px solid $border-gray;
-				
-				input {
-					@include rounded;
-					width: 365px;
-					padding: 4px 4px 4px 24px;
-					font-size: 18px;
-					
-					background: url(/images/icons/search.png) 6px center no-repeat white;
-					
-				}
-			}
-		}
-		
-		.map-and-results {
-			position: relative;
-			
-			.results {
-				position: absolute;
-				top: 0;
-				left: 0;
-				bottom: 0;
-				width: 245px;
-				overflow-y: auto;
-				
-				background: white;
-				
-				&.loading {
-					@include loading;
-				}
-
-				.result {
-					
-					label {
-						display: block;
-						position: relative;
-						padding: 3px 3px;
-						@include rounded;
-						background: white;
-						border: 2px solid white;
-						
-						&:hover {
-							background: #e1ecff;
-						}
-						&.selected {
-							border-color: gray;
-						}
-
-						.input {
-							position: absolute;
-
-							background-color: #ff3434;
-							@include rounded;
-						}
-						.place {
-							margin-left: 23px;
-							//min-height: 27px;
-
-							.title {
-								//font-size: 1.2em;
-							}
-							.address {
-								@include thinfont;
-								font-size: .75em;
-							}
-						}
-					}
-					
-				}
-			}
-		}
-	}
-}
-
 .input-with-tip {
 	.tip {
 		position: absolute;
 		top: 7px;
-		left: 27px;
+		left: 7px;
 		color: gray;
 	}
 }
@@ -4088,3 +3859,4 @@ h2 {
 @import 'sorties';
 @import 'users';
 @import 'follows';
+@import 'places';

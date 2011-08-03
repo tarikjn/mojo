@@ -3,6 +3,8 @@ class Place < ActiveRecord::Base
   has_many :sorties
   has_many :reviews, :class_name => "PlaceReview"
   
+  has_one :yelp, :class_name => "PlaceYelp", :dependent => :destroy
+  
   # GeoKit
   acts_as_mappable :default_units => :miles, 
                    :default_formula => :sphere, 
@@ -31,6 +33,12 @@ class Place < ActiveRecord::Base
         :country_code => business['location']['country_code'],
         :cross_streets => business['location']['cross_streets'],
         :neighborhoods => (business['location']['neighborhoods'].is_a? Array)? business['location']['neighborhoods'].join(", ") : nil
+      })
+      
+      place.yelp = PlaceYelp.new({
+        :url => business['url'],
+        :review_count => business['review_count'],
+        :rating_img_url_small => business['rating_img_url_small']
       })
       
       # save record

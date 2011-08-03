@@ -6,5 +6,9 @@
 			<div class="title"><%= place.name %></div>
 			<div class="address"><%= place.address %></div>
 		</div>
+		<div class="review">
+			<%= image_tag place.yelp.rating_img_url_small %>
+			<%= link_to pluralize(place.yelp.review_count, "review"), place.yelp.url %>
+		</div>
 	</label>
 </div>
