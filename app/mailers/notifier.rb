@@ -85,7 +85,7 @@ class Notifier < ActionMailer::Base
     
     @friends_url = friendships_url
     
-    mail to: @user.email, subject: "#{@user.name} sent you a wingmate request on Mojo"
+    mail to: @recipient.email, subject: "#{@user.name} sent you a wingmate request on Mojo"
     
   end
   
@@ -96,7 +96,7 @@ class Notifier < ActionMailer::Base
     
     @signup_url = account_signup_url(invitation.token)
     
-    mail to: @user.email, subject: "#{@user.name} invited you on Mojo"
+    mail to: @recipient.email, subject: "#{@user.name} invited you on Mojo"
     
   end
   
