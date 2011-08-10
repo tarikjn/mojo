@@ -1,4 +1,4 @@
-<% content_tag :li, :class => (['date'] << ((list != :entered and sortie.has_tasks_for?(current_user))? 'with_tasks':nil)) do %>
+<%= content_tag :li, :class => (['date'] << ((list != :entered and sortie.has_tasks_for?(current_user))? 'with_tasks':nil)) do %>
 	<div class="status">
 		<%
 			case list

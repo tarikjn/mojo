@@ -1,12 +1,7 @@
 Mojo::Application.routes.draw do
-
-  get "follows/follow"
-
-  get "follows/unfollow"
-
-  get "followings/follow"
-
-  get "followings/unfollow"
+  
+  # no 'new' route if only loading partial
+  resources :friendships, :only => [:index, :new, :create]
 
   resources :invitations, :only => [:new, :create]
   get "invitations/find"
@@ -43,6 +38,15 @@ Mojo::Application.routes.draw do
       collection do
         get 'follow'   => :create,  :as => 'create'
         get 'unfollow' => :destroy, :as => 'destroy'
+      end
+    end
+    
+    resources :friendships, :only => [], :path => 'friendship' do
+      collection do
+        get 'approve'
+        get 'ignore'
+        get 'withdraw'
+        delete '/' => :delete
       end
     end
   

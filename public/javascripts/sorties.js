@@ -1,26 +1,34 @@
 $(function() {
 	
 	// the code after this point is executed when the DOM finished loading
-	
-	$(".columns > div > .tabs > h3").click(function() {
 		
-		if ($(this).hasClass("inactive")) {
+	// actions buttons on date page
+	$(".cancel-action").click(function() {
+		
+		var date = $(this).parents(".date:eq(0)");
+		var prompt = date.next(".action-box.cancel:eq(0)");
+		var action = this;
+		
+		$(action).addClass("disabled");
+		date.css('z-index', '1000');
+		$("body").append('<div id="black-screen"></div>');
+		prompt.show();
+		
+		prompt.find(".abort").click(function() {
+			prompt.hide();
+			$("#black-screen").remove();
+			date.css('z-index', 'auto');
+			$(action).removeClass("disabled");
 			
-			var index = $(this).index();
-			var activeTab = $(this).parent().find("h3:not(.inactive)");
-			var activeBlock = $(this).parent().parent().find("> ul, > .empty").not(".inactive");
-			var newBlock = $(this).parent().parent().find("> ul, > .empty").eq(index);
-			
-			// disable previous tab
-			activeTab.addClass("inactive");
-			// activate new tab
-			$(this).removeClass("inactive");
-			
-			// diabled previous block
-			activeBlock.addClass("inactive");
-			// show new block
-			newBlock.removeClass("inactive");
-		}
-	})
+			return false;
+		});
+		
+		return false;
+	});
+	
+	// show/hide description on date
+	$(".toggle-text").click(function() {
+		$(this).toggleClass("ellipsis");
+	});
 	
 });

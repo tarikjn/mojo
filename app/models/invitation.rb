@@ -1,5 +1,5 @@
 class Invitation < ActiveRecord::Base
-  belongs_to :sender, :class_name => 'User'
+  belongs_to :source, :polymorphic => true # User or Friendship
   has_one :recipient, :class_name => 'User'
   
   validates :recipient_email, :presence => true
@@ -40,6 +40,10 @@ class Invitation < ActiveRecord::Base
     end
     
     true
+  end
+  
+  def sender
+    self.source.is_a?(User) ? self.source : self.source.user
   end
   
 private

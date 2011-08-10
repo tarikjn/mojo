@@ -10,6 +10,12 @@ class User < ActiveRecord::Base
   
   # problem: how to do hosted_sorties both for single sorties and through wings
   
+  has_many :lead_wings, :class_name => "Wing", :foreign_key => "lead_id"
+  has_many :mate_wings, :class_name => "Wing", :foreign_key => "mate_id"
+  
+  has_many :lead_host_sorties, :through => :lead_wings, :source => :host_sortie
+  has_many :mate_host_sorties, :through => :mate_wings, :source => :host_sortie
+  
   #has_many :hosted_single_sorties, :source => :sortie, :as => :host
   #has_many :invited_single_sorties, :source => :sortie, :as => :guest
   
@@ -24,10 +30,14 @@ class User < ActiveRecord::Base
   has_many :hosted_sorties, :class_name => "Sortie", :as => :host
   
   # :generate_password is not so secure but practical, can be made more secure
-  before_create :set_invitations_left, :generate_password # when adding invitation instances, this need to be hacked
+  before_create :set_invitations_left # when adding invitation instances, this need to be hacked
+  
+  before_create :before_registration, :if => :registered? # calls generate_password
+  before_update :before_registration, :if => lambda { |u| u.state_changed? and u.state_was == 'invitation' and u.state == 'active' } # calls generate_password
+  
   
   # AuthLogic
-  # Switch to Rails' SecurePassword after upgrading to Rails 3.1?
+  # Switch to Rails' SecurePassword/Devise after upgrading to Rails 3.1?
   acts_as_authentic do |config|
     # we already have a RFC-compliant validation for email, damn Authlogic tries to do too much
     config.validate_email_field = false
@@ -39,7 +49,7 @@ class User < ActiveRecord::Base
   # object level attribute overrides the config level attribute
   # replaced ignore_blank_passwords with require_password?
   def require_password?
-    require_password.nil? ? super : require_password
+    require_password.nil? ? (registered? ? super : false) : require_password
   end
   #
   # check for current password when doing a normal password change
@@ -61,7 +71,7 @@ class User < ActiveRecord::Base
   validates :level, :inclusion => { :in => %w(user admin) }
   validates :email, :presence => true, :uniqueness => true, :email => true
   validates :first_name, :presence => true, :if => :active?
-  validate :validate_age
+  validate :validate_age # if dob is set
   # picture fails with marshaling (stepflow issue)
   validates :picture, :presence => true, :if => :active?
   validates :cellphone, :presence => true, :format => {:with => /^(\+\d{1,3})?[-. ]?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/}, :if => :active?
@@ -79,13 +89,14 @@ class User < ActiveRecord::Base
               :allow_nil => true, :converter => Proc.new { |hash| Height.create(hash) }
   
   # friendship TODO: add :dependant => :destroy?         
-  has_many :friendships
-  has_many :inverse_friendships, :class_name => "Friendship", :foreign_key => "friend_id"
-  has_many :direct_friends, :through => :friendships, :conditions => ["approved = ?", true], :source => :friend
-  has_many :inverse_friends, :through => :inverse_friendships, :conditions => ["approved = ?", true], :source => :user
+  has_many :friendships, :dependent => :destroy
+  has_many :inverse_friendships, :foreign_key => "friend_id", :class_name => "Friendship", :dependent => :destroy
+  
+  has_many :direct_friends, :through => :friendships, :source => :friend, :conditions => ["friendships.state = ?", 'approved']
+  has_many :inverse_friends, :through => :inverse_friendships, :source => :user, :conditions => ["friendships.state = ?", 'approved']
 
-  has_many :pending_friends, :through => :friendships, :conditions => ["approved = ?", false], :foreign_key => "user_id", :source => :user
-  has_many :requested_friendships, :class_name => "Friendship", :foreign_key => "friend_id", :conditions => ["approved = ?", false]
+  has_many :requested_friends, :through => :friendships, :source => :friend, :conditions => ["friendships.state = ?", 'pending']
+  has_many :pending_friends, :through => :inverse_friendships, :source => :user, :conditions => ["friendships.state = ?", 'pending']
   
   # following
   has_many :follows, :foreign_key => "follower_id", :dependent => :destroy
@@ -93,8 +104,11 @@ class User < ActiveRecord::Base
   has_many :reverse_follows, :foreign_key => "followed_id", :class_name => "Follow", :dependent => :destroy
   has_many :followers, :through => :reverse_follows, :source => :follower
   
+  # date requests
+  
+  
   # invitations
-  validates :invitation_id, :presence => {:message => 'is required'}, :uniqueness => true
+  validates :invitation_id, :presence => {:message => 'is required'}, :uniqueness => true, :if => :active?
   # todo if an invitation user exists, load that user/update...
   has_many :sent_invitations, :class_name => 'Invitation', :foreign_key => 'sender_id'
   belongs_to :invitation
@@ -105,8 +119,9 @@ class User < ActiveRecord::Base
     where(:sex_preference => user.sex, :sex => user.sex_preference).join(:hosted_sorties)
   }
   
-  after_create :add_email_to_list, :if => lambda { |u| u.active? }
-  after_update :clear_foodia, :update_email_in_list
+  after_create :add_email_to_list, :if => lambda { |u| u.registered? }
+  after_update :add_email_to_list, :if => lambda { |u| u.state_changed? and u.state_was == 'invitation' and u.state == 'active' }
+  after_update :clear_foodia, :update_email_in_list, :unless => :state_changed?
 
   # move to EventMachine
   # TODO: make it work with invites/requests system
@@ -115,6 +130,11 @@ class User < ActiveRecord::Base
   end
   def after_changes
     self.update_email_in_list
+  end
+  
+  def before_registration
+    # generate password
+    generate_password
   end
 
   def friends
@@ -140,6 +160,14 @@ class User < ActiveRecord::Base
   
   # TODO: secure active and admin attributes with attr_accessible?
   # Authlogic checks this
+  def registered?
+    state != 'invitation'
+  end
+  
+  def unregistered?
+    state == 'invitation'
+  end
+  
   def active?
     state == 'active'
   end
@@ -166,7 +194,9 @@ class User < ActiveRecord::Base
   end
   
   def validate_age
-    errors.add :dob, 'you need to be at least 18' if 18.years.ago < self.dob
+    if !self.dob.nil?
+      errors.add :dob, 'you need to be at least 18' if 18.years.ago < self.dob
+    end
   end
   
   def possessive
@@ -227,7 +257,7 @@ class User < ActiveRecord::Base
   end
   
   def name
-    first_name
+    registered? ? first_name : email
   end
   
   def full_name
@@ -309,7 +339,7 @@ class User < ActiveRecord::Base
   end
   
   def tasks_count
-    self.sortie_tasks_count
+    self.sortie_tasks_count + self.friend_tasks_count
   end
   
   def sortie_tasks_count
@@ -321,7 +351,7 @@ class User < ActiveRecord::Base
   end
   
   def friend_tasks_count
-    0
+    self.pending_friends.size + self.mate_host_sorties.unconfirmed.size
   end
   
   def entered_sorties

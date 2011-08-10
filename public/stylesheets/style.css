@@ -3018,148 +3018,149 @@ h2 {
     .settings-block .content form .hybrid-input.filter .range {
       margin-top: 10px; }
 
-.dates-layout {
+.dates-layout, .friendship-layout {
   margin: 50px 0 100px; }
-  .dates-layout .flash {
+  .dates-layout .flash, .friendship-layout .flash {
     text-align: center; }
-  .dates-layout > .columns > div {
+  .dates-layout > .columns > .col-0 h3, .dates-layout > .columns > .col-1 h3, .dates-layout > .columns > .col-2 h3, .dates-layout > .columns .box h3, .friendship-layout > .columns > .col-0 h3, .friendship-layout > .columns > .col-1 h3, .friendship-layout > .columns > .col-2 h3, .friendship-layout > .columns .box h3 {
+    background: rgba(25, 25, 25, 0.025);
+    text-align: center;
+    text-shadow: 1px 1px 0px white;
+    padding: 5px 0;
+    margin-bottom: 0;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: 1px solid #e6e6e6;
+    border-bottom-width: 0; }
+  .dates-layout > .columns > .col-0 .tabs h3, .dates-layout > .columns > .col-1 .tabs h3, .dates-layout > .columns > .col-2 .tabs h3, .dates-layout > .columns .box .tabs h3, .friendship-layout > .columns > .col-0 .tabs h3, .friendship-layout > .columns > .col-1 .tabs h3, .friendship-layout > .columns > .col-2 .tabs h3, .friendship-layout > .columns .box .tabs h3 {
     float: left;
-    position: relative;
-    width: 290px; }
-    .dates-layout > .columns > div:not(:last-of-type) {
-      margin-right: 10px; }
-    .dates-layout > .columns > div h3 {
-      background: rgba(25, 25, 25, 0.025);
+    width: 144px; }
+    .dates-layout > .columns > .col-0 .tabs h3 .count, .dates-layout > .columns > .col-1 .tabs h3 .count, .dates-layout > .columns > .col-2 .tabs h3 .count, .dates-layout > .columns .box .tabs h3 .count, .friendship-layout > .columns > .col-0 .tabs h3 .count, .friendship-layout > .columns > .col-1 .tabs h3 .count, .friendship-layout > .columns > .col-2 .tabs h3 .count, .friendship-layout > .columns .box .tabs h3 .count {
+      display: none;
+      min-width: 15px;
+      padding: 1px 0;
+      -moz-border-radius: 15px;
+      -webkit-border-radius: 15px;
+      border-radius: 15px;
+      font-size: 11px;
       text-align: center;
-      text-shadow: 1px 1px 0px white;
-      padding: 5px 0;
-      margin-bottom: 0;
-      -moz-border-radius-topleft: 5px;
-      -moz-border-radius-topright: 5px;
-      -webkit-border-top-left-radius: 5px;
-      -webkit-border-top-right-radius: 5px;
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
-      border: 1px solid #e6e6e6;
-      border-bottom-width: 0; }
-    .dates-layout > .columns > div .tabs h3 {
-      float: left;
-      width: 144px; }
-      .dates-layout > .columns > div .tabs h3 .count {
-        display: none;
-        min-width: 15px;
-        padding: 1px 0;
-        -moz-border-radius: 15px;
-        -webkit-border-radius: 15px;
-        border-radius: 15px;
-        font-size: 11px;
-        text-align: center;
-        font-family: Verdana, Arial, Helvetica, sans-serif;
-        font-weight: normal;
-        background: white; }
-      .dates-layout > .columns > div .tabs h3.inactive {
-        background: #f2f2f2;
-        color: gray;
-        position: relative;
-        top: 3px;
-        padding-bottom: 1px;
-        width: 143px; }
-        .dates-layout > .columns > div .tabs h3.inactive:hover {
-          cursor: pointer;
-          color: black; }
-        .dates-layout > .columns > div .tabs h3.inactive .count {
-          display: inline-block; }
-      .dates-layout > .columns > div .tabs h3:first-of-type.inactive {
-        border-top-right-radius: 0;
-        border-width: 1px 0 1px 1px; }
-      .dates-layout > .columns > div .tabs h3:last-of-type.inactive {
-        border-top-left-radius: 0;
-        border-width: 1px 1px 1px 0; }
-    .dates-layout > .columns > div .tabs:after {
-      content: "";
-      display: block;
-      height: 0;
-      clear: both; }
-    .dates-layout > .columns > div > ul, .dates-layout > .columns > div > .empty {
-      border-bottom-left-radius: 5px;
-      border-bottom-right-radius: 5px;
-      background: rgba(25, 25, 25, 0.025);
-      padding: 10px;
-      border: 1px solid #e6e6e6;
-      border-top-width: 0; }
-      .dates-layout > .columns > div > ul.inactive, .dates-layout > .columns > div > .empty.inactive {
-        display: none; }
-    .dates-layout > .columns > div .empty {
+      font-family: Verdana, Arial, Helvetica, sans-serif;
+      font-weight: normal;
+      background: white; }
+    .dates-layout > .columns > .col-0 .tabs h3.inactive, .dates-layout > .columns > .col-1 .tabs h3.inactive, .dates-layout > .columns > .col-2 .tabs h3.inactive, .dates-layout > .columns .box .tabs h3.inactive, .friendship-layout > .columns > .col-0 .tabs h3.inactive, .friendship-layout > .columns > .col-1 .tabs h3.inactive, .friendship-layout > .columns > .col-2 .tabs h3.inactive, .friendship-layout > .columns .box .tabs h3.inactive {
+      background: #f2f2f2;
       color: gray;
-      font-size: .8em;
-      text-align: center;
-      font-style: italic;
-      padding: 25px 10px; }
-    .dates-layout > .columns > div > ul {
-      margin: 0; }
-      .dates-layout > .columns > div > ul > .date {
-        list-style-type: none;
-        margin-bottom: 15px; }
-        .dates-layout > .columns > div > ul > .date.with_tasks:before {
-          content: "●";
-          font-size: 32px;
-          color: red;
-          position: absolute;
-          margin-top: -32px;
-          margin-right: -10px;
-          right: 0; }
-        .dates-layout > .columns > div > ul > .date.with_tasks .status {
-          background: #fffdbf; }
-        .dates-layout > .columns > div > ul > .date .participants:after {
-          content: "";
-          display: block;
-          height: 0;
-          clear: both; }
-        .dates-layout > .columns > div > ul > .date .status {
-          font-size: .75em;
-          text-align: center;
-          padding: 2px 0;
-          background: #e1ecff;
-          margin-bottom: 10px; }
-        .dates-layout > .columns > div > ul > .date .actions {
-          margin-top: 10px;
-          border-top: 1px solid #e6e6e6;
-          padding: 3px 0; }
-  .dates-layout > .columns:after {
+      position: relative;
+      top: 3px;
+      padding-bottom: 1px;
+      width: 143px; }
+      .dates-layout > .columns > .col-0 .tabs h3.inactive:hover, .dates-layout > .columns > .col-1 .tabs h3.inactive:hover, .dates-layout > .columns > .col-2 .tabs h3.inactive:hover, .dates-layout > .columns .box .tabs h3.inactive:hover, .friendship-layout > .columns > .col-0 .tabs h3.inactive:hover, .friendship-layout > .columns > .col-1 .tabs h3.inactive:hover, .friendship-layout > .columns > .col-2 .tabs h3.inactive:hover, .friendship-layout > .columns .box .tabs h3.inactive:hover {
+        cursor: pointer;
+        color: black; }
+      .dates-layout > .columns > .col-0 .tabs h3.inactive .count, .dates-layout > .columns > .col-1 .tabs h3.inactive .count, .dates-layout > .columns > .col-2 .tabs h3.inactive .count, .dates-layout > .columns .box .tabs h3.inactive .count, .friendship-layout > .columns > .col-0 .tabs h3.inactive .count, .friendship-layout > .columns > .col-1 .tabs h3.inactive .count, .friendship-layout > .columns > .col-2 .tabs h3.inactive .count, .friendship-layout > .columns .box .tabs h3.inactive .count {
+        display: inline-block; }
+    .dates-layout > .columns > .col-0 .tabs h3:first-of-type.inactive, .dates-layout > .columns > .col-1 .tabs h3:first-of-type.inactive, .dates-layout > .columns > .col-2 .tabs h3:first-of-type.inactive, .dates-layout > .columns .box .tabs h3:first-of-type.inactive, .friendship-layout > .columns > .col-0 .tabs h3:first-of-type.inactive, .friendship-layout > .columns > .col-1 .tabs h3:first-of-type.inactive, .friendship-layout > .columns > .col-2 .tabs h3:first-of-type.inactive, .friendship-layout > .columns .box .tabs h3:first-of-type.inactive {
+      border-top-right-radius: 0;
+      border-width: 1px 0 1px 1px; }
+    .dates-layout > .columns > .col-0 .tabs h3:last-of-type.inactive, .dates-layout > .columns > .col-1 .tabs h3:last-of-type.inactive, .dates-layout > .columns > .col-2 .tabs h3:last-of-type.inactive, .dates-layout > .columns .box .tabs h3:last-of-type.inactive, .friendship-layout > .columns > .col-0 .tabs h3:last-of-type.inactive, .friendship-layout > .columns > .col-1 .tabs h3:last-of-type.inactive, .friendship-layout > .columns > .col-2 .tabs h3:last-of-type.inactive, .friendship-layout > .columns .box .tabs h3:last-of-type.inactive {
+      border-top-left-radius: 0;
+      border-width: 1px 1px 1px 0; }
+  .dates-layout > .columns > .col-0 .tabs:after, .dates-layout > .columns > .col-1 .tabs:after, .dates-layout > .columns > .col-2 .tabs:after, .dates-layout > .columns .box .tabs:after, .friendship-layout > .columns > .col-0 .tabs:after, .friendship-layout > .columns > .col-1 .tabs:after, .friendship-layout > .columns > .col-2 .tabs:after, .friendship-layout > .columns .box .tabs:after {
     content: "";
     display: block;
     height: 0;
     clear: both; }
-  .dates-layout .action-box {
-    display: none;
-    z-index: 1000;
+  .dates-layout > .columns > .col-0 > ul, .dates-layout > .columns > .col-0 > .empty, .dates-layout > .columns > .col-1 > ul, .dates-layout > .columns > .col-1 > .empty, .dates-layout > .columns > .col-2 > ul, .dates-layout > .columns > .col-2 > .empty, .dates-layout > .columns .box > ul, .dates-layout > .columns .box > .empty, .friendship-layout > .columns > .col-0 > ul, .friendship-layout > .columns > .col-0 > .empty, .friendship-layout > .columns > .col-1 > ul, .friendship-layout > .columns > .col-1 > .empty, .friendship-layout > .columns > .col-2 > ul, .friendship-layout > .columns > .col-2 > .empty, .friendship-layout > .columns .box > ul, .friendship-layout > .columns .box > .empty {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background: rgba(25, 25, 25, 0.025);
+    padding: 10px;
+    border: 1px solid #e6e6e6;
+    border-top-width: 0; }
+    .dates-layout > .columns > .col-0 > ul.inactive, .dates-layout > .columns > .col-0 > .empty.inactive, .dates-layout > .columns > .col-1 > ul.inactive, .dates-layout > .columns > .col-1 > .empty.inactive, .dates-layout > .columns > .col-2 > ul.inactive, .dates-layout > .columns > .col-2 > .empty.inactive, .dates-layout > .columns .box > ul.inactive, .dates-layout > .columns .box > .empty.inactive, .friendship-layout > .columns > .col-0 > ul.inactive, .friendship-layout > .columns > .col-0 > .empty.inactive, .friendship-layout > .columns > .col-1 > ul.inactive, .friendship-layout > .columns > .col-1 > .empty.inactive, .friendship-layout > .columns > .col-2 > ul.inactive, .friendship-layout > .columns > .col-2 > .empty.inactive, .friendship-layout > .columns .box > ul.inactive, .friendship-layout > .columns .box > .empty.inactive {
+      display: none; }
+  .dates-layout > .columns > .col-0 .empty, .dates-layout > .columns > .col-1 .empty, .dates-layout > .columns > .col-2 .empty, .dates-layout > .columns .box .empty, .friendship-layout > .columns > .col-0 .empty, .friendship-layout > .columns > .col-1 .empty, .friendship-layout > .columns > .col-2 .empty, .friendship-layout > .columns .box .empty {
+    color: gray;
+    font-size: .8em;
+    text-align: center;
+    font-style: italic;
+    padding: 25px 10px; }
+  .dates-layout > .columns > .col-0 > ul, .dates-layout > .columns > .col-1 > ul, .dates-layout > .columns > .col-2 > ul, .dates-layout > .columns .box > ul, .friendship-layout > .columns > .col-0 > ul, .friendship-layout > .columns > .col-1 > ul, .friendship-layout > .columns > .col-2 > ul, .friendship-layout > .columns .box > ul {
+    margin: 0; }
+    .dates-layout > .columns > .col-0 > ul > li, .dates-layout > .columns > .col-1 > ul > li, .dates-layout > .columns > .col-2 > ul > li, .dates-layout > .columns .box > ul > li, .friendship-layout > .columns > .col-0 > ul > li, .friendship-layout > .columns > .col-1 > ul > li, .friendship-layout > .columns > .col-2 > ul > li, .friendship-layout > .columns .box > ul > li {
+      list-style-type: none;
+      margin-bottom: 15px; }
+      .dates-layout > .columns > .col-0 > ul > li.with_tasks:before, .dates-layout > .columns > .col-1 > ul > li.with_tasks:before, .dates-layout > .columns > .col-2 > ul > li.with_tasks:before, .dates-layout > .columns .box > ul > li.with_tasks:before, .friendship-layout > .columns > .col-0 > ul > li.with_tasks:before, .friendship-layout > .columns > .col-1 > ul > li.with_tasks:before, .friendship-layout > .columns > .col-2 > ul > li.with_tasks:before, .friendship-layout > .columns .box > ul > li.with_tasks:before {
+        content: "●";
+        font-size: 32px;
+        color: red;
+        position: absolute;
+        margin-top: -32px;
+        margin-right: -10px;
+        right: 0; }
+      .dates-layout > .columns > .col-0 > ul > li.with_tasks .status, .dates-layout > .columns > .col-1 > ul > li.with_tasks .status, .dates-layout > .columns > .col-2 > ul > li.with_tasks .status, .dates-layout > .columns .box > ul > li.with_tasks .status, .friendship-layout > .columns > .col-0 > ul > li.with_tasks .status, .friendship-layout > .columns > .col-1 > ul > li.with_tasks .status, .friendship-layout > .columns > .col-2 > ul > li.with_tasks .status, .friendship-layout > .columns .box > ul > li.with_tasks .status {
+        background: #fffdbf; }
+
+.dates-layout > .columns > div {
+  float: left;
+  position: relative;
+  width: 290px; }
+  .dates-layout > .columns > div:not(:last-of-type) {
+    margin-right: 10px; }
+  .dates-layout > .columns > div > ul > .date .participants:after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both; }
+  .dates-layout > .columns > div > ul > .date .status {
+    font-size: .75em;
+    text-align: center;
+    padding: 2px 0;
+    background: #e1ecff;
+    margin-bottom: 10px; }
+  .dates-layout > .columns > div > ul > .date .actions {
+    margin-top: 10px;
+    border-top: 1px solid #e6e6e6;
+    padding: 3px 0; }
+.dates-layout > .columns:after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both; }
+.dates-layout .action-box {
+  display: none;
+  z-index: 1000;
+  position: absolute;
+  left: 50%;
+  margin-left: -188px;
+  margin-top: 6px;
+  width: 360px;
+  background: white;
+  border: 1px outset #e6e6e6;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 8px;
+  font-size: .95em;
+  text-align: center; }
+  .dates-layout .action-box:before {
+    content: "▴";
+    font-size: 32px;
+    color: #e6e6e6;
     position: absolute;
+    margin-top: -36px;
     left: 50%;
-    margin-left: -188px;
-    margin-top: 6px;
-    width: 360px;
-    background: white;
-    border: 1px outset #e6e6e6;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    padding: 8px;
-    font-size: .95em;
+    margin-left: -16px;
+    width: 32px;
     text-align: center; }
-    .dates-layout .action-box:before {
-      content: "▴";
-      font-size: 32px;
-      color: #e6e6e6;
-      position: absolute;
-      margin-top: -36px;
-      left: 50%;
-      margin-left: -16px;
-      width: 32px;
-      text-align: center; }
-    .dates-layout .action-box .prompt {
-      font-size: 110%; }
-    .dates-layout .action-box .choices {
-      margin-top: 8px; }
+  .dates-layout .action-box .prompt {
+    font-size: 110%; }
+  .dates-layout .action-box .choices {
+    margin-top: 8px; }
 
 .form-page {
   position: relative;
@@ -3816,3 +3817,125 @@ form .rating-input {
     font-size: .70em; }
     .mj-location-input.place-view .powered-by img, .mj-location-input.place-view .powered-by span {
       vertical-align: middle; }
+
+.friendship-layout {
+  margin: 50px 0 100px; }
+  .friendship-layout .flash {
+    margin-bottom: 10px; }
+  .friendship-layout .friend-section .content {
+    border: 1px solid #e6e6e6;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background: white;
+    padding: 10px; }
+  .friendship-layout .friend-section ul.friendlist {
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    position: relative;
+    height: 92px; }
+    .friendship-layout .friend-section ul.friendlist:after {
+      content: "";
+      display: block;
+      height: 0;
+      clear: both; }
+    .friendship-layout .friend-section ul.friendlist li {
+      list-style-type: none;
+      float: left;
+      width: 80px;
+      padding: 5px 0;
+      margin: 0 10px 10px 0;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      border: 1px solid transparent; }
+      .friendship-layout .friend-section ul.friendlist li:hover {
+        border-color: #f2f2f2; }
+      .friendship-layout .friend-section ul.friendlist li .pic48, .friendship-layout .friend-section ul.friendlist li.new .symbol {
+        margin: 0 auto;
+        width: 48px;
+        height: 48px; }
+      .friendship-layout .friend-section ul.friendlist li .name, .friendship-layout .friend-section ul.friendlist li.new .caption {
+        font-size: .75em;
+        text-align: center;
+        padding-top: 5px; }
+      .friendship-layout .friend-section ul.friendlist li.new {
+        background: #f2f2f2;
+        cursor: pointer; }
+        .friendship-layout .friend-section ul.friendlist li.new .symbol {
+          line-height: 48px;
+          font-size: 48px;
+          text-align: center;
+          vertical-align: middle;
+          color: gray;
+          font-weight: bold; }
+  .friendship-layout .friend-section .add-friend {
+    position: absolute;
+    display: none;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border: 5px solid rgba(0, 0, 0, 0.25);
+    width: 400px;
+    z-index: 10; }
+    .friendship-layout .friend-section .add-friend > .arrow {
+      position: absolute;
+      width: 35px;
+      height: 21px;
+      margin-top: -21px;
+      margin-left: 20px;
+      background: url(/images/friendships/floatbox-top_arrow.png); }
+    .friendship-layout .friend-section .add-friend .box {
+      background: white;
+      padding: 10px; }
+      .friendship-layout .friend-section .add-friend .box .hidden {
+        display: none; }
+      .friendship-layout .friend-section .add-friend .box .form-item {
+        margin-bottom: 10px; }
+        .friendship-layout .friend-section .add-friend .box .form-item .title {
+          padding-top: 10px;
+          font-size: 90%; }
+        .friendship-layout .friend-section .add-friend .box .form-item .hybrid-input, .friendship-layout .friend-section .add-friend .box .form-item .errors {
+          margin-left: 140px; }
+        .friendship-layout .friend-section .add-friend .box .form-item .hybrid-input input[type=email] {
+          width: 230px; }
+      .friendship-layout .friend-section .add-friend .box .submit {
+        text-align: right; }
+        .friendship-layout .friend-section .add-friend .box .submit .button {
+          display: inline-block;
+          width: 115px; }
+          .friendship-layout .friend-section .add-friend .box .submit .button.loading {
+            background: url(/images/ajax-loading.gif) no-repeat center left; }
+  .friendship-layout .columns {
+    margin-top: 50px; }
+    .friendship-layout .columns:after {
+      content: "";
+      display: block;
+      height: 0;
+      clear: both; }
+    .friendship-layout .columns .col-left, .friendship-layout .columns .col-right {
+      width: 445px;
+      position: relative;
+      float: left; }
+      .friendship-layout .columns .col-left:not(:last-of-type), .friendship-layout .columns .col-right:not(:last-of-type) {
+        margin-right: 10px; }
+      .friendship-layout .columns .col-left > .box > ul > li.friend-request, .friendship-layout .columns .col-right > .box > ul > li.friend-request {
+        position: relative;
+        padding: 10px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        background: #e6e6e6 !important; }
+        .friendship-layout .columns .col-left > .box > ul > li.friend-request .actions, .friendship-layout .columns .col-right > .box > ul > li.friend-request .actions {
+          position: absolute;
+          width: 105px;
+          right: 10px;
+          text-align: right;
+          vertical-align: top; }
+          .friendship-layout .columns .col-left > .box > ul > li.friend-request .actions a, .friendship-layout .columns .col-right > .box > ul > li.friend-request .actions a {
+            width: 75px;
+            vertical-align: top;
+            margin-bottom: 5px; }
+        .friendship-layout .columns .col-left > .box > ul > li.friend-request .content, .friendship-layout .columns .col-right > .box > ul > li.friend-request .content {
+          margin-right: 105px; }

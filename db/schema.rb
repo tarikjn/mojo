@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110803080545) do
+ActiveRecord::Schema.define(:version => 20110810053654) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -58,18 +58,19 @@ ActiveRecord::Schema.define(:version => 20110803080545) do
   create_table "friendships", :force => true do |t|
     t.integer  "user_id"
     t.integer  "friend_id"
-    t.boolean  "approved"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "state",      :default => "pending"
   end
 
   create_table "invitations", :force => true do |t|
-    t.integer  "sender_id"
+    t.integer  "source_id"
     t.string   "recipient_email"
-    t.string   "token",           :null => false
+    t.string   "token",                               :null => false
     t.datetime "sent_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "source_type",     :default => "User"
   end
 
   create_table "picture_ratings", :force => true do |t|

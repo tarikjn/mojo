@@ -25,7 +25,7 @@ class SortieReportsController < ApplicationController
     @report = SortieReport.new(params[:sortie_report].merge(:sortie_id => params[:date_id], :by_id => current_user.id))
     
     if @report.save
-      flash[:notice] = "You're done! Thank you a bunch!"
+      flash[:notice] = "You're done! Thanks a bunch!"
       
       redirect_to dates_url
     else

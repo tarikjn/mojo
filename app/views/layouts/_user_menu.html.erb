@@ -10,10 +10,10 @@
 			Dates
 			<%= ((current_user.sortie_tasks_count > 0)? (content_tag :div, current_user.sortie_tasks_count, :class => 'task-count') : '') %>
 		<% end %>
-		<a href="#" class="">
+		<%= link_to friendships_path, class: (current_page?(friendships_path))? 'active':nil do %>
 			Wingmates
 			<%= ((current_user.friend_tasks_count > 0)? (content_tag :div, current_user.friend_tasks_count, :class => 'task-count') : '') %>
-		</a>
+		<% end %>
 		<%= link_to userhome_path, class: 'user-link' do %>
 			<%= image_tag(current_user.picture_url(:mini)) %> <%= current_user.first_name %> ▾
 		<% end %>

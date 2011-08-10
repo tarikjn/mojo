@@ -3572,8 +3572,7 @@ h2 {
 }
 
 // part of .userhome-container
-.dates-layout {
-	$border-radius: 5px;
+.dates-layout, .friendship-layout {
 	margin: 50px 0 100px;
 	
 	.flash {
@@ -3581,24 +3580,8 @@ h2 {
 	}
 	
 	> .columns {
-		> div {
-			float: left;
-			position: relative;
-			width: 290px;
-		
-			&:not(:last-of-type) {
-				
-				margin-right: 10px;
-				
-				> ul, > .empty {
-				}
-			
-			}
-		
-			&:not(:first-of-type) {
-				> ul, > .empty {
-				}
-			}
+		> .col-0, > .col-1, > .col-2, .box {
+			$border-radius: 5px;
 		
 			h3 {
 				background: $form-background-color;
@@ -3684,8 +3667,7 @@ h2 {
 				// 286px of width available
 				margin: 0;
 				
-				> .date {
-					
+				> li {
 					list-style-type: none;
 					margin-bottom: 15px;
 					
@@ -3701,6 +3683,41 @@ h2 {
 						}
 						.status { background: $info-color; }
 					}
+				}
+			}
+		}
+	}
+}
+
+.dates-layout {
+	
+	> .columns {
+		> div {
+			float: left;
+			position: relative;
+			width: 290px;
+		
+			&:not(:last-of-type) {
+				
+				margin-right: 10px;
+				
+				> ul, > .empty {
+				}
+			
+			}
+		
+			&:not(:first-of-type) {
+				> ul, > .empty {
+				}
+			}
+		
+			> ul {
+				// 286px of width available
+				
+				// TODO: move to _sorties.scss
+				> .date {
+					
+					
 					
 					.participants {
 						@include clear-after;
@@ -3860,3 +3877,4 @@ h2 {
 @import 'users';
 @import 'follows';
 @import 'places';
+@import 'friendships';

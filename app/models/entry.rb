@@ -1,5 +1,8 @@
 class Entry < ActiveRecord::Base
-  belongs_to :party, :polymorphic => true
+  
+  belongs_to :party, :polymorphic => true # destroy dependent only if a Wing
+  after_destroy :destroy_wing_dependent
+  
   belongs_to :sortie
   has_many :entry_actions, :dependent => :destroy
   
@@ -15,6 +18,11 @@ class Entry < ActiveRecord::Base
         {:state => 'open', :start => time - 2.hour, :end => time + 1.hour}]
     }
   }
+  
+  def destroy_wing_dependent
+    # will only be destroyed if also not part of a sortie (as guest)
+    self.party.destroy if self.party.is_a?(Wing)
+  end
   
   def self.get_waitlist(sortie) # rename to find, unless count is included
     where(:sortie_id => sortie.id, :state => 'waiting').first

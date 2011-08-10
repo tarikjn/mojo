@@ -1,0 +1,194 @@
+.friendship-layout {
+	margin: 50px 0 100px;
+	
+	.flash {
+		margin-bottom: 10px;
+	}
+	
+	.friend-section {
+		
+		.content {
+			border: 1px solid $border-gray; // outset looks really cool!
+			@include rounded;
+			background: white;
+			padding: 10px;
+			//@include boxshadow(0 1px 1px 1px gray);
+		}
+			
+		ul.friendlist {
+			margin: 0;
+			padding: 0;
+			overflow-y: auto;
+			
+			// TODO: find a smarter solution
+			position: relative;
+			height: 82px + 10px;
+			
+			@include clear-after;
+			
+			li {
+				list-style-type: none;
+				float: left;
+				width: 80px;
+				padding: 5px 0;
+				margin: 0 10px 10px 0;
+				//background: $light-gray;
+				
+				@include rounded;
+				border: 1px solid transparent;
+				
+				&:hover {
+					border-color: $lighter-gray;
+				}
+				
+				.pic48, &.new .symbol {
+					margin: 0 auto;
+					width: 48px; height: 48px;
+					//background: red;
+				}
+				.name, &.new .caption {
+					font-size: .75em;
+					text-align: center;
+					padding-top: 5px;
+				}
+				
+				&.new {
+					background: $lighter-gray;
+					cursor: pointer;
+					
+					.symbol {
+						line-height: 48px;
+						font-size: 48px;
+						text-align: center;
+						vertical-align: middle;
+						color: gray;
+						font-weight: bold;
+					}
+					
+					
+				}
+			}
+		}
+		
+		.add-friend {
+			position: absolute;
+			display: none;
+			
+			@include rounded;
+			border: 5px solid rgba(0, 0, 0, .25);
+			width: 400px;
+
+			z-index: 10;
+
+			> .arrow {
+				position: absolute;
+				width: 35px; height: 21px;
+				margin-top: - (21px);
+				margin-left: 20px;
+				background: url(/images/friendships/floatbox-top_arrow.png);
+			}	
+			
+			.box {
+				background: white;
+				padding: 10px;
+				
+				.hidden {
+					display: none;
+				}
+				
+				.form-item {
+					margin-bottom: 10px;
+					.title {
+						padding-top: 10px;
+						font-size: 90%;
+					}
+					.hybrid-input, .errors {
+						margin-left: 140px;
+					}
+					.hybrid-input {
+						
+						input[type=email] {
+							width: 230px;
+						}
+					}
+				}
+				.submit {
+					//margin-top: 10px;
+					text-align: right;
+					
+					.button {
+						display: inline-block;
+						width: 83px + 32px;
+
+						&.loading {
+							background: url(/images/ajax-loading.gif) no-repeat center left;
+						}
+					}
+				}
+			}
+		}
+
+	}
+	
+	.columns {
+		
+		margin-top: 50px;
+		@include clear-after;
+		
+		.col-left, .col-right {
+			width: 445px;
+			
+			position: relative;
+			float: left;
+		
+			&:not(:last-of-type) {
+				
+				margin-right: 10px;
+				
+				> ul, > .empty {
+				}
+			
+			}
+		
+			&:not(:first-of-type) {
+				> ul, > .empty {
+				}
+			}
+			
+			> .box {
+				> ul {
+					> li {
+						&.friend-request {
+							
+							position: relative;
+							padding: 10px;
+							@include rounded;
+							
+							background: $border-gray !important;
+							
+							.actions {
+								position: absolute;
+								width: 105px;
+								right: 10px;
+								text-align: right;
+								//padding: 3px;
+								
+								vertical-align: top;
+								
+								a {
+									width: 75px;
+									vertical-align: top;
+									margin-bottom: 5px;
+								}
+							}
+							.content {
+								margin-right: 105px;
+							}
+						}
+					}
+				}
+			}
+			
+		}
+	}
+}

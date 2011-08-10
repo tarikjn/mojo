@@ -14,11 +14,19 @@ class UsersController < ApplicationController
     # TODO find user(state=invitation) using email (friend/date invite was done)
     @user = User.new(:invitation_token => params[:invitation_token])
     @user.email = @user.invitation.recipient_email if @user.invitation
+    @user.state = 'active'
+    # TODO: load gender/preference if invitation source = Friendship
     render :layout => 'application'
   end
   
   def create
-    @user = User.new(params[:user])
+    
+    # works by either create (normal signup/raw invitation) or update (invitation with request(s))
+    if @user = User.find_by_email(params[:user][:email])
+      @user.attributes = params[:user]
+    else
+      @user = User.new(params[:user])
+    end
     
     # this needs to be passed to the object instance to allow auto password-generation
     @user.require_password = false if @user.password.blank? and @user.password_confirmation.blank?
@@ -30,7 +38,7 @@ class UsersController < ApplicationController
       # force user autologin when password has been auto-generated
       UserSession.create(@user) if !current_user
       
-      redirect_to root_url
+      redirect_to friendships_url #root_url
     else
       #@user.clear_password! if @user.generated_password
       render :action => :signup, :layout => 'application'

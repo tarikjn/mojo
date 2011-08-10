@@ -10,7 +10,7 @@ class InvitationsController < ApplicationController
   
   def create
     @invitation = Invitation.new(params[:invitation])
-    @invitation.sender = current_user
+    @invitation.source = current_user
     if @invitation.save
       Notifier.invitation(@invitation, account_signup_url(@invitation.token)).deliver
       flash[:notice] = "Thank you, invitation sent."

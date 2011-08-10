@@ -1,0 +1,68 @@
+<div class="add-friend" id="add-friend-box">
+	<div class="arrow"></div>
+	<div class="box">
+		<%= form_for @friendship, :html => {:class => ['form-inputs', 'column-titles']} do |f| %>
+			<%= f.fields_for :friend do |s| %>
+			<%= s.hidden_field :state %>
+			<div class="form-item">
+				<%= format_errors_for s.object, :email %>
+				<div class="title">Email</div>
+				<div class="hybrid-input">
+					<%= s.email_field :email %>
+				</div>
+			</div>
+			<%= content_tag :div, :class => (s.object.errors.count > 0  and s.object.errors[:email].length == 0)? nil : "hidden" do %>
+				<div class="form-item">
+					<%= format_errors_for s.object, :sex %>
+					<div class="title">Your friend is a</div>
+					<div class="mj-merged-choices hybrid-input">
+						<label>
+							<%= s.radio_button :sex, "male" %>
+							<div class="person">
+								<div class="img"><img src="/images/icons/guy.png" /></div>
+								<div class="title">Guy</div>
+							</div>
+						</label><label>
+							<%= s.radio_button :sex, "female" %>
+							<div class="person">
+								<div class="img"><img src="/images/icons/gal.png" /></div>
+								<div class="title">Girl</div>
+							</div>
+						</label>
+					</div>
+				</div>
+				<div class="form-item">
+					<%= format_errors_for s.object, :sex_preference %>
+					<div class="title">Looking for</div>
+					<div class="mj-merged-choices hybrid-input">
+						<label>
+							<%= s.radio_button :sex_preference, "female" %>
+							<div class="person">
+								<div class="img"><img src="/images/icons/gal.png" /></div>
+								<div class="title">Girls</div>
+							</div>
+						</label><label>
+							<%= s.radio_button :sex_preference, "both" %>
+							<div class="person">
+								<div class="img"><img src="/images/icons/person.png" /></div>
+								<div class="title">Both</div>
+							</div>
+						</label><label>
+							<%= s.radio_button :sex_preference, "male" %>
+							<div class="person">
+								<div class="img"><img src="/images/icons/guy.png" /></div>
+								<div class="title">Guys</div>
+							</div>
+						</label>
+					</div>
+				</div>
+			<% end %>
+			<% end %>
+			<div class="submit">
+				<div class="button">
+					<button type="submit" class="mj-button white">Add</button>
+				</div>
+			</div>
+		<% end %>
+	</div>
+</div>

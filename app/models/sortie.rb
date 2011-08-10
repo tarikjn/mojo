@@ -2,8 +2,10 @@
 class Sortie < ActiveRecord::Base
   include ActiveModelExtensions # Mojo's
   
-  belongs_to :host, :foreign_type => 'host_type', :polymorphic => true
-  belongs_to :guest, :foreign_type => 'guest_type', :polymorphic => true
+  belongs_to :host, :foreign_type => 'host_type', :polymorphic => true   # destroy dependent only if a Wing
+  belongs_to :guest, :foreign_type => 'guest_type', :polymorphic => true # destroy dependent only if a Wing
+  after_destroy :destroy_wing_dependent
+  
   belongs_to :place
   
   has_many :entries, :dependent => :destroy
@@ -12,7 +14,7 @@ class Sortie < ActiveRecord::Base
   
   # silent validations
   validates_inclusion_of :size, :in => [2, 4]
-  validates_inclusion_of :state, :in => %w(unconfirmed open canceled closed expired)
+  validates_inclusion_of :state, :in => %w(unconfirmed declined withdrawn open canceled closed expired)
   validates_inclusion_of :category, :in => %w(food_and_drinks entertainment outdoor)
   
   # validations with view feedback
@@ -32,6 +34,10 @@ class Sortie < ActiveRecord::Base
   scope :active, lambda { where('time < ? and time > ?', Time.now + 2.hours, Time.now - 1.hour) }
   scope :closed, where(:state => 'closed')
   scope :open, where(:state => 'open')
+  scope :unconfirmed, where(:state => 'unconfirmed')
+  
+  # IDEA: transform those: has_many lambda user IN has_many (through?) in user model?
+  #
   scope :hosted_by, lambda { |user|
     where('(size = 2 AND host_id = :user) OR (size = 4 AND host_id = :wings)',
       {:user => user.id, :wings => Wing.ids_with(user)})
@@ -80,6 +86,11 @@ class Sortie < ActiveRecord::Base
   }
   
   after_create :set_expiration, :send_to_followers
+  
+  def destroy_wing_dependent
+    self.host.destroy if self.host.is_a?(Wing)
+    self.guest.destroy if self.guest.is_a?(Wing)
+  end
   
   def validate_time
     if self.time < Time.now + 2.hours

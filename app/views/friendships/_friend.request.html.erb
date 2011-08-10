@@ -1,0 +1,32 @@
+<%= content_tag :li, :class => (['friend-request'] << ((list == :pending)? 'with_tasks':nil)) do %>
+	<div class="actions">
+		<%
+			if list == :pending
+		%>
+		<%= link_to "Approve", approve_user_friendships_path(friend.id), :class => ['mj-button', 'small', 'green'] %>
+		<%= link_to "Ignore", ignore_user_friendships_path(friend.id), :class => ['mj-button', 'small', 'red'] %>
+		<%
+			else
+		%>
+		<%= link_to "Withdraw", withdraw_user_friendships_path(friend.id), :class => ['mj-button', 'small', 'white'] %>
+		<%
+			end
+		%>
+	</div>
+	<div class="content full-width">
+		<div class="person partial">
+			<div class="box">
+				<div class="picture">
+					<% if friend.registered? %>
+						<%= image_tag friend.picture_url(:mini) %>
+					<% else %>
+						<%= image_tag "avatars/#{friend.sex}-46.png", :class => 'open' %>
+					<% end %>
+				</div>
+				<div class="title">
+					<div class="name"><%= friend.name %></div>
+				</div>
+			</div>
+		</div>
+	</div>
+<% end %>

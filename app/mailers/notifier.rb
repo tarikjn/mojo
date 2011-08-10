@@ -77,4 +77,35 @@ class Notifier < ActionMailer::Base
     mail to: user.email, subject: "#{host.name} just created a date!"
     
   end
+  
+  def friend_request(friendship)
+    
+    @user = friendship.user
+    @recipient = friendship.friend
+    
+    @friends_url = friendships_url
+    
+    mail to: @user.email, subject: "#{@user.name} sent you a wingmate request on Mojo"
+    
+  end
+  
+  def friend_invite(friendship, invitation)
+    
+    @user = friendship.user
+    @recipient = friendship.friend
+    
+    @signup_url = account_signup_url(invitation.token)
+    
+    mail to: @user.email, subject: "#{@user.name} invited you on Mojo"
+    
+  end
+  
+  def friend_approved(user, friend)
+    
+    @user = user
+    @friend = friend
+    
+    mail to: @user.email, subject: "#{@friend.name} approved your wingmate request"
+    
+  end
 end

@@ -1,7 +1,7 @@
 <div class="dates-layout">
 	<%= flash_messages %>
 	<div class="columns">
-		<div class="col-0">
+		<div class="box col-0">
 			<h3>Past</h3>
 			<%
 				if @past_sorties.size > 0
@@ -19,8 +19,8 @@
 				end
 			%>
 		</div>
-		<div class="col-1">
-			<h3>Upcoming</h3>
+		<div class="box col-1">
+			<h3>Confirmed</h3>
 			<%
 				if @upcoming_sorties.size > 0
 			%>
@@ -37,9 +37,9 @@
 				end
 			%>
 		</div>
-		<div class="col-2">
+		<div class="box col-2">
 			<div class="tabs">
-				<h3>Open <span class="count"><%= @open_sorties.size %></span></h3>
+				<h3>Hosted <span class="count"><%= @open_sorties.size %></span></h3>
 				<h3 class="inactive">Entered <span class="count"><%= @entered_sorties.size %></span></h3>
 			</div>
 			<%
