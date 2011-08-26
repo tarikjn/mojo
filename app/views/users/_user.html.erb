@@ -13,7 +13,11 @@
 	<%= content_tag :div, class: (['person', 'partial'] << (user.related?(current_user) ? 'relation':nil)) do %>
 		<div class="box">
 			<div class="picture">
-				<%= image_tag user.picture_url(:mini), title: user.first_name %>
+				<% if user.registered? %>
+					<%= image_tag user.picture_url(:mini), title: user.name %>
+				<% else %>
+					<%= image_tag "avatars/#{user.sex}-46.png", :class => 'open', title: user.name %>
+				<% end %>
 			</div>
 			<%
 				if kind == :match
@@ -31,7 +35,7 @@
 				else
 			%>
 			<div class="title">
-				<div class="name"><%= user.first_name %></div>
+				<div class="name"><%= user.name %></div>
 				<div class="type"><%= (kind == :host) ? "Host":"Guest" %></div>
 			</div>
 			<%
@@ -44,7 +48,7 @@
 					</div>
 			-->
 			<%
-				if kind == :match or !user.related?(current_user)
+				if kind == :match or (!user.related?(current_user) and user.registered?)
 			%>
 			<div class="profile">
 				<%= render partial: 'users/user.full', locals: {user: user} %>

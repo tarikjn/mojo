@@ -21,6 +21,10 @@
 		position: relative;
 		background: white;
 		
+		// makes sure name doesn't wrap
+		white-space: nowrap;
+		overflow: hidden;
+		
 		> .picture, > .title, > .compatibility {
 			display: inline-block;
 			vertical-align: middle;
@@ -39,6 +43,7 @@
 		}
 
 		> .title {
+			
 			.name {
 				font-size: 115%;
 				overflow: hidden;

@@ -1,0 +1,31 @@
+<!-- TODO: make into form helper -->
+<div class="mj-friend-selector">
+	<ul class="friendlist input-holder">
+		<li class="new" id="new-friend-button">
+			<%= link_to new_friendship_path do %>
+				<div class="symbol">＋</div>
+				<div class="caption">Add</div>
+			<% end %>
+		</li>
+		<% current_user.friends_and_pending.each do |friend| %>
+			<li>
+				<label>
+					<div class="radio">
+						<!-- entire form should be reload (validation off) to be more orthodox and use correct form variable -->
+						<%= radio_button_tag "sortie[wingmate]", friend.id, (friend.id == @preselect_friend) %>
+					</div>
+					<div class="pic48">
+						<!-- TODO: partial, helper or User.method -->
+						<% if friend.registered? %>
+							<%= image_tag friend.picture_url(:mini) %>
+						<% else %>
+							<%= image_tag "avatars/#{friend.sex}-46.png", :class => 'open' %>
+						<% end %>
+					</div>
+					<div class="name"><%= friend.name %></div>
+				</label>
+			</li>
+		<% end %>
+	</ul>
+	<!-- new form goes here -->
+</div>

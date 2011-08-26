@@ -57,7 +57,7 @@ class Friendship < ActiveRecord::Base
     end
   end
   
-  def self.active?
+  def active?
      %w(pending accepted).include?(state)
   end
   

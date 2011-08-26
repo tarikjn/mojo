@@ -6,6 +6,9 @@ class Sortie < ActiveRecord::Base
   belongs_to :guest, :foreign_type => 'guest_type', :polymorphic => true # destroy dependent only if a Wing
   after_destroy :destroy_wing_dependent
   
+  # not used to protect the host.lead attribute and be sure it's current_user
+  #accepts_nested_attributes_for :host
+  
   belongs_to :place
   
   has_many :entries, :dependent => :destroy
@@ -21,9 +24,12 @@ class Sortie < ActiveRecord::Base
   validates :title, :presence => true
   validates :place, :presence => true
   # also do that check when inviting a friend (check it goes in his/her schedule...)
-  validate :validate_time, :on => :create # add validation for update?
+  validates :time, :presence => true
+  validate :validate_time, :on => :create, :if => :time # add validation for update?
   
-  attr_accessor :location
+  # these attributes are used temporarly by the form/controller when creating the date
+  attr_accessor :location, :wingmate, :time_hourminutes, :time_date
+  before_validation :combine_time
   
   # GeoKit
   acts_as_mappable :through => :place
@@ -144,6 +150,41 @@ class Sortie < ActiveRecord::Base
     else
       nil
     end
+  end
+  
+  # doing the wingmate "getter/setter" in controller to acccess current_user
+  def wingmate=(friend_id)
+    self.host = Wing.new(
+      :lead => nil, # current_user is set in controller
+      :mate => User.find(friend_id)
+    )
+    self[:wingmate] = friend_id # ugly, I know, using it for the form
+  end
+  def wingmate
+    self[:wingmate]
+  end
+  
+  # TODO: use a Class with (1s), (2s)... ?
+  def time_hourminutes
+    hour = (self[:time_hourminutes] / 3600).to_i
+    minute = (self[:time_hourminutes] % 3600) / 60
+    
+    format "%.2d:%.2d", hour, minute if self[:time_hourminutes]
+  end
+  def time_hourminutes=(s)
+    # from TimeRange
+    e = s.split(/:/)
+    self[:time_hourminutes] = e[0].to_i.hours + e[1].to_i.minutes
+  end
+  def time_date
+    self[:time_date].strftime("%F") if self[:time_date]
+  end
+  def time_date=(s)
+    # from TimeRange
+    self[:time_date] = Date.parse(s)
+  end
+  def combine_time
+    self.time = self[:time_date] + self[:time_hourminutes] if self[:time_date] and self[:time_hourminutes]
   end
   
   def update_state

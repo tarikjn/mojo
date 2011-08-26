@@ -5,10 +5,18 @@ class ApplicationController < ActionController::Base
   
   # if Rails.env == 'staging' and params[:controller] == 'sms', require auth
   #before_filter :restricted_access
+  before_filter :browser_alert
   
   require 'pony'
 
 private
+
+  def browser_alert
+    
+    unless request.user_agent =~ /(safari|konqueror|khtml|webkit|chrome)/i
+      @show_browser_alert = true unless request.cookies['browser_alert'] == 'hide'
+    end
+  end
 
   def resolve_layout(layout_name)
       self.layout layout_name

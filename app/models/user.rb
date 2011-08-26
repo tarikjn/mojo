@@ -141,6 +141,10 @@ class User < ActiveRecord::Base
     direct_friends | inverse_friends
   end
   
+  def friends_and_pending
+    friends | requested_friends
+  end
+  
   def following?(followed)
     follows.find_by_followed_id(followed)
   end

@@ -1,3 +1,27 @@
+<div class="form-item optional"> 
+	<div class="title">With <span class="info">optional</span></div> 
+	<div class="hybrid-input host-mate-selector">
+		<div class="current-host">
+			<%= render :partial => 'users/user', :object => current_user, locals: {kind: :host} %>
+		</div>
+		<%= content_tag :div, :class => (['add-host'] << (s.object.wingmate ? 'inactive':nil)) do %>
+			<div class="box" id="add-host-button">Add a wingmate</div>
+		<% end %>
+		<% if s.object.wingmate %>
+		<div class="set-wingmate">
+			<%= s.hidden_field :wingmate %>
+			<%= render :partial => 'users/user', :object => s.object.host.mate, locals: {kind: :host} %>
+			<div class="remove" id="remove-wingmate">
+				<div class="symbol">✗</div>
+				<div class="caption">remove</div>
+			</div>
+		</div>
+		<% end %>
+	</div>
+	<div class="hybrid-input friend-selection">
+		<%= render :partial => 'friendships/friendlist.select' %>
+	</div>
+</div>
 <div class="form-item"> 
 	<div class="title">Category</div> 
 	<!-- TODO: fix to non-JS and arrows use, see: http://test.cita.illinois.edu/aria/radio/radio1.php --> 
@@ -20,10 +44,41 @@
 </div>
 <div class="form-item">
 	<%= format_errors_for s.object, :time %>
-	<div class="title">Time</div> 
-	<div class="hybrid-input">
-		<!-- AM/PM coming in Rails 3.1 -->
-		<%= s.datetime_select :time, {:start_time => Time.now + 2.hours, :minute_step => 15, :ampm => true, :discard_year => true} %>
+	<div class="title">Time</div>
+	<div class="hybrid-input mj-time-selector">
+			<div class="move-start">◀</div>
+			<div class="viewport input-holder">
+				<%
+					time_options = []
+					time_options_start = Date.today.to_time + 6.hours
+					0.upto (18*4) do |t|
+						time = time_options_start + (t * 15).minutes
+						time_options << [time.strftime("%I:%M%P"), time.strftime("%H:%M")]
+					end
+
+					start_time = Time.now + 2.hours
+					0.upto 14 do |d|
+						day = start_time.to_date + d.days
+				%>
+				<label class="day-box">
+					<div class="radio">
+						<%= s.radio_button :time_date, day.strftime("%F") %>
+					</div>
+					<%= content_tag :div, :class => (['day'] << (( [6, 7].include?(day.strftime("%u").to_i) )? 'weekend' : nil)) do %>
+						<div class="month"><%= day.strftime("%b") %></div>
+						<div class="weekday"><%= (d == 0)? "Today" : day.strftime("%a") %></div>
+						<div class="monthday"><%= day.strftime("%e") %></div>
+					<% end %>
+				</label>
+				<%
+					end
+				%>
+				<div class="time-selector">
+					<!-- TODO: restrict time from 6am to 12pm? -->
+					<%= s.select :time_hourminutes, time_options %>
+				</div>
+			</div>
+			<div class="move-end">▶</div>
 	</div>
 </div> 
 <div class="form-item">

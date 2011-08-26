@@ -474,6 +474,8 @@ a {
 		background: #F1FCFF;
 	}
 }
+// getSat monkeypatch
+a#fdbk_close:hover { background-color: transparent; }
 
 #head-content,
 #main-content,
@@ -1042,7 +1044,7 @@ h2, h3 {
 .signup-page {
 	margin: 50px 125px;
 }
-.signup-page form, .settings-block form, .form-page form {
+.signup-page form, .settings-block form, .form-page > form {
 	
 	position: relative;
 	
@@ -1066,7 +1068,7 @@ h2, h3 {
 		}
 	}
 	
-	.form-item {
+	> .form-item {
 		padding: 10px 15px;
 		position: relative;
 		
@@ -2701,7 +2703,7 @@ $map-length: 250px;
 
 				> textarea {
 					width: 400px;
-					height: 100px;
+					height: 4em; // was 100px (only affecting sorties?)
 				}
 			}
 			
@@ -3878,3 +3880,4 @@ h2 {
 @import 'follows';
 @import 'places';
 @import 'friendships';
+@import 'browser_alert';

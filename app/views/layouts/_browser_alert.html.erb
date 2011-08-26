@@ -1,0 +1,21 @@
+<div id="browser-alert">
+	<div class="message">⚠ Warning: your browser is currently not supported on Mojo.</div>
+	<div class="recommended">
+		<div class="title">Recommended browsers:</div>
+		<ul>
+			<li>
+				<%= link_to "http://www.google.com/chrome" do %>
+				<div class="icon"><%= image_tag "/images/browsers/chrome.png" %></div>
+				<div class="title">Chrome 10+</div>
+				<% end %>
+			</li>
+			<li>
+				<%= link_to "http://www.apple.com/safari/download/" do %>
+				<div class="icon"><%= image_tag "/images/browsers/safari.png" %></div>
+				<div class="title">Safari 5+</div>
+				<% end %>
+			</li>
+		</ul>
+	</div>
+	<div id="close-browser-alert">Discard this ✕</div>
+</div>

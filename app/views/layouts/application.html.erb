@@ -23,6 +23,7 @@
 	<%= javascript_include_tag 'places' %>
 	<%= javascript_include_tag 'follows' %>
 	<%= javascript_include_tag 'friendships' %>
+	<%= javascript_include_tag 'browser_alert' %>
 	<%= javascript_include_tag 'mtaTwitterStatuses' %>
 	
 	<!-- Typekit -->
@@ -39,6 +40,7 @@
 	<meta name="geo.country" content="US" />
 </head>
 <body>
+	<%= render :partial => 'layouts/browser_alert' if @show_browser_alert %>
 	<div id="head-content">
 		<div class="auto-margin-cell">
 			<div id="logo-wrapper"><a href="/">Mojo</a></div>
@@ -55,5 +57,6 @@
 			<%= render :partial => 'layouts/footer_links' %>
 		</div>
 	</div>
+	<%= render :partial => 'layouts/feedback' %>
 </body>
 </html>

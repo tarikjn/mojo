@@ -12,14 +12,22 @@ class SortiesController < ApplicationController
   
   def new
     @sortie = Sortie.new
-    @sortie.time = Time.now + 2.days # make it work with time zones
+    @sortie.time_hourminutes = "15:00" # make it work with time zones
   end
   
   def create
     @sortie = Sortie.new(params[:sortie])
-    @sortie.host = current_user
-    @sortie.state = 'open'
+    if (@sortie.host.is_a? Wing)
+      # it's a double date
+      @sortie.host.lead = current_user
+      @sortie.state = 'unconfirmed' # set in before_create?
+    else
+      # it's a single date
+      @sortie.host = current_user
+      @sortie.state = 'open'
+    end
 
+    # => before create, set state = unconfirmed if host is a wing
     if @sortie.save
       redirect_to(dates_url, :notice => 'Your date was successfully created!')
     else

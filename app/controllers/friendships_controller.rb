@@ -7,18 +7,18 @@ class FriendshipsController < ApplicationController
     # move to a sortie controller method?
     @received_sortie_requests = current_user.mate_host_sorties.unconfirmed
     @sent_sortie_requests = current_user.lead_host_sorties.unconfirmed
+  end
+
+  def new
+    # this one is called through AJAX (link_to_remote style)
     
     @friendship = Friendship.new
     #@friendship.user = current_user
     @friendship.friend = User.new # if not found by email
     @friendship.friend.state = 'invitation'
-  end
-
-  def new
-    @friendship = Friendship.new
-    #@friendship.user = current_user
-    @friendship.friend = User.new # if not found by email
-    @friendship.friend.state = 'invitation'
+    @friendship
+    
+    render :layout => !request.xhr?
   end
 
   def create
@@ -41,12 +41,17 @@ class FriendshipsController < ApplicationController
         Notifier.friend_invite(@friendship, @friendship.invitation).deliver
       end
       
+      # for friendlist redisplay
+      @preselect_friend = @friendship.friend.id
+      
       flash[:notice] = "You successfully added your friend!"
       with_format('html') do
         render :json => {
           :action => 'redirect', # any of redirect, block
-          :redirect_path => url_for(:action => :index)
+          :redirect_path => url_for(:action => :index),
           # return new friendlist for sorties
+          # don't generate code otherwise: use Backbone.js?
+          :new_friendlist => render_to_string(:partial => 'friendlist.select', :layout => false)
         }
       end
       

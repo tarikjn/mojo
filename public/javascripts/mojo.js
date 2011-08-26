@@ -835,7 +835,7 @@ var LiveInit = {
 	mapResultsOnly: function(c) {
 		
 		// apply "selected" class to label when switching radio
-		$(c).find(".mj-choice, .mj-merged-choices, .mj-operation-choices, .mj-micro-select, .mj-place").find("input[type=radio]")
+		$(c).find(".mj-choice, .mj-merged-choices, .mj-operation-choices, .mj-micro-select, .mj-place, .mj-friend-selector, .mj-time-selector").find("input[type=radio]")
 			.change(Lib.applySelected).filter(":checked").each(Lib.applySelected);
 	},
 	all: function(c) {
@@ -1112,7 +1112,7 @@ $(function() {
 			var matches = this.href.match(/\?v=(.+)$/);
 			var video_id = matches[1];
 			
-			popup.append('<iframe width="640" height="390" src="http://www.youtube.com/embed/'+video_id+'?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>');
+			popup.append('<iframe width="640" height="390" src="http://www.youtube.com/embed/'+video_id+'?rel=0&amp;autoplay=1&amp;hd=1" frameborder="0" allowfullscreen></iframe>');
 			popup.css( {marginLeft: -popup.width() / 2, marginTop: -popup.height() / 2} );
 		}
 		else {
