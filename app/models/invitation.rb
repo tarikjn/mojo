@@ -2,9 +2,9 @@ class Invitation < ActiveRecord::Base
   belongs_to :source, :polymorphic => true # User or Friendship
   has_one :recipient, :class_name => 'User'
   
-  #validates :recipient_email, :presence => true
+  validates :recipient_email, :presence => true
   validates :token, :uniqueness => true # TODO: auto-regenerate if exists...
-  validate :recipient_is_not_registered
+  #validate :recipient_is_not_registered
   validate :sender_has_invitations, :if => :sender
   
   before_create :generate_token
