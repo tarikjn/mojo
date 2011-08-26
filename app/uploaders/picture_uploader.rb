@@ -2,6 +2,10 @@
 
 class PictureUploader < CarrierWave::Uploader::Base
 
+  def default_url 
+    "/images/fallback/" + [version_name, "default.png"].compact.join('_') 
+  end
+
   # Include RMagick or ImageScience support:
   include CarrierWave::MiniMagick
   # include CarrierWave::ImageScience

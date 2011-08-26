@@ -73,7 +73,7 @@ class User < ActiveRecord::Base
   validates :first_name, :presence => true, :if => :active?
   validate :validate_age # if dob is set
   # picture fails with marshaling (stepflow issue)
-  validates :picture, :presence => true, :if => :active?
+  #validates :picture, :presence => true, :if => :active?
   validates :cellphone, :presence => true, :format => {:with => /^(\+\d{1,3})?[-. ]?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/}, :if => :active?
   validates :sex, :inclusion => { :in => %w(male female), :message => "Please select" }
   validates :sex_preference, :inclusion => { :in => %w(female both male), :message => "Please select" }
