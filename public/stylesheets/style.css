@@ -3642,8 +3642,7 @@ form .rating-input {
     padding: 3px;
     position: relative;
     background: white;
-    white-space: nowrap;
-    overflow: hidden; }
+    white-space: nowrap; }
     .person.partial > .box > .picture, .person.partial > .box > .title, .person.partial > .box > .compatibility {
       display: inline-block;
       vertical-align: middle; }

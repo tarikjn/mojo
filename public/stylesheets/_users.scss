@@ -23,7 +23,7 @@
 		
 		// makes sure name doesn't wrap
 		white-space: nowrap;
-		overflow: hidden;
+		//overflow: hidden; // nop, breaks the profile hover
 		
 		> .picture, > .title, > .compatibility {
 			display: inline-block;
