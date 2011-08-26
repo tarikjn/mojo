@@ -34,7 +34,7 @@ class Invitation < ActiveRecord::Base
     if !match
       errors.add :token, 'not found'
       return false
-    elsif User.registered.find_by_invitation_id(match)
+    elsif false #User.registered.find_by_invitation_id(match)
       errors.add :token, 'already used'
       return false
     end
