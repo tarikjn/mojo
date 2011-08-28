@@ -42,4 +42,13 @@ namespace :maintenance do
     end
     
   end
+  
+  task :reset_invitations => :environment do
+    
+    User.all.each do |u|
+      u.invitations_left = 10 if (!u.invitations_left.nil? and u.invitations_left < 10)
+      u.save
+    end
+    
+  end
 end

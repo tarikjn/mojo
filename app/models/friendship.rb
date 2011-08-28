@@ -10,8 +10,9 @@ class Friendship < ActiveRecord::Base
   # validate that a user is already your friend?
   validates :state, :inclusion => { :in => %w(pending withdrawn approved ignored removed) }
   validate :validate_non_existing
+  validate :not_self
   
-  before_create :create_invitation
+  before_validation :create_invitation
   
   # static
   def self.is_active_friendship?(user, friend)
@@ -63,15 +64,19 @@ class Friendship < ActiveRecord::Base
   
 private
   
+  def not_self
+    self.errors.add :email, "you cannot add yourself!" if self.user == self.friend
+  end
+  
   def validate_non_existing
     if new_record?
-      errors.add :dob, "you already have a friend request or are already friend with this user" if Friendship.is_active_friendship?(self.user, self.friend)
+      self.errors.add :email, "you already have a friend request or are already friend with this user" if Friendship.is_active_friendship?(self.user, self.friend)
     end
   end
   
   def create_invitation
     
-    if !self.friend.registered?
+    if self.friend.unregistered?
       invite = Invitation.new(:recipient_email => self.friend.email)
       invite.source = self # the Friendship object
       self.invitation = invite

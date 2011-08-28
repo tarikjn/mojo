@@ -21,13 +21,15 @@ class FriendshipsController < ApplicationController
     render :layout => !request.xhr?
   end
 
-  def create
+  def create # this action needs some serious clean-up
     @friendship = Friendship.new(params[:friendship])
     @friendship.user = current_user
     
     # can the friend be found by email? (registered or simply already invited)
     if friend_result = User.find_by_email(@friendship.friend.email)
       @friendship.friend = friend_result
+    else
+      @friendship.friend.state = 'invitation' # TODO: add create_user_invite method to avoid repetitions
     end
     
     if @friendship.save
@@ -37,6 +39,7 @@ class FriendshipsController < ApplicationController
         # email friend added notice
         Notifier.friend_request(@friendship).deliver
       else
+        Logger.new(STDOUT).info(@friendship.invitation.inspect)
         # send friend's invitation, invitation was automatically created by model
         Notifier.friend_invite(@friendship, @friendship.invitation).deliver
       end
@@ -56,7 +59,15 @@ class FriendshipsController < ApplicationController
       end
       
     else
-      Logger.new(STDOUT).info(@friendship.errors.inspect)
+      # preserve original input / avoid update on friend
+      # kind of fixes: user id in input after error
+      # this removes errors
+      @friendship.friend = User.new(:email => @friendship.friend.email, :state => 'invitation') unless @friendship.friend.new_record?
+      
+      #Logger.new(STDOUT).info(@friendship.errors.inspect)
+      #Logger.new(STDOUT).info(@friendship.invitation.errors.inspect)
+      #Logger.new(STDOUT).info(@friendship.errors.full_messages.inspect)
+      
       
       with_format('html') do
         render :json => {

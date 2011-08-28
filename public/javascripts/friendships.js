@@ -43,9 +43,13 @@ var Friendship = {
 	},
 	init: function(el) {
 		$(el).submit(function() {
+			
+			// cancel if an action is already loading
+			if ($(this).find(".submit .button button").is(":disabled"))
+				return false;
 
 			// show it's loading
-			$(this).find(".submit .button").addClass("loading");
+			$(this).find(".submit .button").addClass("loading").find("button").prop("disabled", true);
 
 			// ajax the form
 			$.post(this.action, $(this).serialize(), function(r) {
@@ -68,8 +72,7 @@ var Friendship = {
 					var friendlist = $(el).parents(".hybrid-input.friend-selection:eq(0)");
 					
 					if (friendlist.length == 0) {
-						console.log(friendlist);
-						//window.location = r.redirect_path;
+						window.location = r.redirect_path;
 					}
 					else
 					{

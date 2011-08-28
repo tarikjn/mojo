@@ -5,13 +5,17 @@
 			<%= f.fields_for :friend do |s| %>
 			<%= s.hidden_field :state %>
 			<div class="form-item">
+				<!-- TODO: clean-up -->
+				<%= format_errors_for f.object.invitation, :base if f.object.invitation %>
+				<%= format_errors_for f.object, :email %> <!-- fake field -->
 				<%= format_errors_for s.object, :email %>
 				<div class="title">Email</div>
 				<div class="hybrid-input">
 					<%= s.email_field :email %>
 				</div>
 			</div>
-			<%= content_tag :div, :class => (s.object.errors.count > 0  and s.object.errors[:email].length == 0)? nil : "hidden" do %>
+			<!-- not looking at f.object.errors[:email]?? -->
+			<%= content_tag :div, :class => (s.object.errors.count > 0  and s.object.errors[:email].length == 0 and f.object.errors[:invitation].length == 0)? nil : "hidden" do %>
 				<div class="form-item">
 					<%= format_errors_for s.object, :sex %>
 					<div class="title">Your friend is a</div>

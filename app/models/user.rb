@@ -69,11 +69,11 @@ class User < ActiveRecord::Base
   # add state machine for stepflow/discovery state (object not saved)
   validates :state, :inclusion => { :in => %w(invitation active blocked) }
   validates :level, :inclusion => { :in => %w(user admin) }
-  validates :email, :presence => true, :uniqueness => true, :email => true
+  validates :email, :presence => true, :uniqueness => { :case_sensitive => false }, :email => true
   validates :first_name, :presence => true, :if => :active?
   validate :validate_age # if dob is set
   # picture fails with marshaling (stepflow issue)
-  #validates :picture, :presence => true, :if => :active?
+  validates :picture, :presence => true, :if => :active?
   validates :cellphone, :presence => true, :format => {:with => /^(\+\d{1,3})?[-. ]?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/}, :if => :active?
   validates :sex, :inclusion => { :in => %w(male female), :message => "Please select" }
   validates :sex_preference, :inclusion => { :in => %w(female both male), :message => "Please select" }
@@ -108,7 +108,7 @@ class User < ActiveRecord::Base
   
   
   # invitations
-  validates :invitation_id, :presence => {:message => 'is required'}, :if => :active?
+  validates :invitation_id, :presence => {:message => 'is required'}, :uniqueness => true, :if => :active?
   # todo if an invitation user exists, load that user/update...
   has_many :sent_invitations, :class_name => 'Invitation', :foreign_key => 'sender_id'
   belongs_to :invitation
@@ -122,6 +122,11 @@ class User < ActiveRecord::Base
   after_create :add_email_to_list, :if => lambda { |u| u.registered? }
   after_update :add_email_to_list, :if => lambda { |u| u.state_changed? and u.state_was == 'invitation' and u.state == 'active' }
   after_update :clear_foodia, :update_email_in_list, :unless => :state_changed?
+
+  # email normalization
+  def email=(umail)
+    write_attribute(:email, umail.downcase) 
+  end
 
   # move to EventMachine
   # TODO: make it work with invites/requests system

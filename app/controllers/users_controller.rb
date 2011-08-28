@@ -22,7 +22,7 @@ class UsersController < ApplicationController
   def create
     
     # works by either create (normal signup/raw invitation) or update (invitation with request(s))
-    if @user = User.find_by_email(params[:user][:email])
+    if @user = User.unregistered.find_by_email(params[:user][:email].downcase)
       @user.attributes = params[:user]
     else
       @user = User.new(params[:user])

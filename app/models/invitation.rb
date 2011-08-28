@@ -4,7 +4,7 @@ class Invitation < ActiveRecord::Base
   
   validates :recipient_email, :presence => true
   validates :token, :uniqueness => true # TODO: auto-regenerate if exists...
-  #validate :recipient_is_not_registered
+  validate :recipient_is_not_registered
   validate :sender_has_invitations, :if => :sender
   
   before_create :generate_token
@@ -16,7 +16,7 @@ class Invitation < ActiveRecord::Base
     invite = Invitation.find_by_token(token)
     if invite
       # and it's not associated to any registred user
-      if false #User.registered.find_by_invitation_id(invite)
+      if User.registered.find_by_invitation_id(invite)
         false
       else
         true
@@ -34,7 +34,7 @@ class Invitation < ActiveRecord::Base
     if !match
       errors.add :token, 'not found'
       return false
-    elsif false #User.registered.find_by_invitation_id(match)
+    elsif User.registered.find_by_invitation_id(match)
       errors.add :token, 'already used'
       return false
     end
@@ -46,6 +46,10 @@ class Invitation < ActiveRecord::Base
     self.source.is_a?(User) ? self.source : self.source.user
   end
   
+  def recipient_email=(umail) 
+    write_attribute(:recipient_email, umail.downcase) 
+  end
+  
 private
   
   def recipient_is_not_registered
@@ -54,7 +58,7 @@ private
 
   def sender_has_invitations
     unless sender.invitations_left.nil? or sender.invitations_left > 0
-      errors.add_to_base 'You have reached your limit of invitations to send.'
+      errors.add :base, 'You have reached your limit of invitations to send.'
     end
   end
 
@@ -63,6 +67,6 @@ private
   end
 
   def decrement_sender_count
-    sender.decrement! :invitations_left if !sender.invitations_left.nil?
+    sender.decrement! :invitations_left unless sender.invitations_left.nil?
   end
 end

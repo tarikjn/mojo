@@ -1,0 +1,12 @@
+namespace :migrations do
+  task :normalize_emails => :environment do
+    
+    User.all.each do |u|
+      u.email.downcase!
+      u.save
+    end
+    
+    puts "done!"
+    
+  end
+end
