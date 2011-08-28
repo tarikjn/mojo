@@ -16,7 +16,7 @@ class Friendship < ActiveRecord::Base
   
   # static
   def self.is_active_friendship?(user, friend)
-    Friendship.where("((user_id = :user AND friend_id = :friend) OR (user_id = :friend AND friend_id = :user)) AND state IN (:state)", {:user => user.id, :friend => friend.id, :state => %w(pending accepted)}).count > 0
+    Friendship.where("((user_id = :user AND friend_id = :friend) OR (user_id = :friend AND friend_id = :user)) AND state IN (:state)", {:user => user.id, :friend => friend.id, :state => %w(pending approved)}).count > 0
   end
   
   def self.withdraw(user, friend)
@@ -50,7 +50,7 @@ class Friendship < ActiveRecord::Base
   
   def self.delete(user, friend)
     # user/friend order works both ways
-    if friendship = Friendship.where("((user_id = :user AND friend_id = :friend) OR (user_id = :friend AND friend_id = :user)) AND state = :state", {:user => user.id, :friend => friend.id, :state => 'accepted'}).first
+    if friendship = Friendship.where("((user_id = :user AND friend_id = :friend) OR (user_id = :friend AND friend_id = :user)) AND state = :state", {:user => user.id, :friend => friend.id, :state => 'approved'}).first
       friendship.state = 'deleted'
       friendship.save
     else
@@ -59,7 +59,7 @@ class Friendship < ActiveRecord::Base
   end
   
   def active?
-     %w(pending accepted).include?(state)
+     %w(pending approved).include?(state)
   end
   
 private
