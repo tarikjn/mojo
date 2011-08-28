@@ -6,13 +6,13 @@ class Friendship < ActiveRecord::Base
   
   accepts_nested_attributes_for :friend
   validates_associated :friend, :invitation, :on => :create
+  before_validation :create_invitation, :on => :create
   
   # validate that a user is already your friend?
   validates :state, :inclusion => { :in => %w(pending withdrawn approved ignored removed) }
   validate :validate_non_existing
   validate :not_self
   
-  before_validation :create_invitation
   
   # static
   def self.is_active_friendship?(user, friend)
@@ -40,7 +40,7 @@ class Friendship < ActiveRecord::Base
   
   def self.ignore(user, friend)
     # user/friend order is reversed
-    if friendship = Friendship.where(:user_id => 2, :friend_id => 15, :state => 'pending').first
+    if friendship = Friendship.where(:user_id => friend.id, :friend_id => user.id, :state => 'pending').first
       friendship.state = 'ignored'
       friendship.save
     else
