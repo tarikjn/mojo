@@ -3,7 +3,7 @@ namespace :migrations do
     
     User.all.each do |u|
       u.email.downcase!
-      u.save
+      u.save :validate => false
     end
     
     puts "done!"
