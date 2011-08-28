@@ -115,6 +115,7 @@ class User < ActiveRecord::Base
   
   # scopes
   scope :registered, :conditions => ["state != ?", 'invitation']
+  scope :unregistered, :conditions => ["state = ?", 'invitation']
   scope :match_for, lambda { |user|
     where(:sex_preference => user.sex, :sex => user.sex_preference).join(:hosted_sorties)
   }
