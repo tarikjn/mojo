@@ -35,7 +35,7 @@
 			<div class="month"><%= sortie.time.strftime("%b") %></div>
 			<div class="day"><%= sortie.time.mday %></div>
 		</div>
-		<img src="/images/icons/date-<%= sortie.category %>-micro.png" alt="" class="category-icon" />
+		<img src="/assets/icons/date-<%= sortie.category %>-micro.png" alt="" class="category-icon" />
 		<div class="info">
 			<div class="title"><%= sortie.title %></div>
 			<div class="time-and-area"><%= sortie.time.strftime("%l:%M%p").downcase %>, <%= sortie.place_for(current_user) %></div>

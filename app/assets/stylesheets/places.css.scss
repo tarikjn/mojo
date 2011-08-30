@@ -1,3 +1,5 @@
+@import "global";
+
 .mj-location-input {
 	position: relative;
 	background: transparent;
@@ -31,7 +33,7 @@
 			.state { font-size: .85em; }
 
 			min-height: 27px;
-			background: url(/images/markers/location-selected.png) no-repeat 5px center;
+			background: url(/assets/markers/location-selected.png) no-repeat 5px center;
 			vertical-align: middle;
 			font-size: .85em;
 
@@ -66,7 +68,7 @@
 				font-size: .75em;
 				border-radius: 12px;
 				padding: 2px 2px 2px 19px;
-				background: url(/images/icons/search.png) 4px center no-repeat white;
+				background: url(/assets/icons/search.png) 4px center no-repeat white;
 				
 				&.tip {
 					color: gray;
@@ -144,7 +146,7 @@
 					padding-left: $p; padding-right: $p;
 					height: 33px;
 					
-					background: url(/images/icons/search.png) no-repeat center center, -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
+					background: url(/assets/icons/search.png) no-repeat center center, -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
 					box-shadow: none;
 					
 					border-top-left-radius: 0;
@@ -152,8 +154,8 @@
 					
 					color: transparent !important;
 					
-					&:hover  { background: url(/images/icons/search.png) no-repeat center center, -webkit-gradient(linear, left top, left bottom, from(#fff), to(#dcdcdc)); }
-					&:active { background: url(/images/icons/search.png) no-repeat center center, -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff)); }
+					&:hover  { background: url(/assets/icons/search.png) no-repeat center center, -webkit-gradient(linear, left top, left bottom, from(#fff), to(#dcdcdc)); }
+					&:active { background: url(/assets/icons/search.png) no-repeat center center, -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff)); }
 				}
 			}
 		}

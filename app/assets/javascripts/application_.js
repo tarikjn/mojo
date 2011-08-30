@@ -1,3 +1,5 @@
+// TODO: switch to Coffee
+
 // setup of accept format for Rails' respond_to format.js
 jQuery.ajaxSetup({
     'beforeSend': function(xhr) {

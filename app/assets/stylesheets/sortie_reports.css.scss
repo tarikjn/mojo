@@ -1,3 +1,5 @@
+@import "global";
+
 .sortie.object-view {
 	width: 250px;
 	.person {
@@ -137,10 +139,10 @@ form {
 			&:hover        { background-position: 0 -46px; }
 		}
 		&.affinity .rating-label {
-			background-image: url(/images/rating/affinity.png);
+			background-image: url(/assets/rating/affinity.png);
 		}
 		&.review .rating-label {
-			background-image: url(/images/rating/review.png);
+			background-image: url(/assets/rating/review.png);
 		}
 	}
 }
@@ -154,12 +156,12 @@ form {
 	z-index: 1;
 }
 .yui-skin-sam .yui-h-slider {
-    background: url(/images/slider/bg-fader.png) 5px -4px no-repeat;
+    background: url(/assets/slider/bg-fader.png) 5px -4px no-repeat;
     width: 217px;
     height: 20px;
 }
 .centered-slider .yui-skin-sam .yui-h-slider {
-	background-image: url(/images/slider/centered-bg.png);
+	background-image: url(/assets/slider/centered-bg.png);
 }
 
 .cc-slider {
@@ -180,7 +182,7 @@ form {
 	text-align: center;
 }
 .cc-slider-marks div.selected {
-	background: transparent url(/images/slider/selected-mark.png) center center no-repeat;
+	background: transparent url(/assets/slider/selected-mark.png) center center no-repeat;
 	font-weight: bold;
 	color: white;
 	font-size: larger;

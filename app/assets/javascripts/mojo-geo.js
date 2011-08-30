@@ -28,19 +28,19 @@ function Map(obj, activity_points) {
 	// marker images
 	that.marker_images = {
 		shadow: new google.maps.MarkerImage(
-			"/images/markers/location-selected_shadow.png",
+			"/assets/markers/location-selected_shadow.png",
 	        new google.maps.Size(30, 27),
 	        new google.maps.Point(0, 0),
 	        new google.maps.Point(8, 27)
 	    ),
 		unscoped: new google.maps.MarkerImage(
-			"/images/markers/location.png",
+			"/assets/markers/location.png",
 	        new google.maps.Size(16, 27),
 	        new google.maps.Point(0, 0),
 	        new google.maps.Point(8, 27)
 	    ),
 		scoped: new google.maps.MarkerImage(
-			"/images/markers/location-scoped.png",
+			"/assets/markers/location-scoped.png",
 	        new google.maps.Size(16, 27),
 	        new google.maps.Point(0, 0),
 	        new google.maps.Point(8, 27)
@@ -96,7 +96,7 @@ function Map(obj, activity_points) {
 			strokeWeight: 2
 		});
 		var cross = new google.maps.MarkerImage(
-			"/images/markers/range-center.png",
+			"/assets/markers/range-center.png",
 	        new google.maps.Size(11, 11),
 	        new google.maps.Point(0, 0),
 	        new google.maps.Point(5, 5)
@@ -126,7 +126,7 @@ function Map(obj, activity_points) {
 		};
 		
 	    var image = new google.maps.MarkerImage(
-			"/images/markers/location"+types[type]+".png",
+			"/assets/markers/location"+types[type]+".png",
 	        new google.maps.Size(16, 27),
 	        new google.maps.Point(0, 0),
 	        new google.maps.Point(8, 27)

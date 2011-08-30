@@ -1,10 +1,12 @@
+@import "global";
+
 .follow-action {
 	
 	display: inline-block;
 	width: 124px + 32px;
 	
 	&.loading {
-		background: url(/images/ajax-loading.gif) no-repeat center left;
+		background: url(/assets/ajax-loading.gif) no-repeat center left;
 	}
 	
 	a {

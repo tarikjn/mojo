@@ -1,3 +1,5 @@
+@import "global";
+
 .friendship-layout {
 	margin: 50px 0 100px;
 	
@@ -132,7 +134,7 @@ ul.friendlist {
 				
 			&.loading {
 				a { opacity: .25; }
-				background: url(/images/ajax-loading.gif) no-repeat center center;
+				background: url(/assets/ajax-loading.gif) no-repeat center center;
 			}
 			&.active a {
 				border-style: inset;
@@ -198,7 +200,7 @@ ul.friendlist {
 		width: 35px; height: 21px;
 		margin-top: - (21px);
 		margin-left: 20px;
-		background: url(/images/friendships/floatbox-top_arrow.png);
+		background: url(/assets/friendships/floatbox-top_arrow.png);
 	}	
 	
 	.box {
@@ -234,7 +236,7 @@ ul.friendlist {
 				width: 83px + 32px;
 
 				&.loading {
-					background: url(/images/ajax-loading.gif) no-repeat center left;
+					background: url(/assets/ajax-loading.gif) no-repeat center left;
 				}
 			}
 		}

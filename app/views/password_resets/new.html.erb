@@ -3,7 +3,7 @@
 	<h2>Forgot your password?</h2>
 	<p>Enter your email below and instructions to reset your password will be emailed to you:</p>
 	<div class="box">
-		<% form_tag password_resets_path do %>
+		<%= form_tag password_resets_path do %>
 			<% if @single_error %>
 				<div class="errors"><ul><li><%= @single_error %></li></ul></div>
 			<% end %>
