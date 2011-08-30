@@ -25,7 +25,7 @@ Mojo::Application.routes.draw do
     get "/settings/:account_section" => :edit, :as => :edit
     get "/profile" => :profile
     
-    get "/signup/:invitation_token" => :signup, :as => "signup"
+    get "/signup(/:invitation_token)" => :signup, :as => "signup"
     post "/signup/:invitation_token" => :create
     
     get "/" => :index

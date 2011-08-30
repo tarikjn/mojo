@@ -361,6 +361,7 @@ class User < ActiveRecord::Base
   end
   
   def friend_tasks_count
+    # sortie need to be 'expired' by async task for the counter to be right
     self.pending_friends.size + self.mate_host_sorties.unconfirmed.size
   end
   

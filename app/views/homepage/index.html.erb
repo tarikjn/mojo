@@ -53,6 +53,9 @@
 	<div class="tagline">Stop <em>browsing</em>, start <em>dating</em>.</div>
 	<div class="call-to-action">
 		<div class="form">
+			<%
+				if current_user
+			%>
 			<div class="message">Howdy! Get started:</div>
 			<div class="grouping">
 				<div class="user">
@@ -68,6 +71,19 @@
 					</div>
 				</div>
 			</div>
+			<%
+				else
+			%>
+			<div class="invite-message">Mojo is in private beta in San Francisco only.</div>
+			<div class="invite-form">
+				Sign-up for an invite:
+			</div>
+			<div class="sign-on">
+				Already have an invite code? <%= link_to  "Sign up", account_signup_path, :class => "mj-button mojo" %>
+			</div>
+			<%
+				end
+			%>
 		</div>
 	</div>
 </div>

@@ -1,9 +1,8 @@
-Hello!,
+Howdy!
 
 <%= @user.name %> invited you to Mojo and wants you to be <%= @user.possessive %> wingmate, you can sign-up on: <%= @signup_url %>
 After signing-up, you will be able to approve or ignore <%= @user.possessive %> request.
 
-Best,
+Mojo is currently in closed beta and limited to San Francisco only.
 
-The Mojo Team 
-http://mojo.co
+<%= render :partial => 'signature' %>

@@ -46,4 +46,9 @@ Mojo::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+  
+  # ActionMailer settings
+  config.action_mailer.default_url_options = { :host => "staging.mojo.co" }
+  
+  config.action_controller.cache_store = :dalli_store
 end
