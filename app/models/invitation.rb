@@ -16,6 +16,7 @@ class Invitation < ActiveRecord::Base
     invite = Invitation.find_by_token(token)
     if invite
       # and it's not associated to any registred user
+      # WHY registered?
       if User.registered.find_by_invitation_id(invite)
         false
       else

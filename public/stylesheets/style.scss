@@ -1068,7 +1068,7 @@ h2, h3 {
 		}
 	}
 	
-	> .form-item {
+	> .form-item, > div > .form-item, > div > div > .form-item {
 		padding: 10px 15px;
 		position: relative;
 		
