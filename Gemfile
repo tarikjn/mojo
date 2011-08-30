@@ -25,6 +25,15 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
+
+# webserver must be explicit on new cedar stack
+# using thin for all environments with Procfile
+gem 'thin'
+
+# queue system (used for SMS notifications and date expiration)
+gem 'delayed_job'
+
+
 # Rails 3.1 - Heroku
 group :production, :staging do
   gem 'pg'
@@ -70,6 +79,3 @@ gem "pony"
 gem 'carrierwave'
 gem 'mini_magick'	# wrapper to system's ImageMagick
 gem 'fog'			# used to access s3
-
-# for SMS notifications
-gem 'delayed_job'
