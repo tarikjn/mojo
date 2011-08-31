@@ -64,7 +64,7 @@ private
   end
 
   def generate_token
-    self.token = ActiveSupport::SecureRandom.hex(4)
+    self.token = SecureRandom.hex(4)
   end
 
   def decrement_sender_count

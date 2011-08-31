@@ -54,12 +54,12 @@ staging:
   <<: *defaults
   bucket: media-staging.mojo.co
   CampaignMonitor:
-      <<: *CampaignMonitor
-      UserListID: b7e379ec11135f36e07fefdab03825e6
+    <<: *CampaignMonitor
+    UserListID: b7e379ec11135f36e07fefdab03825e6
 
 production:
   <<: *defaults
   bucket: media.mojo.co
   Twilio:
-        <<: *Twilio
-        CALLER_ID: (415) 728-0905 # for production only, incoming on http://mojo.co/sms.xml
+    <<: *Twilio
+    CALLER_ID: (415) 728-0905 # for production only, incoming on http://mojo.co/sms.xml

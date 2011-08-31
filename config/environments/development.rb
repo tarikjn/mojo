@@ -47,7 +47,7 @@ Mojo::Application.configure do
     :password             => "br8pRasw",
     :enable_starttls_auto => true
   }
-  config.action_mailer.default_url_options = { :host => "localhost:3000" }
+  config.action_mailer.default_url_options = { :host => "localhost:5000" }
   
   config.action_controller.cache_store = :file_store, 'tmp/cache'
 end
