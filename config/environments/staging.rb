@@ -12,6 +12,8 @@ Mojo::Application.configure do
   config.serve_static_assets = false
 
   # Compress JavaScripts and CSS
+  config.assets.js_compressor  = :uglifier
+  config.assets.css_compressor = :scss
   config.assets.compress = true
 
   # Specifies the header that your server uses for sending files
@@ -50,6 +52,15 @@ Mojo::Application.configure do
   config.active_support.deprecation = :notify
   
   # ActionMailer settings
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :address        => "smtp.sendgrid.net",
+    :port           => "25",
+    :authentication => :plain,
+    :user_name      => ENV['SENDGRID_USERNAME'],
+    :password       => ENV['SENDGRID_PASSWORD'],
+    :domain         => ENV['SENDGRID_DOMAIN']
+  }
   config.action_mailer.default_url_options = { :host => "staging.mojo.co" }
   
   # store for Heroku's memcached

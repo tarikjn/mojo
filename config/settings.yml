@@ -5,7 +5,7 @@ defaults: &defaults
       :client_credential_secret: 92_sq_DgnNeTiHF96upfP_KHlEI
       :token_credential_key:     Mm7BAz8uK0_a1LCYTOJDwWIaMkpuIUzc
       :token_credential_secret:  K0o42jJQL9HeeH2YUiRtpC3yFdc
-  Twilio:
+  Twilio: &Twilio
     # your Twilio authentication credentials
     ACCOUNT_SID: ACe04542bb0bb52dd68d5ed9e03b87ef99
     ACCOUNT_TOKEN: ce45261ee3ced1c7c3af8deb41fddf93
@@ -17,7 +17,7 @@ defaults: &defaults
     BASE_URL: http://staging.mojo.co/sms
 
     # Outgoing Caller ID you have previously validated with Twilio
-    CALLER_ID: (415) 236-3526
+    CALLER_ID: (415) 236-3526 # used for development outgoing and staging outgoing/incoming, incoming on http://staging.mojo.co/sms.xml
   s3:
     access_key_id: AKIAII5L2KWAARSQ2VHA
     secret_access_key: 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
@@ -28,13 +28,13 @@ defaults: &defaults
   CampaignMonitor: &CampaignMonitor
     APIKey: 8d91618b9b1e76f00886f14cff94ed51
     APIClientID: cc363600fe3afcc2ce53e8d6dc1e06d2
-    UserListID: 83d1738e8ac10d8395473a3788ebf4ff
-    SubscribersListID: fc5a863e5f5458e584f17375ba166c2e
+    UserListID: 83d1738e8ac10d8395473a3788ebf4ff        # production list
+    SubscribersListID: fc5a863e5f5458e584f17375ba166c2e # production list
   
 
 development:
   <<: *defaults
-  bucket: dev-media.mojo.co
+  bucket: media-development.mojo.co
   smtp:
     address: smtp.gmail.com
     port: 587
@@ -52,7 +52,14 @@ test:
 
 staging:
   <<: *defaults
-  bucket: media.mojo.co #media.mojo.co
+  bucket: media-staging.mojo.co
+  CampaignMonitor:
+      <<: *CampaignMonitor
+      UserListID: b7e379ec11135f36e07fefdab03825e6
 
 production:
   <<: *defaults
+  bucket: media.mojo.co
+  Twilio:
+        <<: *Twilio
+        CALLER_ID: (415) 728-0905 # for production only, incoming on http://mojo.co/sms.xml
