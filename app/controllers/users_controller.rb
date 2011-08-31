@@ -11,19 +11,33 @@ class UsersController < ApplicationController
   end
   
   def signup
-    # TODO find user(state=invitation) using email (friend/date invite was done)
-    @user = User.new(:invitation_token => params[:invitation_token])
-    @user.email = @user.invitation.recipient_email if @user.invitation
+    
+    # NOTE: assuming token is valid and required in this action
+    i = Invitation.find_by_token(params[:invitation_token])
+    
+    # load by email associated to invitation_token (friend/date invite was sent if found)
+    @user = User.new unless @user = User.unregistered.find_by_email(i.recipient_email)
+    
+    @user.invitation_token = i.token # or params[:invitation_token]
+    @user.email = @user.invitation.recipient_email if @user.invitation and @user.new_record?
     @user.state = 'active'
-    # TODO: load gender/preference if invitation source = Friendship
+    
+    # if the user choose to change his acocunt email he would still keep the friend requests
+    
     render :layout => 'application'
   end
   
   def create
     
     # works by either create (normal signup/raw invitation) or update (invitation with request(s))
-    if @user = User.unregistered.find_by_email(params[:user][:email].downcase)
+    
+    # load by ID first (may pause security issues, shoudl check it matches with original token.recipient)
+    if @user = User.unregistered.find(params[:user][:id])
       @user.attributes = params[:user]
+    # try by email in case the user is signing up on his own/using a plain invite
+    elsif @user = User.unregistered.find_by_email(params[:user][:email].downcase)
+      @user.attributes = params[:user]
+    # fresh new user, obviously
     else
       @user = User.new(params[:user])
     end

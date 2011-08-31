@@ -69,7 +69,10 @@ class User < ActiveRecord::Base
   # add state machine for stepflow/discovery state (object not saved)
   validates :state, :inclusion => { :in => %w(invitation active blocked) }
   validates :level, :inclusion => { :in => %w(user admin) }
+  
+  # TODO: should only check for uniqueness on registered users, to avoid conflicts at registration
   validates :email, :presence => true, :uniqueness => { :case_sensitive => false }, :email => true
+  
   validates :first_name, :presence => true, :if => :active?
   validate :validate_age # if dob is set
   # picture fails with marshaling (stepflow issue)

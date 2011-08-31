@@ -1,6 +1,7 @@
 <div class="signup-page">
 	<h2>Create your account</h2>
 	<%= form_for @user, :url => account_signup_path(@user.invitation_token), :html => { :class => ['form-inputs', 'column-titles'], :multipart => true } do |s| %>
+		<%= s.hidden_field :id %>
 		<%= s.hidden_field :invitation_token %>
 		<%= s.hidden_field :state %>
 		<div class="form-item">

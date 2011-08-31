@@ -25,8 +25,9 @@ Mojo::Application.routes.draw do
     get "/settings/:account_section" => :edit, :as => :edit
     get "/profile" => :profile
     
-    get "/signup(/:invitation_token)" => :signup, :as => "signup"
-    post "/signup(/:invitation_token)" => :create
+    get  "/signup(/:invitation_token)" => :signup, :as => "signup"
+    post "/signup(/:invitation_token)" => :create # if creating a new user from a plain invitation
+    put  "/signup(/:invitation_token)" => :create # from a friend invitation
     
     get "/" => :index
   end
