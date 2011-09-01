@@ -1,8 +1,11 @@
 class HomepageController < ApplicationController
   
-  #before_filter :require_user
+  skip_before_filter :browser_alert
   
   def index
+  end
+  
+  def team
   end
 
 end

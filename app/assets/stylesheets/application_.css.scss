@@ -103,10 +103,11 @@ a#uvTabLabel:hover { background-color: transparent; }
 }
 
 #head-content {
+	
+	padding-top: 8px; // changed from 9px?
+	
 	background: black;
 	color: white;
-
-	padding-top: 8px; // changed from 9px?
 	
 	.auto-margin-cell {
 		position: relative;
@@ -131,6 +132,34 @@ a#uvTabLabel:hover { background-color: transparent; }
 			top: 0; right: 0; bottom: 0; left: 0;
 			
 			&:hover { background: transparent; };
+		}
+	}
+	#beta-caption {
+		position: absolute;
+		top: -4px; left: 68px;
+		
+		font-size: 9pt;
+		color: #AAA;
+	}
+	
+	#blog-link {
+		position: absolute;
+		bottom: 0; left: 120px;
+		
+		//@include mjfont;
+		//font-size: 12pt;
+		font-size: .80em;
+		
+		a {
+			display: inline-block;
+			
+			padding: 8px 5px;
+			background-color: rgba(103, 163, 229, .5);
+			
+			@include thinfont;
+			color: $border-gray;
+			
+			&:hover { color: white; }
 		}
 	}
 	
@@ -337,7 +366,10 @@ a#uvTabLabel:hover { background-color: transparent; }
 	.footer-links {
 
 		//border-top: 1px solid $lighter-gray;
-
+		
+		// current page
+		li { color: $dark-gray; }
+		
 		a {
 
 			color: gray;
@@ -1947,7 +1979,7 @@ ul.location-list {
 	}
 }
 
-h2 {
+*:not(.team-block) > h2 {
 	margin-bottom: 0;
 	font-weight: normal;
 }

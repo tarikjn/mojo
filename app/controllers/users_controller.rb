@@ -38,7 +38,7 @@ class UsersController < ApplicationController
       # force user autologin when password has been auto-generated
       UserSession.create(@user) if !current_user
       
-      redirect_to friendships_url #root_url
+      redirect_to search_dates_url #userhome_url
     else
       #@user.clear_password! if @user.generated_password
       render :action => :signup, :layout => 'application'

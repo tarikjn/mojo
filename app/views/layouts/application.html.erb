@@ -26,7 +26,9 @@
 	<%= render :partial => 'layouts/browser_alert' if @show_browser_alert %>
 	<div id="head-content">
 		<div class="auto-margin-cell">
-			<div id="logo-wrapper"><a href="/">Mojo</a></div>
+			<div id="logo-wrapper"><%= link_to 'Mojo', root_path %></div>
+			<div id="beta-caption">βeta</div>
+			<div id="blog-link"><%= link_to 'blog', 'http://blog.mojo.co' %></div>
 			<%= render :partial => 'layouts/user_menu' %>
 		</div>
 	</div>

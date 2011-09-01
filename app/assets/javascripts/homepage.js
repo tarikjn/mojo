@@ -66,5 +66,17 @@ $(function() {
 	// homepage graphic animation
 	$("#landing .illustration").find(".layer-0, .layer-2").each(Animate.leftToRight);
 	
+	/*
+	 * team page stuff
+	 */
+	// int is 0, 1 or 2
+	var preselect = Math.floor(Math.random() * 3)
+	$(".team-block .member").eq(preselect).addClass("active");
+	// also randomize rotation?
 	
+	$(".team-block .member").mouseenter(function() {
+		//handlerIn
+		$(this).parent().children().removeClass("active");
+		$(this).addClass("active");
+	})
 });

@@ -10,7 +10,7 @@
 		</ul>
 	</div>
 	<div class="section">
-		<div class="title">Follow Us</div>
+		<div class="title">Follow</div>
 		<ul>
 			<!--<li><a href="http://blog.mojo.co">Blog</a></li>-->
 			<li><a href="http://twitter.com/mojo">Twitter</a></li>
@@ -18,10 +18,10 @@
 		</ul>
 	</div>
 	<div class="section">
-		<div class="title">Company</div>
+		<div class="title">About</div>
 		<ul>
 			<!--<li><a href="#">About Mojo</a></li>-->
-			<li><a href="http://mojo.co/team">Team</a></li>
+			<li><%= link_to_unless_current "Team", team_path %></li>
 			<!--<li><a href="http://mojo.co/jobs">Jobs</a></li>-->
 			<li><a href="mailto:hello@mojo.co">Contact</a></li>
 		</ul>

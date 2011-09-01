@@ -1,5 +1,11 @@
 @import 'global';
 
+@mixin transform($a) {
+	-webkit-transform: $a;
+	-o-transform: $a;
+	-moz-transform: $a;
+}
+
 #landing {
 	margin-bottom: 50px;
 	position: relative;
@@ -157,6 +163,64 @@
 				
 					.left { float: left; }
 					.right { float: right; }
+				}
+			}
+			
+			.guest {
+				
+				$color-bordure: rgba(255, 255, 255, .15);
+				
+				.beta {
+					
+					text-align: left;
+					
+					@include clear-after;
+					padding-bottom: 10px;
+					border-bottom: 2px solid $color-bordure;
+					
+					img {
+						float: left;
+						width: 60px; height: 60px;
+						@include rounded(8px);
+						margin-right: 15px;
+					}
+					.text {
+						@include mjfont;
+						font-size: 150%;
+					}
+				}
+				
+				.invite {
+					
+					margin: 10px 0;
+					
+					.title {
+						text-align: left;
+						@include mjfont;
+						//font-size: 110%;
+					}
+				}
+				
+				.sign-up {
+					
+					padding-top: 10px;
+					border-top: 2px dashed $color-bordure;
+					
+					@include mjfont;
+					
+					a {
+						padding: 2px 8px;
+						@include rounded;
+						
+						color: white;
+						//font-size: 110%;
+						
+						background: rgba(255, 255, 255, .25);
+
+						&:hover {
+							//background: transparent;
+						}
+					}
 				}
 			}
 			
@@ -321,3 +385,126 @@
 #mtaTwitter ul li.even { background-color: #EDEEFD; }
 #mtaTwitter ul li.first span { font-size: .9em; font-weight: normal; display: block; margin-top: 3pt; }
 #mtaTwitter ul li span { font-style: normal; font-family: Verdana, Arial, Helvetica, sans-serif; } // span is the time
+
+.team-block {
+	$zoom-x-offset: 30px; // (245px - 75%) / 2
+	$zoom-y-offset: 38px; // (302px - 75%) / 2
+	$spacing: 15px;
+	
+	margin: 0 50px 25px;
+	//height: 18px + 302px + 300px;
+	//padding-bottom: 300px;
+	
+	h2 {
+		//text-align: right;
+		 padding: 0 10px;
+	}
+	
+	.members {
+		position: relative;
+		
+		background-image: url(/assets/paper-shadow_partial.png);
+		background-repeat: no-repeat;
+		background-position: center (226px + 3 * $spacing);
+
+		padding: ($spacing * 2) 10px (300px - $zoom-y-offset);
+	}
+	
+	.member {
+		display: inline-block;
+		
+		width: 184px; //~75% of 245px
+		margin-right: $spacing;
+		
+		.picture {
+			
+			position: relative;
+			width: 215px;
+			
+			@include transform(scale(.75));
+			//@include transition(all 1s ease-in-out);
+			
+			margin-left: -$zoom-x-offset;
+			margin-top: -$zoom-y-offset;
+			
+			border: 15px solid white;
+			border-bottom-width: 10px;
+			padding-top: 228px; // image is a background...
+			@include boxshadow;
+			background: white no-repeat;
+			
+			text-align: center;
+			
+			.name, .role, .follow {
+				visibility: hidden;
+			}
+			
+			.name {
+				@include mjfont;
+				font-size: 1.35em;
+			}
+			.role {
+				color: gray;
+			}
+		}
+		&:nth-of-type(1) { .picture { @include transform(scale(.75) rotate(-1.8deg)); } }
+		&:nth-of-type(2) { .picture { @include transform(scale(.75) rotate(+2.0deg)); } }
+		&:nth-of-type(3) { .picture { @include transform(scale(.75) rotate(+0.5deg)); } }
+		
+		.follow {
+			display: none;
+			position: absolute;
+			
+			z-index: 100;
+			//top: 80px;
+			margin-left: 0;
+			margin-top: -75px;
+			//@include rotate(+3deg); // cancel rotate
+			 
+			a {
+				background: transparent;
+			}
+		}
+		
+		.bio {
+			
+			display: none;
+			
+			position: absolute;
+			bottom: 0; left: 0;
+			
+			width: 700px; //total: 800
+			height: 240px - $spacing; //total: 300 - $spacing
+			
+			padding: 30px 50px; // compensating for <p> margins
+			
+			@include thinfont;
+			
+			p {
+				text-align: justify;
+				color: #323232;
+				font-size: .95em;
+				line-height: 1.35em;
+				//font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+			}
+		}
+		
+		
+		&:hover, &.active {
+			.picture {
+				@include transform(scale(1) rotate(-3deg));
+				z-index: 10;
+				
+				.name, .role, .follow {
+					visibility: visible;
+				}
+			}
+			.follow {
+				display: block;
+			}
+			.bio {
+				display: block;
+			}
+		}
+	}
+}

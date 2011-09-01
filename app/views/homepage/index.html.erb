@@ -35,12 +35,17 @@
 			<%
 				else
 			%>
-			<div class="invite-message">Mojo is in private beta in San Francisco only.</div>
-			<div class="invite-form">
-				Sign-up for an invite:
-			</div>
-			<div class="sign-on">
-				Already have an invite code? <%= link_to  "Sign up", account_signup_path, :class => "mj-button mojo" %>
+			<div class="guest">
+				<div class="beta">
+					<%= image_tag '/assets/sf-beta.jpg' %>
+					<div class="text">Mojo is in private beta in San Francisco.</div>
+				</div>
+				<div class="invite">
+					<div class="title">Sign-up to receive an invite and know when we launch near you:</div>
+				</div>
+				<div class="sign-up">
+					Already have an invite code? <%= link_to  "Sign up", account_signup_path %>
+				</div>
 			</div>
 			<%
 				end
