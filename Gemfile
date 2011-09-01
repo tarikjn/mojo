@@ -40,6 +40,10 @@ group :production, :staging do
   gem 'dalli' # memcache on Heroku
 end
 
+group :development do
+  gem "rails3-generators"
+end
+
 group :test, :development do
   gem 'sqlite3'
 end
@@ -64,7 +68,6 @@ gem 'twiliolib'
 
 # authlogic (rails3)
 gem "authlogic"
-gem "rails3-generators"
 
 # used to access Yelp API
 gem "httparty"
