@@ -7,6 +7,10 @@ class UserSessionsController < ApplicationController
   end
   
   def create
+    
+    # remove whitespaces in login
+    params[:user_session][:email].strip!
+    
     @user_session = UserSession.new(params[:user_session])
      if @user_session.save
        flash[:notice] = "Login successful!"

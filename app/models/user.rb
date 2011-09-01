@@ -126,7 +126,7 @@ class User < ActiveRecord::Base
 
   # email normalization
   def email=(umail)
-    write_attribute(:email, umail.downcase) 
+    write_attribute(:email, umail.downcase.strip) 
   end
 
   # move to EventMachine

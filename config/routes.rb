@@ -12,9 +12,13 @@ Mojo::Application.routes.draw do
   get "places/search"
 
   # TODO: pretty up these urls (like subscribers)
-  resources :user_sessions
-  match 'login' => "user_sessions#new",      :as => :login
-  match 'logout' => "user_sessions#destroy", :as => :logout
+  #resources :user_sessions
+  #match 'signin' => "user_sessions#new",      :as => :login
+  #match 'signout' => "user_sessions#destroy", :as => :logout
+  
+  # sign-in/sign-out (user_session object)
+  resources :user_sessions, :only => [:new, :create], :path => 'sign-in', :path_names => { :new => '' }
+  get 'sign-out' => "user_sessions#destroy", :as => 'signout'
 
   # route bellow uses userhome_path(:action) as helper
   # match "/userhome(/:action)", :controller => :userhome, :as => "userhome"

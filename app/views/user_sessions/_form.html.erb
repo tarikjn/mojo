@@ -1,7 +1,7 @@
 <%= form_for session, :url => {:controller => "user_sessions", :action => "create"} do |f| %>
 	<div class="labeled-input">
 		<%= format_errors_for session, :email, {:title => 'Email'} %>
-	    <div><%= f.text_field :email, :size => nil %></div>
+	    <div><%= f.email_field :email, :size => nil %></div>
 		<%= f.label :email, 'Email' %>
 	</div>
 	<div class="labeled-input space">

@@ -48,7 +48,7 @@ class Invitation < ActiveRecord::Base
   end
   
   def recipient_email=(umail) 
-    write_attribute(:recipient_email, umail.downcase) 
+    write_attribute(:recipient_email, umail.downcase.strip) 
   end
   
 private
