@@ -1,42 +1,3 @@
-<!--<div id="top-frame">
-	<h2 class="tagline">Happy and dating.</h2>
-	<div class="start-stepflow">
-		<div class="quick-start">
-			<div class="opaque-layer"></div>
-			<div class="content-layer">
-				<div class="title">Schedule your date:</div>
-				<%#= form_tag stepflow_path, :method => :get do %>
-					<select name="stepflow[timerange](1s)">
-					<%
-						0.upto 7 do |d|
-							day = Date.today + d.days
-					%>
-						<option value="<%= day %>"><%= (d == 0)? "Today" : day.strftime("%a") %></option>
-					<%
-						end
-					%>
-					</select>
-					<select name="stepflow[timerange](2s)">
-						<option value="12:00-15:00">12-3 pm</option>
-						<option value="15:00-18:00">3-6 pm</option>
-						<option value="18:00-21:00" selected>6-9 pm</option>
-					</select>
-					<div class="submit">
-						<button type="submit" class="mojo">Get excited</button>
-					</div>
-				<%# end %>
-			</div>
-		</div>
-		<div class="nav-info">
-			<div class="numbers">
-				<div>1</div>
-				<div>2</div>
-				<div>3</div>
-			</div>	
-			<div class="caption">...in 2 minutes</div>
-		</div>
-	</div>
-</div>-->
 <div id="landing">
 	<div class="illustration">
 		<div class="layer-0" data-slide="1500"></div>
@@ -111,22 +72,22 @@
 <div id="testimonials">
 	<div class="block-left alternate-elements">
 		<div class="promo-block">
-			<img src="/assets/icons/timer.png" />
+			<img src="/assets/icons/testimonials/timer.png" />
 			<div class="title">Timely &amp; Actual</div>
 			<div class="text">We want you to spend as little time online as possible, and enjoy your time meeting people in the real world now. This is how we designed Mojo.</div>
 		</div>
 		<div class="promo-block" style="display: none;">
-			<img src="/assets/icons/gears.png" />
+			<img src="/assets/icons/testimonials/gears.png" />
 			<div class="title">Genuine &amp; Personal</div>
 			<div class="text">Mojo establishes your profile using progressive personality testing and feedback aggregation. The more you use it, the more you meet people like you.</div>
 		</div>
 		<div class="promo-block" style="display: none;">
-			<img src="/assets/icons/privacy.png" />
+			<img src="/assets/icons/testimonials/privacy.png" />
 			<div class="title">Less exposing</div>
 			<div class="text">Only those wanting to join your dates or hosting a date you are trying to join can find you on Mojo.</div>
 		</div>
 		<div class="promo-block" style="display: none;">
-			<img src="/assets/icons/key.png" />
+			<img src="/assets/icons/testimonials/key.png" />
 			<div class="title">Safer</div>
 			<div class="text">Not only are double-dates meant so you can bring your friends along, but you actually meet people without ever revealing your contact info or full name.</div>
 		</div>

@@ -598,38 +598,6 @@ function TimeRangeInput(obj)
 	initialize.call(obj);
 };
 
-// class for testimonial fadein/out roller
-var AlternateElement = {
-	active: 0,
-	next: 1,
-	size: 4,
-	blocks: undefined,
-	animTime: 500,
-	rollTime: 7500,
-	
-	initialize: function(block) {
-		AlternateElement.blocks = $(block).children().toArray();
-		
-		// not using abort (return)
-		// NOTE: lead time is 5s, 4s after
-		// TODO: pause on mouseover
-		setInterval(AlternateElement.roll, AlternateElement.rollTime);
-	},
-	roll: function()
-	{
-		var active = AlternateElement.active;
-		var size = AlternateElement.size;
-		var animTime = AlternateElement.animTime;
-		
-		//animation
-		$(AlternateElement.blocks[active]).fadeOut(animTime, function() {
-			$(AlternateElement.blocks[AlternateElement.next]).fadeIn(animTime);
-			AlternateElement.active = ++active % size;
-			AlternateElement.next = (active + 1) % size;
-		});
-	}
-}
-
 var Flash = {
 	timing: 50,
 	set: function(id) {
@@ -1066,42 +1034,6 @@ $(function() {
 		AutoselectPersona.initialize(this);
 	})
 	
-	// homepage tab animations
-	$(".tab-widget .tab-button div").hover(function() {
-		
-		var id = $(this).index();
-		var idOff = (id + 1) % 2;
-		var tabEl = $(this).parent().find("div");
-		var contentEl = $(this).parent().parent().find(".tab-content>*");
-		
-		// interrupt any ongoing animation
-		tabEl.stop().removeAttr('style');
-		contentEl.stop();
-		
-		// do nothing if tab is already selected
-		if (!tabEl.eq(id).hasClass("selected"))
-		{
-			tabEl.eq(idOff).removeClass("selected");
-			contentEl.eq(idOff).hide().css({opacity: null});
-			
-			// TODO: reference px and color directly from CSS values
-			tabEl.eq(id).animate({top: "-3px", backgroundColor: "gray"}, 150);
-			
-			contentEl.eq(id).fadeIn(300, function() {
-				tabEl.eq(id).stop().removeAttr('style').addClass("selected");
-				contentEl.eq(id).removeAttr('style');
-			});
-		}
-	});
-	
-	// testimonials rolling
-	$("#testimonials .alternate-elements").each(function() {
-		AlternateElement.initialize(this);
-	});
-	
-	// homepage graphic animation
-	$("#landing .illustration").find(".layer-0, .layer-2").each(Animate.leftToRight);
-	
 	$("a.youtube-box, a.image-zoom").click(function() {
 		
 		$("body").append('<div id="black-screen"></div>');
@@ -1137,6 +1069,7 @@ $(function() {
 		return false;
 	});
 	
+	// used for dates/wingmates sub-tabs
 	$(".columns .box > .tabs > h3").click(function() {
 		
 		if ($(this).hasClass("inactive")) {
@@ -1162,19 +1095,4 @@ $(function() {
 
 var killBox = function() {
 	$("#video-box, #black-screen").remove();
-}
-
-var Animate = {
-	leftToRight: function() {
-		
-		$(this).animate({
-			backgroundPosition: "("+$(this).attr("data-slide")+" 0)"
-		}, 180000, Animate.rightToLeft);
-	},
-	rightToLeft: function() {
-		
-		$(this).animate({
-			backgroundPosition: "(0 0)"
-		}, 180000, Animate.leftToRight);
-	}
 }
