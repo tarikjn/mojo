@@ -68,7 +68,7 @@ GEM
       net-ssh (~> 2.1.4)
       nokogiri (~> 1.5.0)
       ruby-hmac
-    formatador (0.2.0)
+    formatador (0.2.1)
     geokit (1.5.0)
     geokit-rails3-1beta (0.3.1.beta1)
       geokit (~> 1.5.0)
