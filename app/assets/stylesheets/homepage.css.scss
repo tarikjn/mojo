@@ -1,4 +1,4 @@
-//@import 'global';
+@import 'global';
 
 @mixin transform($a) {
 	-webkit-transform: $a;
