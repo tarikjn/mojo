@@ -1,0 +1,22 @@
+/*
+ * This is a manifest file that'll automatically include all the stylesheets available in this directory
+ * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
+ * the top of the compiled file, but it's generally better to create a new file per style scope.
+ *= require_self
+ * ----> Note the missing = require_directory . 
+*/
+
+// temporary:
+@import "global.css.scss";
+@import "follows.css.scss";
+@import "homepage.css.scss";
+@import "shared.css.scss";
+@import "browser_alert.css.scss";
+@import "friendships.css.scss";
+@import "layout.css.scss";
+@import "sortie_reports.css.scss";
+@import "users.css.scss";
+@import "entries.css.scss";
+@import "global.css.scss";
+@import "places.css.scss";
+@import "sorties.css.scss";
