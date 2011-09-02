@@ -228,3 +228,8 @@
 		text-align: right;
 	}
 }
+
+img.zommed-picture {
+	// so that pictures don't go off-screen
+	max-width: 900px;
+}

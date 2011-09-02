@@ -1050,7 +1050,7 @@ $(function() {
 			popup.css( {marginLeft: -popup.width() / 2, marginTop: -popup.height() / 2} );
 		}
 		else {
-			var image = $('<img src="'+this.href+'" alt="" />')
+			var image = $('<img src="'+this.href+'" class="zommed-picture" alt="" />')
 			image.appendTo(popup);
 			
 			image.load(function() {
