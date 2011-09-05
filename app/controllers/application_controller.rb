@@ -153,7 +153,7 @@ private
   end
   
   def ensure_proper_domain
-    if request.host_with_port == 'beta.mojo.co'
+    if ['beta.mojo.co', 'www.mojo.co'].include?(request.host_with_port)
       redirect_to params.merge({host: 'mojo.co'})
     end
   end
