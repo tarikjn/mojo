@@ -169,10 +169,10 @@
 			.guest {
 				
 				$color-bordure: rgba(255, 255, 255, .15);
+				text-align: left;
 				
 				.beta {
 					
-					text-align: left;
 					
 					@include clear-after;
 					padding-bottom: 10px;
@@ -207,6 +207,7 @@
 					border-top: 2px dashed $color-bordure;
 					
 					@include mjfont;
+					text-align: center;
 					
 					a {
 						padding: 2px 8px;

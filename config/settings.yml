@@ -46,6 +46,7 @@ development:
   CampaignMonitor:
     <<: *CampaignMonitor
     UserListID: 695d28f3964f7ba53b7f25b4b2012578
+    SubscribersListID: 58b97215d08e9452a8942174a7797edd
 
 test:
   <<: *defaults
@@ -56,6 +57,7 @@ staging:
   CampaignMonitor:
     <<: *CampaignMonitor
     UserListID: b7e379ec11135f36e07fefdab03825e6
+    SubscribersListID: 6e6b19cb2894300abd1cfdf933f61b0e
 
 production:
   <<: *defaults

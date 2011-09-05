@@ -1,5 +1,7 @@
 Mojo::Application.routes.draw do
   
+  resources :subscribers, :only => [:new, :create], :path => 'subscribe', :path_names => {:new => ''}
+
   # no 'new' route if only loading partial
   resources :friendships, :only => [:index, :new, :create]
 

@@ -1,0 +1,16 @@
+<% content_for :box do %>
+	<div class="guest">
+		<div class="beta">
+			<%= image_tag '/assets/sf-beta.jpg' %>
+			<div class="text">Mojo is in private beta in San Francisco.</div>
+		</div>
+		<div class="invite" id="subscribers-xhr-content">
+			<%= yield %>
+		</div>
+		<div class="sign-up">
+			Already have an invite code? <%= link_to  "Sign up", account_signup_path %>
+		</div>
+	</div>
+	<script src="http://connect.facebook.net/en_US/all.js#appId=227664530603236&amp;xfbml=1"></script>
+<% end %>
+<%= render :file => 'layouts/landing' %>

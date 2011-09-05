@@ -144,4 +144,11 @@ private
     session[:return_to] = nil
   end
 
+  # shared action for ApplicationController and SubscriberController, any better way to do that?
+  def action_for_new_subscriber
+    
+    @subscriber = Subscriber.new unless cookies[:has_subscribed]
+    
+  end
+  
 end
