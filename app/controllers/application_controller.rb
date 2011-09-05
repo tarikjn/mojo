@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   # if Rails.env == 'staging' and params[:controller] == 'sms', require auth
   #before_filter :restricted_access
   before_filter :browser_alert
+  before_filter :ensure_proper_domain
   
   require 'pony'
 
@@ -144,4 +145,17 @@ private
     session[:return_to] = nil
   end
 
+  # shared action for ApplicationController and SubscriberController, any better way to do that?
+  def action_for_new_subscriber
+    
+    @subscriber = Subscriber.new unless cookies[:has_subscribed] # or flash[:notice] = "" ? -- for no_cookies --> different action
+    
+  end
+  
+  def ensure_proper_domain
+    if ['beta.mojo.co', 'www.mojo.co'].include?(request.host_with_port)
+      redirect_to params.merge({host: 'mojo.co'})
+    end
+  end
+  
 end

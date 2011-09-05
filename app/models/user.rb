@@ -129,7 +129,7 @@ class User < ActiveRecord::Base
 
   # email normalization
   def email=(umail)
-    write_attribute(:email, umail.downcase) 
+    write_attribute(:email, umail.downcase.strip) 
   end
 
   # move to EventMachine
@@ -203,7 +203,7 @@ class User < ActiveRecord::Base
   
   def deliver_password_reset_instructions!
     reset_perishable_token!
-    Notifier.deliver_password_reset_instructions(self)
+    Notifier.password_reset_instructions(self).deliver
   end
   
   def validate_age
@@ -364,6 +364,7 @@ class User < ActiveRecord::Base
   end
   
   def friend_tasks_count
+    # sortie need to be 'expired' by async task for the counter to be right
     self.pending_friends.size + self.mate_host_sorties.unconfirmed.size
   end
   
@@ -439,7 +440,7 @@ private
       q = {
         "EmailAddress" => self.email,
         "Name"         => self.name }
-      r = HTTParty.put("http://api.createsend.com/api/v3/subscribers/#{SETTINGS[Rails.env]['CampaignMonitor']['UserListID']}.json", 
+      r = HTTParty.put("http://api.createsend.com/api/v3/subscribers/#{SETTINGS[Rails.env]['CampaignMonitor']['UsersListID']}.json", 
         basic_auth: auth,
         query: { email: self.email_was },
         body: ActiveSupport::JSON.encode(q) )
@@ -453,7 +454,7 @@ private
       "EmailAddress" => self.email,
       "Name"         => self.name,
       "Resubscribe"  => true }
-    HTTParty.post("http://api.createsend.com/api/v3/subscribers/#{SETTINGS[Rails.env]['CampaignMonitor']['UserListID']}.json",
+    HTTParty.post("http://api.createsend.com/api/v3/subscribers/#{SETTINGS[Rails.env]['CampaignMonitor']['UsersListID']}.json",
       basic_auth: auth,
       body: ActiveSupport::JSON.encode(q) )
   end

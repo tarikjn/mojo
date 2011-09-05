@@ -1,0 +1,410 @@
+// this file should only contain vars and mixin
+// it can be included multiple times
+
+/*
+ * Vars
+ */
+
+$main-color: black;
+$lighter-color: #231f20;
+$paper-color: lighten($lighter-color, 86%);
+$error-color: #cd5120;
+$red-calendar: #A32F2F;
+
+$lighter-gray: #F2F2F2; // actually darker than light-gray
+$light-gray: #F9F9F9;
+$border-gray: #E6E6E6;
+$dark-gray: #636363;
+$gray-darker: #575757;
+
+$form-background-color: rgba(25, 25, 25, .025);
+
+$light-blue: #E1ECFF;
+$border-blue: darken(#E1ECFF, 15%);
+$dark-blue: #0080FF;
+
+$radio-background: $light-gray;
+$radio-border: $border-gray;
+$radio-checked-background: white;
+$radio-checked-border: gray;
+$color-selected: #e1ecff;
+
+$info-color: #FFFDBF;
+$info-border: #FF0;
+
+$drop-shadow: 4px 4px 6px #888;
+$inset-shadow: inset 0 0 16px #F0F0F0;
+
+/*
+ * Mixins
+ */
+
+@mixin clear-after {
+	&:after { content: ""; display: block; height: 0; clear: both; }
+}
+
+@mixin loading {
+	background: url(/assets/ajax-loading.gif) no-repeat center center;
+}
+
+// rounded corners
+$radius-default: 5px;
+@mixin rounded($r: $radius-default) {
+	-moz-border-radius: $r;
+	-webkit-border-radius: $r;
+	border-radius: $r;
+}
+@mixin rounded-top($r: $radius-default) {
+	-moz-border-radius-topleft: $r;
+	-moz-border-radius-topright: $r;
+	-webkit-border-top-left-radius: $r;
+	-webkit-border-top-right-radius: $r;
+	border-top-left-radius: $r;
+	border-top-right-radius: $r;
+}
+@mixin rounded-bottom($r: $radius-default) {
+	-moz-border-radius-bottomleft: $r;
+	-moz-border-radius-bottomright: $r;
+	-webkit-border-bottom-left-radius: $r;
+	-webkit-border-bottom-right-radius: $r;
+	border-bottom-left-radius: $r;
+	border-bottom-right-radius: $r;
+}
+
+@mixin opacity($o) {
+	filter: alpha(opacity = $o x 100);
+	opacity: $o;
+	-moz-opacity: $o;
+}
+
+@mixin slgradient($from, $to) {
+	$white: rgba(255, 255, 255, 1);
+	$transparent: rgba(255, 255, 255, 0);
+	
+	background: -moz-linear-gradient($from, $white, $transparent);
+	background: -webkit-gradient(linear, $from center, $to center, from($white), to($transparent));
+}
+
+@mixin std_gradient($from, $to) {
+	background: -webkit-gradient(linear, left top, left bottom, from($from), to($to));
+	background: -moz-linear-gradient(top,  $from,  $to);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='$from', endColorstr='$to');
+}
+
+@mixin transitions {
+	-webkit-transition: background-color 0.2s linear;  
+	-moz-transition: background-color 0.2s linear;  
+	-o-transition: background-color 0.2s linear;
+}
+
+// Mojo font, works with Typekit
+@mixin mjfont   { font-family: brevia-1, brevia-2, sans-serif; }
+@mixin basefont { font-family: Verdana, Arial, Helvetica, sans-serif; }
+@mixin thinfont { font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif; }
+@mixin font-trebuchet { font-family: "Trebuchet MS"; }
+
+// inset text
+@mixin inset($c: white) {
+	text-shadow: 1px 1px 0px $c;
+}
+
+// box shadow
+@mixin boxshadow($shadow: $drop-shadow) {
+	box-shadow: $shadow;
+	-webkit-box-shadow: $shadow;
+	-moz-box-shadow: $shadow;
+}
+
+// buttons
+@mixin button {
+	padding: 5px 10px;
+	font-size: 1.05em;
+	background: url(/assets/buttons/button-submit.png);
+	height: 35px;
+	width: 115px;
+	text-align: center;
+	border: none;
+	
+	&:hover {
+		background-position: 0 35px;
+	}
+	&:active {
+		position:relative;
+		top: 1px;
+	}
+	&:disabled {
+		color: gray;
+	}
+}
+
+// from http://www.webdesignerwall.com/tutorials/css3-gradient-buttons/
+
+@mixin white {
+	
+	/*color: #606060;
+	border: solid 1px #b7b7b7;
+	background: #fff;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
+	background: -moz-linear-gradient(top,  #fff,  #ededed);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed');
+	
+	&.selected {
+		color: #999;
+		background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff));
+		background: -moz-linear-gradient(top,  #ededed,  #fff);
+		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#ffffff');
+	}*/
+	
+	// testing
+	color: black;
+	border: outset 1px #9b9b9b;
+	background: #fff;
+	@include std_gradient(#fff, #e5e5e5);
+	
+	&.selected {
+		background: #ededed;
+		@include std_gradient(#f2f2f2, #d9d9d9);
+	}
+}
+@mixin gray {
+	
+		color: #afafaf;
+	border: solid 1px #555;
+	background: #6e6e6e;
+	background: -webkit-gradient(linear, left top, left bottom, from(#888), to(#575757));
+	background: -moz-linear-gradient(top,  #888,  #575757);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#888888', endColorstr='#575757');
+		
+	&.selected {
+		color: #e9e9e9;
+		background: -webkit-gradient(linear, left top, left bottom, from(#575757), to(#888));
+		background: -moz-linear-gradient(top,  #575757,  #888);
+		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#575757', endColorstr='#888888');
+	}
+}
+@mixin wdw-button {
+	
+	display: inline-block;
+	//outline: none;
+	text-align: center;
+	text-decoration: none;
+	font: 14px/100% Arial, Helvetica, sans-serif;
+	padding: .5em 2em .55em;
+	//text-shadow: 0 1px 1px rgba(0,0,0,.3);
+	-webkit-border-radius: .5em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	
+	&:not(:disabled):not(.disabled) {
+		
+		cursor: pointer;
+		
+		&:hover {
+			text-decoration: none;
+		}
+		&:active {
+			position: relative;
+			top: 1px;
+		}
+		
+		// white theme
+		&.white:hover {
+			background: #ededed;
+			@include std_gradient(#fff, #dcdcdc);
+		}
+		&.white:active {
+			color: #999;
+			@include std_gradient(#ededed, #fff);
+		}
+		
+		// red
+		&.red:hover {
+			background: #b61318;
+			background: -webkit-gradient(linear, left top, left bottom, from(#c9151b), to(#a11115));
+			background: -moz-linear-gradient(top,  #c9151b,  #a11115);
+			filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#c9151b', endColorstr='#a11115');
+		}
+		&.red:active {
+			color: #de898c;
+			background: -webkit-gradient(linear, left top, left bottom, from(#aa1317), to(#ed1c24));
+			background: -moz-linear-gradient(top,  #aa1317,  #ed1c24);
+			filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#aa1317', endColorstr='#ed1c24');
+		}
+		
+		// gray theme
+		&.gray:hover {
+			background: #616161;
+			background: -webkit-gradient(linear, left top, left bottom, from(#757575), to(#4b4b4b));
+			background: -moz-linear-gradient(top,  #757575,  #4b4b4b);
+			filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#757575', endColorstr='#4b4b4b');
+		}
+		&.gray:active {
+			color: #afafaf;
+			background: -webkit-gradient(linear, left top, left bottom, from(#575757), to(#888));
+			background: -moz-linear-gradient(top,  #575757,  #888);
+			filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#575757', endColorstr='#888888');
+		}
+		
+		// blue theme
+		&.blue:hover {
+			background: #007ead;
+			background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+			background: -moz-linear-gradient(top,  #0095cc,  #00678e);
+			filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095cc', endColorstr='#00678e');
+		}
+		&.blue:active {
+			color: #80bed6;
+			background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
+			background: -moz-linear-gradient(top,  #0078a5,  #00adee);
+			filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
+		}
+		
+		// green theme
+		&.green:hover {
+			background: #538018;
+			background: -webkit-gradient(linear, left top, left bottom, from(#6b9d28), to(#436b0c));
+			background: -moz-linear-gradient(top,  #6b9d28,  #436b0c);
+			filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#6b9d28', endColorstr='#436b0c');
+		}
+		&.green:active {
+			color: #a9c08c;
+			background: -webkit-gradient(linear, left top, left bottom, from(#4e7d0e), to(#7db72f));
+			background: -moz-linear-gradient(top,  #4e7d0e,  #7db72f);
+			filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#4e7d0e', endColorstr='#7db72f');
+		}
+		
+		// mojo theme
+		&.mojo:hover {
+			background: #ededed;
+			@include std_gradient(#f2f2f2, #d9d9d9);
+		}
+	}
+	&:disabled, &.disabled {
+		opacity: .5;
+		cursor: default;
+	}
+	
+	// white theme
+	&.white {
+		color: #606060;
+		border: solid 1px #b7b7b7;
+		background: #fff;
+		@include std_gradient(#fff, #ededed);
+	}
+	
+	&.red {
+		color: #faddde;
+		border: solid 1px #980c10;
+		background: #d81b21;
+		@include std_gradient(#ed1c24, #aa1317);
+	}
+	
+	// gray theme
+	&.gray {
+		color: #e9e9e9;
+		border: solid 1px #555;
+		background: #6e6e6e;
+		background: -webkit-gradient(linear, left top, left bottom, from(#888), to(#575757));
+		background: -moz-linear-gradient(top,  #888,  #575757);
+		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#888888', endColorstr='#575757');
+	}
+	
+	// blue theme
+	&.blue {
+		color: #d9eef7;
+		border: solid 1px #0076a3;
+		background: #0095cd;
+		background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
+		background: -moz-linear-gradient(top,  #00adee,  #0078a5);
+		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
+	}
+	
+	// green theme
+	&.green {
+		color: #e8f0de;
+		border: solid 1px #538312;
+		background: #64991e;
+		background: -webkit-gradient(linear, left top, left bottom, from(#7db72f), to(#4e7d0e));
+		background: -moz-linear-gradient(top,  #7db72f,  #4e7d0e);
+		filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#7db72f', endColorstr='#4e7d0e');
+	}
+	
+	// mojo theme
+	&.mojo {
+		color: black;
+		border: outset 1px #9b9b9b;
+		background: #fff;
+		@include std_gradient(#fff, #e5e5e5);
+	}
+	&.small {
+		font-size: 11px;
+		padding: .2em 1em .275em;
+	}
+}
+@mixin mojo-color {
+	
+	color: black;
+	border: outset 1px #9b9b9b;
+	background: #fff;
+	@include std_gradient(#fff, #e5e5e5);
+	
+	&:hover {
+		background: #ededed;
+		@include std_gradient(#f2f2f2, #d9d9d9);
+	}
+}
+
+// vertical-box element
+@mixin vertical-box {
+	> .title {
+		@include rounded(15px);
+		width: 150px;
+		background: black;
+		color: white;
+
+		padding: 5px;
+		text-align: center;
+		margin: 0 auto;
+		margin-bottom: -15px;
+		z-index: 10;
+		position: relative;
+	}
+	> .content {
+		@include rounded;
+		background: white;
+		padding: 25px 15px 10px;
+		border: 1px dotted black;
+		
+		// TODO: move to user-box mixin
+		> div {
+			margin-top: 10px;
+			&:first-of-type { margin-top: 0; }
+		}
+	}
+}
+
+// user element
+@mixin user-box {
+	@include rounded;
+	background: #F9F9F9;
+	padding: 8px 10px;
+	border: 2px solid gray;
+	
+	> .picture {
+		display: inline-block;
+		vertical-align: middle;
+		//@include rounded;
+		width: 48px; height: 48px;
+	}
+	> .title {
+		display: inline-block;
+		vertical-align: middle;
+		margin-left: 5px;
+
+		.name { font-size: 1.25em; }
+		.rating { font-size: .85em; }
+	}	
+}

@@ -34,7 +34,7 @@
 			<ul class="friendlist">
 				<% @user.friends.each do |friend| %>
 					<li>
-						<div class="pic48"><%= image_tag "/images/users/"+friend.id.to_s+"-48.jpg" %></div>
+						<div class="pic48"><%= image_tag "/assets/users/"+friend.id.to_s+"-48.jpg" %></div>
 						<div class="name"><%= friend.first_name %></div>
 					</li>
 				<% end %>
@@ -107,7 +107,7 @@
 						<div class="smart-label">Title</div>
 					</div>
 					<div class="hybrid-input mj-micro-select">
-						<label title="Food and Drinks"><input type="radio" name="date_type" value="foodanddrinks"><img src="/images/icons/date-food_and_drinks-micro-gray.png" alt="" /></label><label title="Entertainment"><input type="radio" name="date_type" value="entertainment"><img src="/images/icons/date-entertainment-micro-gray.png" alt="" /></label><label title="Outdoor"><input type="radio" name="date_type" value="outdoor"><img src="/images/icons/date-outdoor-micro-gray.png" alt="" /></label>
+						<label title="Food and Drinks"><input type="radio" name="date_type" value="foodanddrinks"><img src="/assets/icons/date-food_and_drinks-micro-gray.png" alt="" /></label><label title="Entertainment"><input type="radio" name="date_type" value="entertainment"><img src="/assets/icons/date-entertainment-micro-gray.png" alt="" /></label><label title="Outdoor"><input type="radio" name="date_type" value="outdoor"><img src="/assets/icons/date-outdoor-micro-gray.png" alt="" /></label>
 					</div>
 				</div>
 				<div class="input-row description">

@@ -30,7 +30,7 @@ class Invitation < ActiveRecord::Base
   # used by the "Enter your invite form", must be a better way to do that
   def valid_token?
     # we check against a copy invitation object
-    match = Invitation.find_by_token(token)
+    match = Invitation.find_by_token(self.token)
     
     if !match
       errors.add :token, 'not found'
@@ -48,7 +48,7 @@ class Invitation < ActiveRecord::Base
   end
   
   def recipient_email=(umail) 
-    write_attribute(:recipient_email, umail.downcase) 
+    write_attribute(:recipient_email, umail.downcase.strip) 
   end
   
 private
@@ -64,7 +64,8 @@ private
   end
 
   def generate_token
-    self.token = ActiveSupport::SecureRandom.hex(4)
+    # .encode('UTF-8') neeeded to fix *weird* Rails 3.1 <-> SQLite3 issue
+    self.token = SecureRandom.hex(4).encode('UTF-8')
   end
 
   def decrement_sender_count

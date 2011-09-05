@@ -9,7 +9,7 @@
 		<%
 			else
 		%>
-			<img class="ajax-loading" src="/images/ajax-loading.gif" alt="loading..." />
+			<img class="ajax-loading" src="/assets/ajax-loading.gif" alt="loading..." />
 			<button type="button" class="previous" formaction="<%= url_for :action => :previous %>"><%= nav_captions[:steps][@stepflow.step - 1] %></button> 
 		<%
 			end
@@ -31,7 +31,7 @@
 	
 	<div class="next">
 		<button type="submit"><%= nav_captions[:steps][@stepflow.step + 1] %></button>
-		<img class="ajax-loading" src="/images/ajax-loading.gif" alt="loading..." />
+		<img class="ajax-loading" src="/assets/ajax-loading.gif" alt="loading..." />
 	</div>
 	
 </div>

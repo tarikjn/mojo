@@ -1,0 +1,511 @@
+@import 'global';
+
+@mixin transform($a) {
+	-webkit-transform: $a;
+	-o-transform: $a;
+	-moz-transform: $a;
+}
+
+#landing {
+	margin-bottom: 50px;
+	position: relative;
+	
+	@include rounded;
+	//border: 2px solid gray;
+	
+	height: 291px;
+	padding-top: 139px;
+	background: url(/assets/illustration/space.png) 0 -61px repeat-x;
+	
+	text-align: center;
+	
+	
+	.illustration {
+		
+		position: absolute;
+		top: 139px; right: 0; bottom: 0; left: 0;
+		
+		background: url(/assets/illustration/sky.png);
+		
+		.layer-0, .layer-1, .layer-2, .layer-3 {
+			position: absolute;
+			top: 0; right: 0; bottom: 0; left: 0;
+			border-bottom-left-radius: 5px;
+			border-bottom-right-radius: 5px;
+		}
+		
+		.layer-0 {
+			background-image: url(/assets/illustration/clouds-far.png);
+		}
+		.layer-1 {
+			background-image: url(/assets/illustration/buildings.png);
+		}
+		.layer-2 {
+			background-image: url(/assets/illustration/clouds-close.png);
+		}
+		.layer-3 {
+			background-image: url(/assets/illustration/scene.png);
+		}
+	}
+	
+	.videos {
+		position: absolute;
+		top: 30px;
+		left: 30px;
+		
+		.video {
+			display: inline-block;
+			
+			.title {
+				margin-top: 5px;
+				@include mjfont;
+				background: rgba(255, 255, 255, .8);
+				@include rounded;
+			}
+			
+			.thumb {
+				position: relative;
+				width: 120px; height: 68px;
+				padding: 5px;
+				background: rgba(0, 0, 0, .5);
+				@include rounded(8px);
+				
+				a:hover {
+					background: none;
+				}
+				
+				img { @include rounded(5px); }
+				.over {
+					position: absolute;
+					top: 16px + 5px; left: 42px + 5px;
+					width: 36px; height: 36px;
+					background: url(/assets/videos/play.png);
+				}
+			}
+		}
+	}
+	
+	.tagline {
+		//opacity: .8;
+		display: inline-block;
+		position: relative;
+		margin-top: 260px;
+		
+		@include rounded(10px);
+		padding: 5px 15px;
+		//background: rgba(0, 0, 0, .8);
+		background: rgba(255, 255, 255, .85);
+		color: $main-color;
+		//color: white;
+		
+		@include mjfont;
+		font-size: 22pt;
+		
+		em {
+			font-style: normal;
+			font-size: 125%;
+		}
+	}
+	
+	.call-to-action {
+		position: absolute;
+		//top: 5px;
+		//right: 5px;
+		top: 20px;
+		right: 20px;
+		width: 400px;
+		
+		//text-align: left;
+		
+		.form {
+			//background: rgba(255, 255, 255, .95);
+			background: rgba(0, 0, 0, .8);
+			//color: $main-color;
+			color: white;
+			padding: 15px;
+			@include rounded(10px);
+			//border: 2px solid $border-gray;
+			
+			.message {
+				@include mjfont;
+				font-size: 1.45em;
+			}
+			.grouping {
+				position: relative;
+				margin: 25px 0 0;
+				
+				.user, .actions {
+					vertical-align: middle;
+				}
+				
+				.user {
+					
+				}
+				
+				.actions {
+					display: inline-block;
+					width: 210px;
+					
+					a {
+						width: 35px;
+						//@include gray;
+						//color: white;
+					}
+				
+					.left, .right {
+					
+						width: 35px + 58px;						
+						text-align: center;
+						span {
+							font-size: .75em;
+						}
+					}
+				
+					.left { float: left; }
+					.right { float: right; }
+				}
+			}
+			
+			.guest {
+				
+				$color-bordure: rgba(255, 255, 255, .15);
+				text-align: left;
+				
+				.beta {
+					
+					
+					@include clear-after;
+					padding-bottom: 10px;
+					border-bottom: 2px solid $color-bordure;
+					
+					img {
+						float: left;
+						width: 60px; height: 60px;
+						@include rounded(8px);
+						margin-right: 15px;
+					}
+					.text {
+						@include mjfont;
+						font-size: 150%;
+					}
+				}
+				
+				.invite {
+					
+					margin: 10px 0;
+					
+					.title {
+						text-align: left;
+						@include mjfont;
+						//font-size: 110%;
+					}
+				}
+				
+				.sign-up {
+					
+					padding-top: 10px;
+					border-top: 2px dashed $color-bordure;
+					
+					@include mjfont;
+					text-align: center;
+					
+					a {
+						padding: 2px 8px;
+						@include rounded;
+						
+						color: white;
+						//font-size: 110%;
+						
+						background: rgba(255, 255, 255, .25);
+
+						&:hover {
+							//background: transparent;
+						}
+					}
+				}
+			}
+			
+		}
+	}
+}
+
+#testimonials {
+	$border: 2px;
+	$padding: 15px;
+	$line: 1px;
+	$usefull-width: (900px - 2*$border - 2*$line) / 3;
+	
+	border: $border solid #BFBFBF;
+	@include rounded(8px);
+	background: #F5F5F5;
+	
+	> div { // .block-n
+		height: 100px;
+		width: $usefull-width - 2*$padding;
+		padding: $padding;
+		
+		&:not(:last-of-type) {
+			border-right: $line solid #DDD;
+			float: left;
+		}
+		
+		&:last-of-type {
+			margin-left: 2*$usefull-width + 2*$line;
+			float: none;
+		}
+		
+		div.bigsparkle {
+			@include mjfont;
+			font-size: 20pt;
+			text-align: center;
+			margin-top: 30px;
+		}
+	}
+	
+	.promo-block {
+		position: relative;
+		img { height: 32px; width: 32px; }
+		.title {
+			position: absolute;
+			left: 38px; top: 8px;
+		}
+		.text {
+			color: #3F3F3F;
+			font-size: 70%;
+		}
+	}
+}
+
+#flow {
+	$border: 2px;
+	$usefull-width: (900px - 2*$border) / 4;
+	
+	margin-bottom: 25px;
+	//#BFBFBF
+	//border: $border solid $light-gray;
+	@include rounded(8px);
+	
+	.step {
+		position: relative;
+		width: $usefull-width;
+		padding: 10px 0 5px;
+		
+		img {
+			width: 96px; height: 96px;
+			margin-bottom: 10px;
+		}
+		.caption {
+			//visibility: hidden;
+			color: $lighter-color;
+			@include inset;
+			background: $light-gray;
+			@include rounded;
+			padding: 5px;
+			width: auto;
+			margin: 0 10px;
+		}
+		
+		&:hover {
+			.caption { visibility: visible; }
+		}
+		
+		font-size: 80%;
+		text-align: center;
+		
+		&:not(:last-of-type) {
+			float: left;
+		}
+		
+		&:last-of-type {
+			margin-left: 3 * $usefull-width;
+		}
+		
+		.link {
+			position: absolute;
+			top: 50%;
+			margin-top: -35px;
+			right: -15px;
+			
+			font-size: 25px;
+			width: 30px;
+			text-align: center;
+			
+			color: #ababab;
+		}
+	}
+}
+
+// Twitter
+// based on http://www.makkintosshu.com/journal/twitter-statuses-badge
+#mtaTwitter { padding: 0; }
+#mtaTwitter > a {
+	float: left;
+	
+	&:hover {
+		background-color: transparent;
+	}
+}
+#mtaTwitter a img {
+	margin-top: 8px;
+	height: 32px;
+    width: 32px;
+    //border: 1px solid #CCC;
+	background: white;
+}
+#mtaTwitter ul:before {
+	display: block;
+    position: absolute;
+    top: 16px;
+    left: -10px;
+    margin: 0;
+    content: '';
+    border-top: 10px solid transparent;
+    border-right: 10px solid #fff;
+    border-bottom: 10px solid transparent;
+    line-height: 0;
+    font-size: 0;
+    width: 0;
+}
+#mtaTwitter ul {
+	position: relative;
+    background-color: $light-gray;
+	border: 1px solid #fff;
+    -moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+    list-style: none;
+    margin: 0;
+    margin-left: 46px;
+    padding: 0px;
+    //font-family: Helvetica, sans-serif;
+	@include thinfont;
+	//@include mjfont
+}
+#mtaTwitter ul li { padding: 7px; font-size: 10pt; }
+#mtaTwitter ul li.first { font-size: 9pt; /* font-weight: bold; */ }
+#mtaTwitter ul li.even { background-color: #EDEEFD; }
+#mtaTwitter ul li.first span { font-size: .9em; font-weight: normal; display: block; margin-top: 3pt; }
+#mtaTwitter ul li span { font-style: normal; font-family: Verdana, Arial, Helvetica, sans-serif; } // span is the time
+
+.team-block {
+	$zoom-x-offset: 30px; // (245px - 75%) / 2
+	$zoom-y-offset: 38px; // (302px - 75%) / 2
+	$spacing: 15px;
+	
+	margin: 0 50px 25px;
+	//height: 18px + 302px + 300px;
+	//padding-bottom: 300px;
+	
+	h2 {
+		//text-align: right;
+		 padding: 0 10px;
+	}
+	
+	.members {
+		position: relative;
+		
+		background-image: url(/assets/paper-shadow_partial.png);
+		background-repeat: no-repeat;
+		background-position: center (226px + 3 * $spacing);
+
+		padding: ($spacing * 2) 10px (300px - $zoom-y-offset);
+	}
+	
+	.member {
+		display: inline-block;
+		
+		width: 184px; //~75% of 245px
+		margin-right: $spacing;
+		
+		.picture {
+			
+			position: relative;
+			width: 215px;
+			
+			@include transform(scale(.75));
+			//@include transition(all 1s ease-in-out);
+			
+			margin-left: -$zoom-x-offset;
+			margin-top: -$zoom-y-offset;
+			
+			border: 15px solid white;
+			border-bottom-width: 10px;
+			padding-top: 228px; // image is a background...
+			@include boxshadow;
+			background: white no-repeat;
+			
+			text-align: center;
+			
+			.name, .role, .follow {
+				visibility: hidden;
+			}
+			
+			.name {
+				@include mjfont;
+				font-size: 1.35em;
+			}
+			.role {
+				color: gray;
+			}
+		}
+		&:nth-of-type(1) { .picture { @include transform(scale(.75) rotate(-1.8deg)); } }
+		&:nth-of-type(2) { .picture { @include transform(scale(.75) rotate(+2.0deg)); } }
+		&:nth-of-type(3) { .picture { @include transform(scale(.75) rotate(+0.5deg)); } }
+		
+		.follow {
+			display: none;
+			position: absolute;
+			
+			z-index: 100;
+			//top: 80px;
+			margin-left: 0;
+			margin-top: -75px;
+			//@include rotate(+3deg); // cancel rotate
+			 
+			a {
+				background: transparent;
+			}
+		}
+		
+		.bio {
+			
+			display: none;
+			
+			position: absolute;
+			bottom: 0; left: 0;
+			
+			width: 700px; //total: 800
+			height: 240px - $spacing; //total: 300 - $spacing
+			
+			padding: 30px 50px; // compensating for <p> margins
+			
+			@include thinfont;
+			
+			p {
+				text-align: justify;
+				color: #323232;
+				font-size: .95em;
+				line-height: 1.35em;
+				//font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+			}
+		}
+		
+		
+		&:hover, &.active {
+			.picture {
+				@include transform(scale(1) rotate(-3deg));
+				z-index: 10;
+				
+				.name, .role, .follow {
+					visibility: visible;
+				}
+			}
+			.follow {
+				display: block;
+			}
+			.bio {
+				display: block;
+			}
+		}
+	}
+}

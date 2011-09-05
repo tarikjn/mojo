@@ -108,4 +108,8 @@ class Notifier < ActionMailer::Base
     mail to: @user.email, subject: "#{@friend.name} approved your wingmate request"
     
   end
+  
+  def welcome_subscriber(recipient)
+    mail to: recipient, subject: "Thank you for signing-up for updates"
+  end
 end

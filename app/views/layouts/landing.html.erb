@@ -1,0 +1,81 @@
+<% content_for :content do %>
+	<div class="auto-margin-cell">
+		<div id="landing">
+			<div class="illustration">
+				<div class="layer-0" data-slide="1500"></div>
+				<div class="layer-1"></div>
+				<div class="layer-2" data-slide="4500"></div>
+				<div class="layer-3"></div>
+			</div>
+			<div class="videos">
+				<div class="video">
+					<div class="thumb"><a href="http://www.youtube.com/watch?v=a59_fJ9Guc0" class="youtube-box"><img src="/assets/videos/screencast.png" alt="" /><span class="over"></span></a></div>
+					<div class="title">Screencast</div>
+				</div>
+			</div>
+			<div class="tagline">Stop <em>browsing</em>, start <em>dating</em>.</div>
+			<div class="call-to-action">
+				<div class="form">
+					<%= content_for?(:box) ? yield(:box) : yield %>
+				</div>
+			</div>
+		</div>
+		<div id="flow">
+			<div class="step">
+				<img src="/assets/icons/flow-date.png" alt="" />
+				<div class="caption">Create or<br />join a (double-)date</div>
+				<div class="link">➜</div>
+			</div>
+			<div class="step">
+				<img src="/assets/icons/flow-participant.png" alt="" />
+				<div class="caption">Choose participant(s) or<br />wait to be selected</div>
+				<div class="link">➜</div>
+			</div>
+			<div class="step">
+				<img src="/assets/icons/flow-message.png" alt="" />
+				<div class="caption">Arrange last-minute details<br />without revealing your digits</div>
+				<div class="link">➜</div>
+			</div>
+			<div class="step">
+				<img src="/assets/icons/flow-rate.png" alt="" />
+				<div class="caption">Rate your date so we can improve your matches!</div>
+			</div>
+		</div>
+		<div id="testimonials">
+			<div class="block-left alternate-elements">
+				<div class="promo-block">
+					<img src="/assets/icons/testimonials/timer.png" />
+					<div class="title">Timely &amp; Actual</div>
+					<div class="text">We want you to spend as little time online as possible, and enjoy your time meeting people in the real world now. This is how we designed Mojo.</div>
+				</div>
+				<div class="promo-block" style="display: none;">
+					<img src="/assets/icons/testimonials/gears.png" />
+					<div class="title">Genuine &amp; Personal</div>
+					<div class="text">Mojo establishes your profile using progressive personality testing and feedback aggregation. The more you use it, the more you meet people like you.</div>
+				</div>
+				<div class="promo-block" style="display: none;">
+					<img src="/assets/icons/testimonials/privacy.png" />
+					<div class="title">Less exposing</div>
+					<div class="text">Only those wanting to join your dates or hosting a date you are trying to join can find you on Mojo.</div>
+				</div>
+				<div class="promo-block" style="display: none;">
+					<img src="/assets/icons/testimonials/key.png" />
+					<div class="title">Safer</div>
+					<div class="text">Not only are double-dates meant so you can bring your friends along, but you actually meet people without ever revealing your contact info or full name.</div>
+				</div>
+			</div>
+			<div class="block-center">
+				<div class="bigsparkle">⁑</div>
+			</div>
+			<div class="block-right">
+				<!-- Twitter widget -->
+				<script type="text/javascript">
+					makkintosshu.twitterStatuses.tweetCount = 1;
+				</script>
+				<div id="mtaTwitter"></div>
+				<script type="text/javascript" src="http://www.twitter.com/statuses/user_timeline/mojo.json?skip_user=true&amp;callback=makkintosshu.twitterStatuses.twitterCallback"></script>
+			</div>
+		</div>
+	</div>
+<% end %>
+<%= render :file => 'layouts/application' %>

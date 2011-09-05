@@ -1,0 +1,303 @@
+@import "global";
+
+// shared date styles
+.date, .sortie.object-view {
+	background: white;
+	position: relative;
+	
+	border: 1px outset $border-gray;
+	@include rounded;
+	padding: 8px;
+	
+	//max-width: 300px;
+	
+	.header {
+		> * { vertical-align: middle; }
+		white-space: nowrap;
+		overflow: hidden;
+	}
+	
+	.calendar-day {
+		display: inline-block;
+		width: 30px; height: 30px;
+		@include rounded;
+		border: 1px solid $border-gray;
+		
+		text-align: center;
+		
+		.month {
+			background: $red-calendar;
+			border-top-right-radius: 5px; border-top-left-radius: 5px;
+			color: white;
+			font-size: 11px;
+		}
+		.day {
+			font-size: 15px;
+			padding-bottom: 1px;
+		}
+	}
+	
+	.category-icon {
+		width: 24px; height: 24px;
+		padding: 4px;
+		//padding: 4px 3px 20px;
+		background: #0080ff;
+		@include rounded;
+		//background-image: url(/assets/icons/full-sortie-marker.png);
+	}
+
+	.info {
+		display: inline-block;
+		//padding-left: 40px;
+		//background: url(/assets/icons/food-and-drinks_small.png) no-repeat 0 center;
+
+		.title {
+			font-size: .85em;
+		}
+
+		.time-and-area {
+			font-size: .65em;
+		}
+	}
+	
+	.person {
+		
+		margin-top: 8px;
+		> * { vertical-align: middle; }
+		
+		> .name { font-size: 115%; }
+/*		img {
+			height: 48px; width: 48px;
+			
+			&.open {
+				width: 46px; height: 46px;
+				border: 1px solid $border-gray;
+			}
+		}*/
+	}
+}
+
+.date-confirmation {
+	margin: 50px 100px;
+	
+	p {
+		font-size: 1.25em;
+		
+		em {
+			font-style: normal;
+			font-size: 115%;
+		}
+	}
+	
+	.people {
+		> div {
+			display: inline-block;
+			margin-right: 25px;
+			font-size: 115%;
+			
+			img { height: 48px; width: 48px; vertical-align: middle; }
+		}
+	}
+	
+	.location {
+		margin: 25px 0;
+		//height: 400px;
+		position: relative;
+		
+		.map {
+			img {
+				width: 400px;
+				height: 400px;
+			}
+		}
+		
+		.place {
+			position: absolute;
+			margin-left: 425px;
+			top: 50px;
+			
+			.title {
+				font-size: 125%;
+				margin-bottom: 10px;
+			}
+		}
+	}
+	
+	.info {
+		margin-top: 25px;
+		padding: 10px;
+		@include rounded;
+		background: $info-color;
+	}
+}
+
+// .hybrid-input
+.friend-selection {
+	display: none;
+	.mj-friend-selector {
+		margin-top: 8px;
+		border: 1px solid $border-gray; // outset looks really cool!
+		@include rounded;
+		background: white;
+		padding: 10px;
+	}
+}
+.host-mate-selector {
+	
+	width: 450px;
+	@include clear-after;
+	
+	> .current-host, > .add-host, > .set-wingmate {
+		
+		float: left;
+		width: 50%;
+		
+		> .person.partial {
+			// overrides props:
+			margin-top: 0;
+			width: 100%;
+			float: none;
+		}
+	}
+	
+	> .set-wingmate {
+		position: relative;
+		
+		&:hover .remove {
+			display: block;
+		}
+		
+		> .remove {
+			display: none;
+			
+			position: absolute;
+			top: 5px; right: -40px;
+			width: 50px;
+			
+			background: $error-color;
+			color: white;
+			@include rounded;
+			padding: 4px 0;
+			
+			opacity: .5;
+			cursor: pointer;
+			
+			&:hover {
+				opacity: 1;
+			}
+			
+			text-align: center;
+			
+			.symbol {
+				font-size: 20px;
+			}
+			.caption {
+				font-size: 10px;
+			}
+		}
+	}
+	
+	.add-host .box, .set-wingmate .person.partial .box {
+		margin-left: 5px;
+		background: white !important;
+	}
+	
+	.add-host {
+		&.inactive {
+			display: none;
+		}
+		
+		.box {
+			$height: 48px + 6px;
+
+			height: $height;
+
+			@include rounded;
+			border: 1px outset $border-gray;
+
+			color: gray;
+			line-height: $height;
+			text-align: center;
+			font-size: 115%;
+
+			&:hover {
+				background: $light-blue;
+				cursor: pointer;
+			}
+			&:active, &.pushed {
+				border-style: inset;
+			}
+		}
+	}
+}
+
+.mj-time-selector {
+	
+	position: relative;
+	
+	.move-start, .move-end {
+		position: absolute;
+		font-size: 35px;
+		color: gray;
+		top: 25px;
+		cursor: pointer;
+	}
+	.move-start {
+		display: none;
+		left: -35px;
+	}
+	.move-end {
+		right: -35px;
+	}
+	.viewport {
+		position: relative;
+		overflow: hidden;
+		white-space: nowrap;
+		
+		label.day-box {
+			display: inline-block;
+			
+			padding: 0 8px 20px;
+			border: 2px solid white;
+			
+			@include rounded;
+			background: white;
+			
+			text-align: center;
+			
+			&.selected {
+				border-color: $radio-checked-border;
+			}
+			
+			.day {
+				width: 50px;
+				border: 1px solid $border-gray;
+				
+				&.weekend {
+					background: $lighter-gray;
+				}
+				
+				.month {
+					font-size: 70%;
+					text-transform: uppercase;
+					background: $red-calendar;
+					color: white;
+					padding: 2px 0;
+				}
+				.weekday {
+					font-size: 80%;
+				}
+				
+			}
+		}
+		
+		.time-selector, .time-selector select {
+			font-size: 5pt !important;
+		}
+		.time-selector {
+			display: none;
+			position: absolute;
+			bottom: 1px; left: 1px;
+		}
+	}
+}

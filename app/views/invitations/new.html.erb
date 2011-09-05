@@ -1,5 +1,5 @@
 <%= flash_messages %>
-<% form_for @invitation do |f| %>
+<%= form_for @invitation do |f| %>
   <p>
 	<%= format_errors_for @invitation, :recipient_email, {:title => "Recipient's email"} %>
     <%= f.label :recipient_email, "Friend's email address" %><br />

@@ -1,9 +1,9 @@
 Mojo::Application.configure do
   
+  # Settings specified here will take precedence over those in config/environment.rb
+  
   # Stepflow goes over 4K, TODO: implement something for prod
   #config.action_controller.session_store :memory_store
-  
-  # Settings specified here will take precedence over those in config/environment.rb
 
   # In the development environment your application's code is reloaded on
   # every request.  This slows down response time but is perfect for development
@@ -15,8 +15,8 @@ Mojo::Application.configure do
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
-  config.action_view.debug_rjs             = true
-  config.action_controller.perform_caching = true # enabled to not reach API limits in development
+  # enabled to not reach API limits in development, disabled for now: pause issue with assets caching
+  config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
@@ -27,8 +27,14 @@ Mojo::Application.configure do
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
   
-  # ImageMagick path for Paperclip
-  #Paperclip.options[:command_path] = "/opt/local/bin"
+  # Do not compress assets
+  config.assets.compress = false
+  
+  # Allow pass debug_assets=true as a query parameter to load pages with unpackaged assets
+  config.assets.allow_debugging = true
+
+  # Expands the lines which load the assets
+  config.assets.debug = true
   
   # Mail settings, production (Heroku) is automatically using Sendgrid's smtp
   config.action_mailer.delivery_method = :smtp
@@ -41,7 +47,7 @@ Mojo::Application.configure do
     :password             => "br8pRasw",
     :enable_starttls_auto => true
   }
-  config.action_mailer.default_url_options = { :host => "localhost:3000" }
+  config.action_mailer.default_url_options = { :host => "localhost:5000" }
   
   config.action_controller.cache_store = :file_store, 'tmp/cache'
 end

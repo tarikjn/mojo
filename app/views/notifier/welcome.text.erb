@@ -2,15 +2,14 @@ Hi <%= @user.first_name %>,
 
 Welcome to Mojo!
 
-We're thrilled to have you as a new member on this very unique dating concept!
+We're thrilled to have you as a new member!
 
-You can now start creating and joining dates. We'll also update you about new features as we roll them out.
+You can now start creating and joining dates (in San Francisco only). We'll also update you about new features as we roll them out.
 <% if @user.generated_password -%>
 Your generated password is: <%= @user.generated_password %>
 <% end -%>
 
 We hope you enjoy dating with Mojo and have an amazing experience!
-If you've got any questions or run into any problems, simply reply to this email, and we'll be uber-happy to help you :)
+We're still in private beta, so if you've got any questions or run into any problems, contact us by simply replying to this email or at support@mojo.co, we'll get back uber-quick :)
 
-The Mojo Team
-http://mojo.co
+<%= render :partial => 'signature' %>

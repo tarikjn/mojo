@@ -22,11 +22,11 @@
 				<!--<%= link_to "Profile", account_profile_path %>-->
 				<%= link_to "Settings", account_edit_path('profile') %>
 				<%= current_user.admin? ? (link_to "Invitations", new_invitation_path) : nil %>
-				<%= link_to "Sign out", logout_path %>
+				<%= link_to "Sign out", signout_path %>
 			</div>
 		</div>
 	<% else %>
-		<%= link_to "Sign In", login_path, :id => "login-link" %>
+		<%= link_to "Sign In", new_user_session_path, :id => "login-link" %>
 		<% if controller.controller_name != 'user_sessions' %>
 		<div class="relative-container">
 			<div id="login-bubble">

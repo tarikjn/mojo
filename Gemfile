@@ -1,14 +1,20 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~>3.0.9'
+gem 'rails', "~> 3.1.0"
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3-ruby', :require => 'sqlite3'
 
-# fixes issue with rake .9, see: http://stackoverflow.com/questions/6085610/rails-rake-problems-uninitialized-constant-rakedsl
-gem "rake"
+# Gems used only for assets and not required
+# in production environments by default.
+group :assets do
+  gem 'sass-rails',   "~> 3.1.0"
+  gem 'coffee-rails', "~> 3.1.0"
+  gem 'uglifier'
+end
+
+gem 'jquery-rails'
 
 # Use unicorn as the web server
 # gem 'unicorn'
@@ -17,30 +23,52 @@ gem "rake"
 # gem 'capistrano'
 
 # To use debugger
-# gem 'ruby-debug'
+# gem 'ruby-debug19', :require => 'ruby-debug'
 
+
+# webserver must be explicit on new cedar stack
+# using thin for all environments with Procfile
+gem 'thin'
+
+# queue system (used for SMS notifications and date expiration)
+gem 'delayed_job'
+
+
+# Rails 3.1 - Heroku
+group :production, :staging do
+  gem 'pg'
+  gem 'dalli' # memcache on Heroku
+  gem 'exceptional'
+end
+
+group :development do
+  gem "rails3-generators"
+end
+
+group :test, :development do
+  gem 'sqlite3'
+end
+
+group :test do
+  # Pretty printed test output
+  gem 'turn', :require => false
+end
+
+# TODO: remove immediate bellow line after upgrade...
 # Bundle the extra gems:
 # gem 'bj'
 # gem 'nokogiri'
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 # gem 'aws-s3', :require => 'aws/s3'
 
-# Bundle gems for the local environment. Make sure to
-# put test-only gems in this group so their generators
-# and rake tasks are available in development mode:
-# group :development, :test do
-#   gem 'webrat'
-# end
-
 # geokit-rails3 gem
-gem 'geokit-rails3'
+gem 'geokit-rails3-1beta'
 
 # twilio ruby gem
 gem 'twiliolib'
 
 # authlogic (rails3)
 gem "authlogic"
-gem "rails3-generators"
 
 # used to access Yelp API
 gem "httparty"
@@ -55,13 +83,3 @@ gem "pony"
 gem 'carrierwave'
 gem 'mini_magick'	# wrapper to system's ImageMagick
 gem 'fog'			# used to access s3
-
-# for SMS notifications
-gem 'delayed_job'
-
-# generate human "rememberable" passwords
-#gem 'ruby-password'
-# broken
-
-# memcache on Heroku
-gem 'dalli'

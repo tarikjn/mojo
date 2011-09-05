@@ -15,8 +15,16 @@ test:
   pool: 5
   timeout: 5000
 
+# overwritten by Heroku (pg instead)
 production:
   adapter: sqlite3
   database: db/production.sqlite3
+  pool: 5
+  timeout: 5000
+
+# overwritten by Heroku (pg instead), using dev db to test staging env locally
+staging:
+  adapter: sqlite3
+  database: db/development.sqlite3
   pool: 5
   timeout: 5000

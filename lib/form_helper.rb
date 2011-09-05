@@ -55,7 +55,7 @@ module ActionView
         label_tag do
           radio_button_tag("#{object_name}[#{method}]", value, object.send(method) == value) +
           content_tag(:div, :class => 'person') do
-            content_tag(:div, image_tag("/images/icons/#{images[value]}.png"), :class => 'img') +
+            content_tag(:div, image_tag("/assets/icons/#{images[value]}.png"), :class => 'img') +
             content_tag(:div, options[:title], :class => 'title')
           end
         end

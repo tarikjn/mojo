@@ -1,0 +1,210 @@
+// Place all the styles related to the Subscribers controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "global";
+
+.guest > .invite {
+	//width: 400px;
+	//padding: 15px;
+	//margin-left: 200px;
+	
+	//background: rgba(242, 242, 242, .8); //#F2F2F2
+	//@include rounded(10px);
+	//border: 2px solid gray;
+
+	/*> .title {
+			@include mjfont;
+			font-size: 1.25em;
+		}*/
+	
+	.form-block {
+		text-align: center;
+	}
+	form {
+		margin-top: 15px;
+		position: relative;
+		display: inline-block;
+		text-align: center;
+
+		.labeled-input {
+
+			display: inline-block;
+			text-align: left;
+
+			input {
+				font-size: 1em;
+				padding: 2px 4px;
+				width: 110px;
+			}
+			label {
+				color: #AAA;
+				font-size: .75em;
+				
+				//text-shadow: -1px -1px 0 rgba(255,255,255, .5), 1px 1px 0 rgba(0,0,0, .5), 0 0 1px #AAA;
+			}
+		}
+		
+		input[type=text], input[type=email], input[type=number], input[type=password] {
+			//width: 150px;
+			//font-size: 1.2em;
+			//padding: 3px 4px;
+			//border: none;
+			//outline-color: white;
+			background: rgba(255, 255, 255, .85);
+			
+			&:focus {
+				background: rgba(255, 255, 255, 1);
+			}
+		}
+
+		.submit {
+			display: inline-block;
+			vertical-align: top;
+
+			button {
+				//@include button;
+				//@include wdw-button;
+				cursor: default;
+				padding: 6px 10px;
+				
+				//border: none;
+			}
+		}
+	}
+	.err-block {
+		text-align: left;
+		display: block;
+	}
+	ul.errors {
+		margin: 0;
+		display: inline-block;
+		background: $error-color;
+		color: white;
+		font-size: .75em;
+		padding: 8px;
+		@include rounded;
+		margin-bottom: 5px;
+
+		&:after {
+			content: "▾";
+			@include font-trebuchet;
+			font-size: 24px;
+			color: $error-color;
+			position: absolute;
+			margin-top: -6px;
+		}
+
+		li {
+			list-style-type: none;
+		}
+	}
+	
+	.thankyou {
+		margin-bottom: 10px;
+		em {
+			font-style: normal;
+			font-size: 125%;
+		}
+	}
+	
+	.social-plugins {
+		@include clear-after;
+		> div { float: left; }
+	}
+	.twitter {
+		margin-top: 4px;
+	}
+	.facebook {
+	}
+	
+}
+
+/**
+	Progress Bar Styles
+*/
+.progressBar {
+	position: relative;
+	background-color: rgb(245,245,245);
+	
+	background-image:
+		-webkit-gradient(linear, 18 0, 0 10,
+			color-stop(0.23, rgba(255,255,255,0)),
+			color-stop(0.3, rgba(255,255,255,0.8)),
+			color-stop(0.3, rgba(255,255,255,1)),
+			color-stop(0.7, rgba(255,255,255,1)),
+			color-stop(0.7, rgba(255,255,255,0.8)),
+			color-stop(0.77, rgba(255,255,255,0))),
+		-webkit-gradient(linear, 0 0, 0 100%,
+			color-stop(0.05, rgba(0,0,0,.3)),
+			color-stop(0.06, rgba(255,255,255,.8)),
+			color-stop(0.45, rgba(255,255,255,.05)),
+			color-stop(0.55, rgba(0,0,0,.05)),
+			color-stop(0.85, rgba(0,0,0,.2)),
+			color-stop(0.98, rgba(0,0,0,.5))),
+		-webkit-gradient(linear, 0 0, 0 100%,
+			color-stop(0.25, transparent),
+			color-stop(0.25, rgba(255,255,255,.5)),
+			color-stop(0.47, rgba(255,255,255,.5)),
+			color-stop(0.47, transparent)) !important;
+	background-image:
+			-moz-linear-gradient(33deg, 
+				transparent,
+				transparent 10%, 
+				rgba(255,255,255,1) 10%, 
+				rgba(255,255,255,1) 44.5%, 
+				transparent 44.5%, 
+				transparent 70%, 
+				rgba(255,255,255,1) 70%,
+				rgba(255,255,255,1)),
+			-moz-linear-gradient(left,
+				rgba(0,0,0,.3) 5%,
+				rgba(255,255,255,.8) 6%,
+				rgba(255,255,255,.05) 45%,
+				rgba(0,0,0,.05) 55%,
+				rgba(0,0,0,.2) 85%,
+				rgba(0,0,0,.5) 98%),
+			-moz-linear-gradient(-90deg,
+				transparent,
+				transparent 29%,
+				rgba(255,255,255,.5) 29%,
+				rgba(255,255,255,.5) 49%,
+				transparent 49%,
+				transparent) !important;
+				
+	background-repeat: repeat-x;
+	
+	-webkit-background-size: 25px 100%;
+	-webkit-background-position-x: 0%;
+	-webkit-animation-duration: 1.5s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation-name: progressBarAnim;
+	
+	background-size: 25px 100%;
+	background-position-x: 0%;
+	animation-duration: 1.5s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+	animation-name: progressBarAnim;
+		
+	-moz-background-size: 25px 100%;
+	-moz-background-position-x: 0%;
+	-moz-animation-duration: 1.5s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-timing-function: linear;
+	-moz-animation-name: progressBarAnim;
+	
+}
+@-webkit-keyframes progressBarAnim {
+	0% { background-position-x:  0%; }
+	100% { background-position-x: 100%; }
+}
+@-moz-keyframes progressBarAnim {
+	0% { background-position-x:  0%; }
+	100% { background-position-x: 100%; }
+}
+@-keyframes progressBarAnim {
+	0% { background-position-x:  0%; }
+	100% { background-position-x: 100%; }
+}
