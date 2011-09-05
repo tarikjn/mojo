@@ -38,6 +38,7 @@ gem 'delayed_job'
 group :production, :staging do
   gem 'pg'
   gem 'dalli' # memcache on Heroku
+  gem 'exceptional'
 end
 
 group :development do

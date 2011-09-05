@@ -437,7 +437,7 @@ private
       q = {
         "EmailAddress" => self.email,
         "Name"         => self.name }
-      r = HTTParty.put("http://api.createsend.com/api/v3/subscribers/#{SETTINGS[Rails.env]['CampaignMonitor']['UserListID']}.json", 
+      r = HTTParty.put("http://api.createsend.com/api/v3/subscribers/#{SETTINGS[Rails.env]['CampaignMonitor']['UsersListID']}.json", 
         basic_auth: auth,
         query: { email: self.email_was },
         body: ActiveSupport::JSON.encode(q) )
@@ -451,7 +451,7 @@ private
       "EmailAddress" => self.email,
       "Name"         => self.name,
       "Resubscribe"  => true }
-    HTTParty.post("http://api.createsend.com/api/v3/subscribers/#{SETTINGS[Rails.env]['CampaignMonitor']['UserListID']}.json",
+    HTTParty.post("http://api.createsend.com/api/v3/subscribers/#{SETTINGS[Rails.env]['CampaignMonitor']['UsersListID']}.json",
       basic_auth: auth,
       body: ActiveSupport::JSON.encode(q) )
   end

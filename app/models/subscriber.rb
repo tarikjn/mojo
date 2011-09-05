@@ -21,9 +21,10 @@ private
           {
             "Key"    => "ip",
             "Value"  => self.remote_addr
-          }],
+          }
+      ],
       "Resubscribe"  => true }
-    HTTParty.post("http://api.createsend.com/api/v3/subscribers/#{SETTINGS[Rails.env]['CampaignMonitor']['SubscriberListID']}.json",
+    r = HTTParty.post("http://api.createsend.com/api/v3/subscribers/#{SETTINGS[Rails.env]['CampaignMonitor']['SubscribersListID']}.json",
       basic_auth: auth,
       body: ActiveSupport::JSON.encode(q) )
   end

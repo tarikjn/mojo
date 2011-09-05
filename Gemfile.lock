@@ -55,6 +55,8 @@ GEM
       daemons
     erubis (2.7.0)
     eventmachine (0.12.10)
+    exceptional (2.0.32)
+      rack
     excon (0.6.5)
     execjs (1.2.4)
       multi_json (~> 1.0)
@@ -170,6 +172,7 @@ DEPENDENCIES
   coffee-rails (~> 3.1.0)
   dalli
   delayed_job
+  exceptional
   fog
   geokit-rails3-1beta
   httparty
