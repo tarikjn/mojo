@@ -32,7 +32,7 @@ class UsersController < ApplicationController
     # works by either create (normal signup/raw invitation) or update (invitation with request(s))
     
     # load by ID first (may pause security issues, shoudl check it matches with original token.recipient)
-    if @user = User.unregistered.find(params[:user][:id])
+    if params[:user][:id] and @user = User.unregistered.find(params[:user][:id])
       @user.attributes = params[:user]
     # try by email in case the user is signing up on his own/using a plain invite
     elsif @user = User.unregistered.find_by_email(params[:user][:email].downcase)
