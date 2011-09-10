@@ -11,7 +11,7 @@
 				<div class="result-count">
 					<% t = 0; sorties_by_day[d].size.times do %><div class="marker" style="bottom: <%= t*3 %>px"></div><%  t += 1; end %>
 				</div>
-			<% end %><%= (d == 0)? "Today" : day.strftime("%a") %></label>
+			<% end %><%= (Date.today == day)? "Today" : day.strftime("%a") %></label>
 			
 		<%
 			end

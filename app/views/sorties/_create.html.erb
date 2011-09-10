@@ -68,7 +68,7 @@
 					</div>
 					<%= content_tag :div, :class => (['day'] << (( [6, 7].include?(day.strftime("%u").to_i) )? 'weekend' : nil)) do %>
 						<div class="month"><%= day.strftime("%b") %></div>
-						<div class="weekday"><%= (d == 0)? "Today" : day.strftime("%a") %></div>
+						<div class="weekday"><%= (Date.today == day)? "Today" : day.strftime("%a") %></div>
 						<div class="monthday"><%= day.strftime("%e") %></div>
 					<% end %>
 				</label>
