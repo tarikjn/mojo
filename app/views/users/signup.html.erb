@@ -75,24 +75,6 @@
 			</div>
 		</div>
 		<div class="form-item">
-			<%= format_errors_for s.object, :picture %>
-			<div class="title">Picture</div>
-			<div class="hybrid-input">
-				<%= s.file_field :picture %>
-				<%= s.hidden_field :picture_cache %>
-				<div>
-					<%= image_tag s.object.picture.url if s.object.picture? %>
-				</div>
-				<!--<br />
-				<div class="mj-picture-tool">
-					<img src="/assets/tarik-profile.jpg" />
-					<div class="mask"></div>
-					<div class="selection" style="background-image: url(/assets/tarik-profile.jpg)"></div/>
-				</div>
-				-->
-			</div>
-		</div>
-		<div class="form-item">
 			<%= format_errors_for s.object, :email %>
 			<div class="title">E-mail</div>
 			<div class="hybrid-input">
@@ -119,6 +101,29 @@
 			<div class="hybrid-input">
 				<!-- <%= s.text_field 'cellphone', :class => "mj-input-phone" %> why is result different? -->
 				<%= text_field_tag 'user[cellphone]', s.object.cellphone, :class => "mj-input-phone" %>
+			</div>
+		</div>
+		<div class="form-item">
+			<%= format_errors_for s.object, :picture %>
+			<div class="title">Picture</div>
+			<div class="hybrid-input">
+				<div>
+					<%= s.file_field :picture %>
+					<%= s.hidden_field :picture_cache %>
+				</div>
+				<div class="msg-info">
+					If the email you've provided is with a facebook account, we'll automatically pull your profile picture, you can change it later.
+				</div>
+				<div>
+					<%= image_tag s.object.picture.url if s.object.picture? %>
+				</div>
+				<!--<br />
+				<div class="mj-picture-tool">
+					<img src="/assets/tarik-profile.jpg" />
+					<div class="mask"></div>
+					<div class="selection" style="background-image: url(/assets/tarik-profile.jpg)"></div/>
+				</div>
+				-->
 			</div>
 		</div>
 		<div class="submit"><button type="submit" class="mj-button mojo">Sign up</button></div>
