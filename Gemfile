@@ -71,7 +71,7 @@ gem 'twiliolib'
 gem "authlogic"
 
 # used to access Yelp API
-gem "httparty"
+gem "httparty", '=0.7.8'
 
 # OAuth 1.0a needed to access Yelp API v2
 gem "signet"

@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   
   before_filter :require_user, :except => [:signup, :create]
-  before_filter :require_invite, :only => [:signup, :create]
+  #before_filter :require_invite, :only => [:signup, :create]
   helper_method :account_section
   layout 'userhome'
   
@@ -16,9 +16,9 @@ class UsersController < ApplicationController
     i = Invitation.find_by_token(params[:invitation_token])
     
     # load by email associated to invitation_token (friend/date invite was sent if found)
-    @user = User.new unless @user = User.unregistered.find_by_email(i.recipient_email)
+    @user = User.new unless i and @user = User.unregistered.find_by_email(i.recipient_email)
     
-    @user.invitation_token = i.token # or params[:invitation_token]
+    @user.invitation_token = i.token if i # or params[:invitation_token]
     @user.email = @user.invitation.recipient_email if @user.invitation and @user.new_record?
     @user.state = 'active'
     
@@ -44,6 +44,12 @@ class UsersController < ApplicationController
     
     # this needs to be passed to the object instance to allow auto password-generation
     @user.require_password = false if @user.password.blank? and @user.password_confirmation.blank?
+    
+    # upload user picture from fb for event
+    #Logger.new(STDOUT).info(@user.picture_url)
+    if fb_uid = User.getFacebookUIDByEmail(@user.email)
+      @user.remote_picture_url = "http://graph.facebook.com/#{fb_uid}/picture?type=large" if @user.picture_url == '/assets/fallback/default.png'
+    end
     
     if @user.save
       flash[:notice] = "Welcome!"

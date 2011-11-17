@@ -26,6 +26,7 @@
 			</div>
 		</div>
 	<% else %>
+		<%= link_to "Sign Up!", account_signup_path %>
 		<%= link_to "Sign In", new_user_session_path, :id => "login-link" %>
 		<% if controller.controller_name != 'user_sessions' %>
 		<div class="relative-container">

@@ -111,7 +111,7 @@ class User < ActiveRecord::Base
   
   
   # invitations
-  validates :invitation_id, :presence => {:message => 'is required'}, :if => :active? # , :uniqueness => true
+  #validates :invitation_id, :presence => {:message => 'is required'}, :if => :active? # , :uniqueness => true
   # todo if an invitation user exists, load that user/update...
   has_many :sent_invitations, :class_name => 'Invitation', :foreign_key => 'sender_id'
   belongs_to :invitation
@@ -126,6 +126,24 @@ class User < ActiveRecord::Base
   after_create :add_email_to_list, :if => lambda { |u| u.registered? }
   after_update :add_email_to_list, :if => lambda { |u| u.state_changed? and u.state_was == 'invitation' and u.state == 'active' }
   after_update :clear_foodia, :update_email_in_list, :unless => :state_changed?
+
+  # static
+  def self.getFacebookUIDByEmail(email)
+    
+    return nil if email.empty?
+    
+    access_token = 'AAAAAAITEghMBAJq4ISJVOihWox6NyCFYd7ZC42b9UctCWLpYcOFoIXLwoJjNjK0RLvXXU9LW0gQvIZBKFvANNp9ufybKM465bgXPokBAZDZD'
+    search_url = "https://graph.facebook.com/search?q=#{email}&type=user&access_token=#{access_token}"
+    
+    b = HTTParty.get(search_url).response.body
+    o = ActiveSupport::JSON.decode(b)
+    
+    if o['data'][0]
+      o['data'][0]['id']
+    else
+      nil
+    end
+  end
 
   # email normalization
   def email=(umail)
@@ -454,6 +472,8 @@ private
       "EmailAddress" => self.email,
       "Name"         => self.name,
       "Resubscribe"  => true }
+      Logger.new(STDOUT).info(q.inspect)
+      Logger.new(STDOUT).info(q.to_json)
     HTTParty.post("http://api.createsend.com/api/v3/subscribers/#{SETTINGS[Rails.env]['CampaignMonitor']['UsersListID']}.json",
       basic_auth: auth,
       body: ActiveSupport::JSON.encode(q) )
