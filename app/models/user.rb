@@ -132,7 +132,7 @@ class User < ActiveRecord::Base
     
     return nil if email.empty?
     
-    access_token = 'AAAAAAITEghMBANJIxnWYqiI4UmYKnxbhH5LCL4hcx8B3V7XN2pQ4bYz9ZAZAsCQFjxXb0OVAUEdvT1Us9GZAQKVNpoMAv7GokOdIoj8sAZDZD'
+    access_token = 'AAAEiKagHr6ABAEZCG0s9INU56K3WGpUrBohDmkCdNSJPWSRt8ZAH4VZApwW5RyTJO25mB5lgZCLWaJiiysq1ct5ztw92uUIZD'
     search_url = "https://graph.facebook.com/search?q=#{email}&type=user&access_token=#{access_token}"
     
     b = HTTParty.get(search_url).response.body

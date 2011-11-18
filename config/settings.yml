@@ -30,6 +30,9 @@ defaults: &defaults
     APIClientID: cc363600fe3afcc2ce53e8d6dc1e06d2
     UsersListID: 83d1738e8ac10d8395473a3788ebf4ff        # production list
     SubscribersListID: fc5a863e5f5458e584f17375ba166c2e # production list
+  Facebook:
+    AppID: 319037284790176
+    AppSecret: d179eaab4d2680bfe33c21b7c08fc448
   
 
 development:
