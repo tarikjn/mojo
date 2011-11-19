@@ -47,9 +47,9 @@ class UsersController < ApplicationController
     
     # upload user picture from fb for event
     #Logger.new(STDOUT).info(@user.picture_url)
-    if fb_uid = User.getFacebookUIDByEmail(@user.email)
-      @user.remote_picture_url = "http://graph.facebook.com/#{fb_uid}/picture?type=large" if @user.picture_url == '/assets/fallback/default.png'
-    end
+    #if fb_uid = User.getFacebookUIDByEmail(@user.email)
+    #  @user.remote_picture_url = "http://graph.facebook.com/#{fb_uid}/picture?type=large" if @user.picture_url == '/assets/fallback/default.png'
+    #end
     
     if @user.save
       flash[:notice] = "Welcome!"
